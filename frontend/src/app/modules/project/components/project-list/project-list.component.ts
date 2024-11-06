@@ -38,6 +38,4 @@ export class ProjectListComponent implements OnInit {
   deleteProject(id: number): void {
     this.projectService.deleteProject(id);
   }
-
-
 }
