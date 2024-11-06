@@ -1,1 +1,23 @@
-<p>project-form works!</p>
+<form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+    <label>
+        Name:
+        <input formControlName="name" type="text" />
+    </label>
+    <label>
+        URL:
+        <input formControlName="url" type="text" />
+    </label>
+    <label>
+        Category:
+        <select formControlName="category">
+            <option *ngFor="let category of categories" [value]="category">
+                {{ category }}
+            </option>
+        </select>
+    </label>
+    <label>
+        Description:
+        <textarea formControlName="description"></textarea>
+    </label>
+    <button type="submit">Submit</button>
+</form>
