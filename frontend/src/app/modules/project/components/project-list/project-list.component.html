@@ -1,1 +1,11 @@
-<p>project-list works!</p>
+<!--- The html structure for the project-list view -->
+<div *ngIf="projects.length; else noProjects">
+    <app-project-item *ngFor="let project of projects" [project]="project" (edit)="editProject($event)"
+        (delete)="deleteProject($event)"> </app-project-item>
+</div>
+
+<!--- if there are not any project, we show this -->
+<ng-template #noProjects>
+    <p>No existing projects.</p>
+    <button (click)="createProject()">Create +</button>
+</ng-template>
