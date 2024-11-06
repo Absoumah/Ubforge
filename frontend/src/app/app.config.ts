@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 
-import { ErrorHandlerService } from './core/error-handler.service';
+import { ErrorHandlerService } from './core/services/error_handler/error-handler.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [

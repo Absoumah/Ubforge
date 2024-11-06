@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HelloWorldComponent } from './hello-world/hello-world.component';
+import { HelloWorldComponent } from './modules/hello-world/hello-world.component';
 
 @Component({
   selector: 'app-root',
