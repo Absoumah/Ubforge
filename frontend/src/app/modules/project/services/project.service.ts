@@ -41,4 +41,11 @@ export class ProjectService {
     const projects = this.projectsSubject.getValue().filter((project) => project.id !== id);
     this.projectsSubject.next(projects);
   }
+
+  //Get the categories 
+  //TODO: Hardcoded categories, should be fetched from the backend
+  //TODO: This method should be moved to a separate service
+  getCategories(): string[] {
+    return ['Web', 'Mobile', 'Desktop', 'Cloud'];
+  }
 }
