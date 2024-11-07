@@ -11,8 +11,16 @@ export const routes: Routes = [
 
     // prod routes
     { path: 'projects', component: ProjectListComponent },
-    { path: 'projects/new', component: ProjectFormComponent },
+    { path: 'projects/create', component: ProjectFormComponent },
+    { path: 'projects/edit/:id', component: ProjectFormComponent },
     { path: '', redirectTo: '/projects', pathMatch: 'full' }
 
     // TODO: add a 404 page
 ];
+
+@NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+})
+
+export class AppRoutingModule { }

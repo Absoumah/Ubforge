@@ -17,6 +17,11 @@ export class ProjectService {
     return this.projects$;
   }
 
+  //Get a project by id
+  getProjectById(id: number): Project | undefined {
+    return this.projectsSubject.getValue().find((project) => project.id === id);
+  }
+
   //Add a new project
   addProject(project: Project): void {
     const projects = this.projectsSubject.getValue();

@@ -2,6 +2,7 @@
 <div *ngIf="projects.length; else noProjects">
     <app-project-item *ngFor="let project of projects" [project]="project" (edit)="editProject($event)"
         (delete)="deleteProject($event)"> </app-project-item>
+    <button (click)="createProject()">Create +</button>
 </div>
 
 <!--- if there are not any project, we show this -->

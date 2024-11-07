@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
 import { ProjectItemComponent } from '../project-item/project-item.component';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-project-list',
   standalone: true,
-  imports: [CommonModule, ProjectItemComponent],
+  imports: [CommonModule, ProjectItemComponent, RouterModule],
   templateUrl: './project-list.component.html',
   styleUrl: './project-list.component.scss'
 })
@@ -26,12 +26,12 @@ export class ProjectListComponent implements OnInit {
 
   // create a new project
   createProject(): void {
-    this.router.navigate(['/project/create']);
+    this.router.navigate(['/projects/create']);
   }
 
   // edit a project
   editProject(id: number): void {
-    this.router.navigate(['/project/edit', id]);
+    this.router.navigate(['/projects/edit', id]);
   }
 
   // delete a project
