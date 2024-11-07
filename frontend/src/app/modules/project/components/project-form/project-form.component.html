@@ -2,7 +2,14 @@
     <label>
         Name:
         <input formControlName="name" type="text" />
+        <div *ngIf="projectForm.get('name')?.invalid && projectForm.get('name')?.touched">
+            <small *ngIf="projectForm.get('name')?.errors?.['required']">Name is required.</small>
+            <small *ngIf="projectForm.get('name')?.errors?.['maxlength']">
+                Name cannot exceed 100 characters.
+            </small>
+        </div>
     </label>
+
     <label>
         URL:
         <input formControlName="url" type="text" />

@@ -39,7 +39,7 @@ export class ProjectFormComponent {
   // initialize the form with empty values and validators
   private initializeForm(): void {
     this.projectForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(100)]],
+      name: ['', [Validators.required, Validators.maxLength(20)]],
       url: ['', [Validators.required, Validators.pattern('https?://.+')]],
       category: ['', [Validators.required]],
       description: ['', [Validators.required, Validators.maxLength(500)]],
