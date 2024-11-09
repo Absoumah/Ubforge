@@ -1,57 +1,57 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-
 @Component({
   selector: 'app-project-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './project-form.component.html',
-  styleUrl: './project-form.component.scss'
+  styleUrls: ['./project-form.component.scss']
 })
-
-export class ProjectFormComponent {
+export class ProjectFormComponent implements OnInit {
   projectForm!: FormGroup;
   projectId!: number | null;
   isEditMode = false;
   categories: string[] = [];
 
-  constructor
-    (
-      private fb: FormBuilder,
-      private projectService: ProjectService,
-      private router: Router,
-      private route: ActivatedRoute
-    ) { }
+  constructor(
+    private fb: FormBuilder,
+    private projectService: ProjectService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
-
-  // initialize the component
   ngOnInit(): void {
     this.initializeForm();
     this.loadCategories();
     this.checkEditMode();
   }
 
-  // initialize the form with empty values and validators
   private initializeForm(): void {
     this.projectForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(20)]],
       url: ['', [Validators.required, Validators.pattern('https?://.+')]],
       category: ['', [Validators.required]],
       description: ['', [Validators.required, Validators.maxLength(500)]],
-    })
+      // assignedUsers: this.fb.array([]) // Initialize assignedUsers as an empty array
+      // TODO: remove the hardcoded users. This should be fetched from the backend
+      assignedUsers: this.fb.array([
+        this.fb.group({ id: 1, firstName: 'John', lastName: 'Doe' }),
+        this.fb.group({ id: 2, firstName: 'Jane', lastName: 'Smith' }),
+        this.fb.group({ id: 3, firstName: 'Alice', lastName: 'Johnson' })
+      ])
+
+    });
   }
 
-  // load the categories from the service
   private loadCategories(): void {
     this.categories = this.projectService.getCategories();
   }
 
-  // check if the form is in edit mode
   private checkEditMode(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
@@ -61,7 +61,6 @@ export class ProjectFormComponent {
     }
   }
 
-  // load an existing project to edit
   private loadProject(): void {
     if (this.projectId !== undefined) {
       const project = this.projectService.getProjectById(this.projectId!);
@@ -74,25 +73,17 @@ export class ProjectFormComponent {
     }
   }
 
-
-  // sumbit the form method 
-  onSubmit() {
+  onSubmit(): void {
     if (this.projectForm.invalid) {
-      // TODO: handle the errors correctly and display them to the user
       console.error('Form is invalid');
       return;
     }
 
-    // if the project exist update it, otherwise add a new project
-    // using as Id the Date.now() value
-    // TODO: this should be handled by the 
-    // backend and the Id should be generated there ? 
     const project: Project = {
       id: this.projectId || Date.now(),
       ...this.projectForm.value
     };
 
-    // update or add the project
     if (this.isEditMode) {
       this.projectService.updateProject(project);
     } else {
