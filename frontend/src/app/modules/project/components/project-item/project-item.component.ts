@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 import { Project } from '../../models/project.model';
 
+
 @Component({
   selector: 'app-project-item',
   standalone: true,
