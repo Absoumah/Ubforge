@@ -7,7 +7,8 @@
         <p>{{ project.category }}</p>
 
         <div class="project-assigned-users">
-            <app-user-avatar *ngFor="let user of assignedUsers" [initials]="user.initials"></app-user-avatar>
+            <app-user-avatar *ngFor="let user of project.assignedUsers"
+                [initials]="getUserInitials(user)"></app-user-avatar>
         </div>
         <div class="project-item-actions">
             <button (click)="edit.emit(project.id)">Edit</button>
