@@ -1,12 +1,13 @@
-<!--- The html structure for the project-list view -->
-<div *ngIf="projects.length; else noProjects">
-    <app-project-item *ngFor="let project of projects" [project]="project" (edit)="editProject($event)"
-        (delete)="deleteProject($event)"> </app-project-item>
-    <button (click)="createProject()">Create +</button>
-</div>
+<div class="project-list">
+    <h2>Project List</h2>
+    <div *ngIf="projects.length; else noProjects">
+        <app-project-item *ngFor="let project of projects" [project]="project" (edit)="editProject($event)"
+            (delete)="deleteProject($event)"> </app-project-item>
+        <button class="create-button" (click)="createProject()">Create +</button>
+    </div>
 
-<!--- if there are not any project, we show this -->
-<ng-template #noProjects>
-    <p>No existing projects.</p>
-    <button (click)="createProject()">Create +</button>
-</ng-template>
+    <ng-template #noProjects>
+        <p class="no-projects">No existing projects.</p>
+        <button class="create-button" (click)="createProject()">Create +</button>
+    </ng-template>
+</div>

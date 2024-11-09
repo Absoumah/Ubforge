@@ -1,0 +1,64 @@
+@import '../../../../../styles/theme.scss';
+
+.project-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: $spacing-base;
+    background-color: $light-color;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+
+    label {
+        display: block;
+        margin-bottom: $spacing-base;
+        font-weight: $font-weight-bold;
+        color: $text-color;
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: $spacing-small;
+            margin-top: $spacing-small;
+            border: 1px solid $border-color;
+            border-radius: $border-radius;
+            font-size: $font-size-base;
+            color: $text-color;
+            background-color: $background-color;
+            transition: border-color $transition-base;
+
+            &:focus {
+                border-color: $primary-color;
+                outline: none;
+            }
+        }
+
+        small {
+            color: $danger-color;
+            font-size: $font-size-small;
+        }
+    }
+
+    button[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: $spacing-small;
+        background-color: $primary-color;
+        color: $light-color;
+        border: none;
+        border-radius: $border-radius;
+        font-size: $font-size-base;
+        font-weight: $font-weight-bold;
+        cursor: pointer;
+        transition: background-color $transition-base;
+
+        &:hover {
+            background-color: $hover-color;
+        }
+
+        &:active {
+            background-color: $active-color;
+        }
+    }
+}

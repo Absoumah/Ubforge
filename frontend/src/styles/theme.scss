@@ -1,0 +1,33 @@
+// Colors
+$primary-color: #007bff; // Primary blue
+$secondary-color: #6c757d; // Secondary gray
+$background-color: #f8f9fa; // Light background
+$text-color: #212529; // Dark text
+$border-color: #dee2e6; // Light border
+$hover-color: darken($primary-color, 10%);
+$active-color: darken($primary-color, 20%);
+$light-color: #ffffff; // White
+$danger-color: #dc3545; // Red for errors
+
+// Fonts
+$font-family: 'Roboto', sans-serif;
+$font-size-base: 16px;
+$font-size-large: 20px;
+$font-size-small: 14px;
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-bold: 700;
+
+// Spacing
+$spacing-base: 16px;
+$spacing-large: 24px;
+$spacing-small: 8px;
+
+// Border Radius
+$border-radius: 4px;
+
+// Shadows
+$box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+// Transitions
+$transition-base: 0.3s ease-in-out;

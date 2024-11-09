@@ -1,0 +1,36 @@
+@import '../../../../../styles/theme.scss';
+
+.project-item {
+    padding: $spacing-base;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    background-color: $light-color;
+    margin-bottom: $spacing-small;
+    box-shadow: $box-shadow;
+
+    h3 {
+        font-size: $font-size-large;
+        margin-bottom: $spacing-small;
+    }
+
+    p {
+        font-size: $font-size-base;
+        margin-bottom: $spacing-small;
+    }
+
+    button {
+        background-color: $primary-color;
+        border: none;
+        padding: $spacing-small $spacing-base;
+        font-size: $font-size-base;
+        color: $light-color;
+        cursor: pointer;
+        border-radius: $border-radius;
+        margin-right: $spacing-small;
+        transition: background-color $transition-base;
+
+        &:hover {
+            background-color: $hover-color;
+        }
+    }
+}

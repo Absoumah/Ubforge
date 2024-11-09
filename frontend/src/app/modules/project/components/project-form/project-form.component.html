@@ -1,11 +1,11 @@
-<form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="project-form">
     <label>
         Name:
         <input formControlName="name" type="text" />
         <div *ngIf="projectForm.get('name')?.invalid && projectForm.get('name')?.touched">
             <small *ngIf="projectForm.get('name')?.errors?.['required']">Name is required.</small>
             <small *ngIf="projectForm.get('name')?.errors?.['maxlength']">
-                Name cannot exceed 100 characters.
+                Name cannot exceed 20 characters.
             </small>
         </div>
     </label>
