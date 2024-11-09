@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 import { Project } from '../../models/project.model';
 
-
 @Component({
   selector: 'app-project-item',
   standalone: true,
@@ -13,8 +12,6 @@ import { Project } from '../../models/project.model';
 })
 export class ProjectItemComponent {
   @Input() project!: Project;
-  //TODO: change this ugly way of passing data (this should not came from here.)
-  @Input() assignedUsers: { initials: string }[] = ['A', 'B', 'C'].map(initials => ({ initials }));
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
 
@@ -22,5 +19,11 @@ export class ProjectItemComponent {
 
   toggleDescription() {
     this.isDescriptionExpanded = !this.isDescriptionExpanded;
+  }
+
+
+  //TODO: not sure that we should keep it here?? 
+  getUserInitials(user: { firstName: string; lastName: string }): string {
+    return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
   }
 }
