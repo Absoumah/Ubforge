@@ -1,13 +1,14 @@
 // Colors
-$primary-color: #007bff; // Primary blue
-$secondary-color: #6c757d; // Secondary gray
-$background-color: #f8f9fa; // Light background
-$text-color: #212529; // Dark text
+$primary-color: #1e4e76; // Primary blue
+$secondary-color: #68b2ee; // Secondary blue
+$background-color: #f5f9fa; // Light background
+$text-color: #0c1013; // Dark text
 $border-color: #dee2e6; // Light border
 $hover-color: darken($primary-color, 10%);
 $active-color: darken($primary-color, 20%);
 $light-color: #ffffff; // White
 $danger-color: #dc3545; // Red for errors
+$accent-color: #0073d1; // Accent blue
 
 // Fonts
 $font-family: 'Roboto', sans-serif;

@@ -13,7 +13,12 @@
     <label>
         URL:
         <input formControlName="url" type="text" />
+        <div *ngIf="projectForm.get('url')?.invalid && projectForm.get('url')?.touched">
+            <small *ngIf="projectForm.get('url')?.errors?.['required']">URL is required.</small>
+            <small *ngIf="projectForm.get('url')?.errors?.['pattern']">URL must be a valid URL.</small>
+        </div>
     </label>
+
     <label>
         Category:
         <select formControlName="category">
@@ -21,10 +26,20 @@
                 {{ category }}
             </option>
         </select>
+        <div *ngIf="projectForm.get('category')?.invalid && projectForm.get('category')?.touched">
+            <small *ngIf="projectForm.get('category')?.errors?.['required']">Category is required.</small>
+        </div>
     </label>
+
     <label>
         Description:
         <textarea formControlName="description"></textarea>
+        <div *ngIf="projectForm.get('description')?.invalid && projectForm.get('description')?.touched">
+            <small *ngIf="projectForm.get('description')?.errors?.['required']">Description is required.</small>
+            <small *ngIf="projectForm.get('description')?.errors?.['maxlength']">
+                Description cannot exceed 500 characters.
+            </small>
+        </div>
     </label>
     <button type="submit">Submit</button>
 </form>
