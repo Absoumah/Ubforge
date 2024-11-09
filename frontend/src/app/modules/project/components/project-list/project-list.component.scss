@@ -1,12 +1,13 @@
 @import '../../../../../styles/theme.scss';
 
 .project-list {
-    padding: $spacing-base $spacing-base $spacing-base calc(250px - $spacing-base); // Adjust padding-left
+    padding: $spacing-base;
+    padding-left: calc(250px + $spacing-base); // Adjust padding to be closer to the sidebar
     background-color: $background-color;
     color: $text-color;
     border-radius: $border-radius;
     max-width: 1200px; // Increase the max-width to accommodate wider items
-    margin: 0 auto;
+    // margin: 0 auto;
 
     h2 {
         font-size: $font-size-large;
