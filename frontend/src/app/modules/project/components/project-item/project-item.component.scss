@@ -1,36 +1,120 @@
 @import '../../../../../styles/theme.scss';
 
 .project-item {
+    display: flex;
+    flex-direction: column; // Display elements in a column
+    width: 100%;
+    min-width: 800px; // Set the minimum width to 800px
     padding: $spacing-base;
     border: 1px solid $border-color;
     border-radius: $border-radius;
     background-color: $light-color;
     margin-bottom: $spacing-small;
-    box-shadow: $box-shadow;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Add a subtle shadow for a modern look
 
-    h3 {
-        font-size: $font-size-large;
+    .project-item-header {
+        display: flex;
+        flex-direction: row; // Display elements in a row
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
         margin-bottom: $spacing-small;
+
+        h3 {
+            font-size: $font-size-large;
+            margin: 0;
+            color: $primary-color;
+            font-weight: $font-weight-bold;
+        }
+
+        .project-url-container {
+            background-color: rgba(0, 128, 0, 0.1); // Green color with transparency
+            border-radius: $border-radius * 2; // More border radius
+            padding: $spacing-small $spacing-base;
+            margin-left: $spacing-base;
+
+            a {
+                font-size: $font-size-small;
+                color: $accent-color;
+                text-decoration: none;
+                word-break: break-all; // Ensure long URLs break to the next line
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        p {
+            font-size: $font-size-base;
+            margin: 0;
+            margin-left: $spacing-base;
+            color: $secondary-color;
+            font-weight: $font-weight-normal;
+        }
+
+        .project-item-actions {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-left: auto;
+
+            button {
+                background-color: $primary-color;
+                border: none;
+                padding: $spacing-small $spacing-base;
+                font-size: $font-size-base;
+                color: $light-color;
+                cursor: pointer;
+                border-radius: $border-radius;
+                margin-left: $spacing-small;
+                transition: background-color $transition-base;
+
+                &:hover {
+                    background-color: $hover-color;
+                }
+
+                &:last-child {
+                    background-color: $danger-color; // Red color for the delete button
+
+                    &:hover {
+                        background-color: darken($danger-color, 10%);
+                    }
+                }
+            }
+        }
     }
 
-    p {
-        font-size: $font-size-base;
-        margin-bottom: $spacing-small;
-    }
+    .project-item-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
 
-    button {
-        background-color: $primary-color;
-        border: none;
-        padding: $spacing-small $spacing-base;
-        font-size: $font-size-base;
-        color: $light-color;
-        cursor: pointer;
-        border-radius: $border-radius;
-        margin-right: $spacing-small;
-        transition: background-color $transition-base;
+        .project-description {
+            font-size: $font-size-base;
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
 
-        &:hover {
-            background-color: $hover-color;
+            &.expanded {
+                white-space: normal;
+            }
+        }
+
+        button {
+            align-self: flex-start;
+            background-color: transparent;
+            border: none;
+            color: $accent-color;
+            cursor: pointer;
+            padding: 0;
+            font-size: $font-size-small;
+            margin-top: $spacing-small;
+
+            &:hover {
+                text-decoration: underline;
+            }
         }
     }
 }

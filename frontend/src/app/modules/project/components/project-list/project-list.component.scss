@@ -1,11 +1,11 @@
 @import '../../../../../styles/theme.scss';
 
 .project-list {
-    padding: $spacing-base;
+    padding: $spacing-base $spacing-base $spacing-base calc(250px - $spacing-base); // Adjust padding-left
     background-color: $background-color;
     color: $text-color;
     border-radius: $border-radius;
-    max-width: 800px;
+    max-width: 1200px; // Increase the max-width to accommodate wider items
     margin: 0 auto;
 
     h2 {
@@ -17,43 +17,9 @@
     .project-list-content {
         display: flex;
         flex-direction: column;
-        align-items: flex-start; // Align items to the left
+        align-items: flex-start; // Align items to the start left
         justify-content: flex-start;
         width: 100%;
-    }
-
-    .project-item {
-        width: 100%;
-        padding: $spacing-base;
-        border-radius: $border-radius;
-        background-color: $light-color;
-        margin-bottom: $spacing-small;
-
-        h3 {
-            font-size: $font-size-large;
-            margin-bottom: $spacing-small;
-        }
-
-        p {
-            font-size: $font-size-base;
-            margin-bottom: $spacing-small;
-        }
-
-        button {
-            background-color: $primary-color;
-            border: none;
-            padding: $spacing-small $spacing-base;
-            font-size: $font-size-base;
-            color: $light-color;
-            cursor: pointer;
-            border-radius: $border-radius;
-            margin-right: $spacing-small;
-            transition: background-color $transition-base;
-
-            &:hover {
-                background-color: $hover-color;
-            }
-        }
     }
 
     .create-button {
