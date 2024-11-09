@@ -1,14 +1,21 @@
 @import '../../../../../styles/theme.scss';
 
-.project-form {
-    max-width: 600px;
-    margin: 0 auto;
+.project-form-container {
     padding: $spacing-base;
-    background-color: $light-color;
-    border: 1px solid $border-color;
+    background-color: $background-color;
+    color: $text-color;
     border-radius: $border-radius;
-    box-shadow: $box-shadow;
+    max-width: 800px;
+    margin: 0 auto;
 
+    h2 {
+        font-size: $font-size-large;
+        margin-bottom: $spacing-large;
+        font-weight: $font-weight-bold;
+    }
+}
+
+.project-form {
     label {
         display: block;
         margin-bottom: $spacing-base;
@@ -32,6 +39,11 @@
                 border-color: $primary-color;
                 outline: none;
             }
+        }
+
+        textarea {
+            height: 150px;
+            resize: none; // prevent users from resizing the textarea
         }
 
         small {
