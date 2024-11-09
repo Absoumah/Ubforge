@@ -7,12 +7,16 @@ import { Project } from '../../models/project.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './project-item.component.html',
-  styleUrl: './project-item.component.scss'
+  styleUrls: ['./project-item.component.scss']
 })
-
-
 export class ProjectItemComponent {
   @Input() project!: Project;
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
+
+  isDescriptionExpanded = false;
+
+  toggleDescription() {
+    this.isDescriptionExpanded = !this.isDescriptionExpanded;
+  }
 }
