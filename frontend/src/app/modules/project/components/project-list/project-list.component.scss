@@ -17,12 +17,13 @@
     .project-list-content {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: calc(100vh - 200px); // Adjust height to account for title and padding
+        align-items: flex-start; // Align items to the left
+        justify-content: flex-start;
+        width: 100%;
     }
 
     .project-item {
+        width: 100%;
         padding: $spacing-base;
         border-radius: $border-radius;
         background-color: $light-color;
@@ -76,6 +77,14 @@
         &:active {
             background-color: $active-color;
         }
+    }
+
+    .no-projects-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: calc(100vh - 200px); // Adjust height to account for title and padding
     }
 
     .no-projects {
