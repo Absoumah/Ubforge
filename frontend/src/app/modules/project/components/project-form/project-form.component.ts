@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray, FormControl } from '@angular/forms';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -33,19 +33,36 @@ export class ProjectFormComponent implements OnInit {
 
   private initializeForm(): void {
     this.projectForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(20)]],
-      url: ['', [Validators.required, Validators.pattern('https?://.+')]],
-      category: ['', [Validators.required]],
-      description: ['', [Validators.required, Validators.maxLength(500)]],
-      // assignedUsers: this.fb.array([]) // Initialize assignedUsers as an empty array
-      // TODO: remove the hardcoded users. This should be fetched from the backend
-      assignedUsers: this.fb.array([
-        this.fb.group({ id: 1, firstName: 'John', lastName: 'Doe' }),
-        this.fb.group({ id: 2, firstName: 'Jane', lastName: 'Smith' }),
-        this.fb.group({ id: 3, firstName: 'Alice', lastName: 'Johnson' })
-      ])
-
+      name: this.createNameControl(),
+      url: this.createUrlControl(),
+      category: this.createCategoryControl(),
+      description: this.createDescriptionControl(),
+      assignedUsers: this.createAssignedUsersArray()
     });
+  }
+
+  private createNameControl(): FormControl {
+    return this.fb.control('', [Validators.required, Validators.maxLength(20)]);
+  }
+
+  private createUrlControl(): FormControl {
+    return this.fb.control('', [Validators.required, Validators.pattern('https?://.+')]);
+  }
+
+  private createCategoryControl(): FormControl {
+    return this.fb.control('', [Validators.required]);
+  }
+
+  private createDescriptionControl(): FormControl {
+    return this.fb.control('', [Validators.required, Validators.maxLength(500)]);
+  }
+
+  private createAssignedUsersArray(): FormArray {
+    return this.fb.array([
+      this.fb.group({ id: 1, firstName: 'John', lastName: 'Doe' }),
+      this.fb.group({ id: 2, firstName: 'Jane', lastName: 'Smith' }),
+      this.fb.group({ id: 3, firstName: 'Alice', lastName: 'Johnson' })
+    ]);
   }
 
   private loadCategories(): void {
