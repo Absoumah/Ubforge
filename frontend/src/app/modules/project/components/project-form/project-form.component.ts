@@ -17,6 +17,7 @@ export class ProjectFormComponent implements OnInit {
   projectId!: number | null;
   isEditMode = false;
   categories: string[] = [];
+  errorMessage: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -66,7 +67,11 @@ export class ProjectFormComponent implements OnInit {
   }
 
   private loadCategories(): void {
-    this.categories = this.projectService.getCategories();
+    try {
+      this.categories = this.projectService.getCategories();
+    } catch (error) {
+      this.handleError(error);
+    }
   }
 
   private checkEditMode(): void {
@@ -79,14 +84,18 @@ export class ProjectFormComponent implements OnInit {
   }
 
   private loadProject(): void {
-    if (this.projectId !== undefined) {
-      const project = this.projectService.getProjectById(this.projectId!);
-      if (project) {
-        this.projectForm.patchValue(project);
-      } else {
-        console.error('Project with Id: ', this.projectId, ' not found');
-        this.router.navigate(['/projects']);
+    try {
+      if (this.projectId !== undefined) {
+        const project = this.projectService.getProjectById(this.projectId!);
+        if (project) {
+          this.projectForm.patchValue(project);
+        } else {
+          console.error('Project with Id: ', this.projectId, ' not found');
+          this.router.navigate(['/projects']);
+        }
       }
+    } catch (error) {
+      this.handleError(error);
     }
   }
 
@@ -101,12 +110,21 @@ export class ProjectFormComponent implements OnInit {
       ...this.projectForm.value
     };
 
-    if (this.isEditMode) {
-      this.projectService.updateProject(project);
-    } else {
-      this.projectService.addProject(project);
-    }
+    try {
+      if (this.isEditMode) {
+        this.projectService.updateProject(project);
+      } else {
+        this.projectService.addProject(project);
+      }
 
-    this.router.navigate(['/projects']);
+      this.router.navigate(['/projects']);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  private handleError(error: any): void {
+    console.error('An error occurred:', error);
+    this.errorMessage = 'An error occurred while processing your request. Please try again later.';
   }
 }
