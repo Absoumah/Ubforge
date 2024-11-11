@@ -1,1 +1,26 @@
-<p>project-item works!</p>
+<div class="project-item">
+    <div class="project-item-header">
+        <h3>{{ project.name }}</h3>
+        <div class="project-url-container">
+            <a [href]="project.url" target="_blank">{{ project.url }}</a>
+        </div>
+        <p>{{ project.category }}</p>
+
+        <div class="project-assigned-users">
+            <app-user-avatar *ngFor="let user of project.assignedUsers"
+                [initials]="getUserInitials(user)"></app-user-avatar>
+        </div>
+        <div class="project-item-actions">
+            <button (click)="edit.emit(project.id)">Edit</button>
+            <button (click)="delete.emit(project.id)">Delete</button>
+        </div>
+    </div>
+    <div class="project-item-body">
+        <p class="project-description" [class.expanded]="isDescriptionExpanded">
+            {{ project.description }}
+        </p>
+        <button (click)="toggleDescription()">
+            {{ isDescriptionExpanded ? 'Show Less' : 'Show More' }}
+        </button>
+    </div>
+</div>

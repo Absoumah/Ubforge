@@ -1,0 +1,8 @@
+<nav class="sidebar">
+    <ul>
+        <li *ngFor="let item of menuItems" [routerLink]="[item.route]" routerLinkActive="active"
+            (click)="onSelectMenuItem(item)">
+            {{ item.title }}
+        </li>
+    </ul>
+</nav>

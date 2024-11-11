@@ -1,0 +1,63 @@
+@import '../../../../../styles/theme.scss';
+
+.project-list {
+    padding: $spacing-base;
+    padding-left: calc(250px + $spacing-base); // Adjust padding to be closer to the sidebar
+    background-color: $background-color;
+    color: $text-color;
+    border-radius: $border-radius;
+    max-width: 1200px; // Increase the max-width to accommodate wider items
+    // margin: 0 auto;
+
+    h2 {
+        font-size: $font-size-large;
+        margin-bottom: $spacing-large;
+        font-weight: $font-weight-bold;
+    }
+
+    .project-list-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; // Align items to the start left
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .create-button {
+        display: block;
+        width: 150px; // Smaller width for the button
+        padding: $spacing-small;
+        background-color: $primary-color;
+        color: $light-color;
+        border: none;
+        border-radius: $border-radius * 2; // More border radius
+        font-size: $font-size-base;
+        font-weight: $font-weight-bold;
+        cursor: pointer;
+        transition: background-color $transition-base;
+        margin-top: $spacing-base; // Space above the button
+
+        &:hover {
+            background-color: $hover-color;
+        }
+
+        &:active {
+            background-color: $active-color;
+        }
+    }
+
+    .no-projects-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: calc(100vh - 200px); // Adjust height to account for title and padding
+    }
+
+    .no-projects {
+        text-align: center;
+        font-size: $font-size-base;
+        color: $secondary-color;
+        margin-bottom: $spacing-base; // Space between the message and the button
+    }
+}

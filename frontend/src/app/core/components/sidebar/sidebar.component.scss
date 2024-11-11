@@ -1,0 +1,36 @@
+@import '../../../../styles/theme';
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-right: 1px solid $border-color;
+    background-color: $primary-color;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: $box-shadow;
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        padding: $spacing-base;
+        cursor: pointer;
+        transition: background-color $transition-base;
+        color: $light-color;
+
+        &:hover {
+            background-color: $hover-color;
+        }
+
+        &.active {
+            background-color: $active-color;
+            font-weight: $font-weight-bold;
+        }
+    }
+}

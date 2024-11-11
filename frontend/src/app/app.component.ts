@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HelloWorldComponent } from './modules/hello-world/hello-world.component';
+import { SidebarComponent } from './core/components/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HelloWorldComponent],
-  template: `<router-outlet></router-outlet>`,
+  imports: [RouterOutlet, SidebarComponent],
+  templateUrl: './app.component.html',
 
 })
 export class AppComponent {
