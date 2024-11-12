@@ -1,0 +1,53 @@
+@import '../../../../styles/theme';
+
+.slim-sidebar {
+    width: 60px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: $light-color;
+    border-right: 1px solid $border-color;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-base 0;
+    z-index: 1001;
+
+    .top-section,
+    .bottom-section {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-base;
+        align-items: center;
+    }
+
+    .icon-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: none;
+        color: $text-color;
+        cursor: pointer;
+        transition: all $transition-base;
+
+        &:hover {
+            background-color: rgba($primary-color, 0.1);
+            color: $primary-color;
+        }
+
+        &.avatar {
+            background-color: $primary-color;
+            color: $light-color;
+
+            &:hover {
+                background-color: $hover-color;
+            }
+        }
+    }
+}
