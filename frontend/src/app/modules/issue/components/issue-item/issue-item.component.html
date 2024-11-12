@@ -24,7 +24,10 @@
         <div class="tasks-list" [ngClass]="{ 'expanded': isTasksExpanded }">
             <div class="task-item" *ngFor="let task of issue.tasks">
                 <input type="checkbox" [checked]="task.completed" disabled />
-                <span [class.completed]="task.completed">{{ task.description }}</span>
+                <div>
+                    <span [class.completed]="task.completed">{{ task.name }}</span>
+                    <span class="task-description" *ngIf="task.description">{{ task.description }}</span>
+                </div>
             </div>
         </div>
     </div>
