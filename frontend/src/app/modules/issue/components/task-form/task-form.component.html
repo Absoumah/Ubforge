@@ -1,0 +1,68 @@
+<!-- task-form.component.html -->
+<div class="task-form" [formGroup]="taskGroup">
+    <!-- Basic Info Row -->
+    <div class="form-row basic-info">
+        <div class="form-group name-field">
+            <input id="name" type="text" formControlName="name" placeholder="Task name">
+        </div>
+
+        <div class="form-group priority-field">
+            <select id="priority" formControlName="priority">
+                <option value="" disabled>Select priority</option>
+                <option *ngFor="let priority of priorities" [ngValue]="priority">
+                    {{priority}}
+                </option>
+            </select>
+        </div>
+
+        <button type="button" class="remove-button icon-button" (click)="onRemove()" title="Remove task">
+            ✕
+        </button>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button type="button" class="toggle-button" [class.active]="showDescription"
+            (click)="toggleSection('description')">
+            <span class="icon">📝</span> Description
+        </button>
+        <button type="button" class="toggle-button" [class.active]="showAssignment"
+            (click)="toggleSection('assignment')">
+            <span class="icon">👥</span> Assign
+        </button>
+        <button type="button" class="toggle-button" [class.active]="showEstimation"
+            (click)="toggleSection('estimation')">
+            <span class="icon">⏱️</span> Estimate
+        </button>
+    </div>
+
+    <!-- Expandable Sections -->
+    <div class="expandable-sections">
+        <!-- Description Section -->
+        <div class="section description" [class.expanded]="showDescription" [@slideInOut]>
+            <div class="form-group">
+                <textarea id="description" formControlName="description" rows="2"
+                    placeholder="Add description..."></textarea>
+            </div>
+        </div>
+
+        <!-- Assignment Section -->
+        <div class="section assignment" [class.expanded]="showAssignment" [@slideInOut]>
+            <div class="form-group">
+                <select id="assignedTo" formControlName="assignedTo" multiple>
+                    <option *ngFor="let user of availableUsers" [value]="user.id">
+                        {{user.firstName}} {{user.lastName}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Estimation Section -->
+        <div class="section estimation" [class.expanded]="showEstimation" [@slideInOut]>
+            <div class="form-group">
+                <input id="estimatedHours" type="number" formControlName="estimatedHours" min="0" step="0.5"
+                    placeholder="Estimated hours">
+            </div>
+        </div>
+    </div>
+</div>

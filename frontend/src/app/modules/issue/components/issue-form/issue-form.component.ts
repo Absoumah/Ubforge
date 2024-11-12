@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import { IssueService } from '../../services/issue.service';
-import { Issue, IssueCategory } from '../../models/issue';
+import { Issue, IssueCategory, TaskPriority } from '../../models/issue';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TaskFormComponent } from '../task-form/task-form.component';
 
 @Component({
   selector: 'app-issue-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TaskFormComponent],
   templateUrl: './issue-form.component.html',
   styleUrls: ['./issue-form.component.scss']
 })
@@ -31,6 +32,8 @@ export class IssueFormComponent implements OnInit {
     this.checkEditMode();
   }
 
+
+
   private initializeForm(): void {
     this.issueForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(100)]],
@@ -44,10 +47,19 @@ export class IssueFormComponent implements OnInit {
 
   addTask(): void {
     const tasks = this.issueForm.get('tasks') as FormArray;
-    tasks.push(this.fb.group({
-      description: ['', Validators.required],
-      completed: [false]
-    }));
+    tasks.push(TaskFormComponent.createTaskForm(this.fb));
+  }
+
+  // Optional: Add type safety for task controls
+  get taskControls(): FormGroup<{
+    id: FormControl<number>;
+    name: FormControl<string>;
+    description: FormControl<string>;
+    priority: FormControl<TaskPriority>;
+    assignedTo: FormControl<number[]>;
+    estimatedHours: FormControl<number>;
+  }>[] {
+    return (this.issueForm.get('tasks') as FormArray).controls as FormGroup[];
   }
 
   removeTask(index: number): void {
@@ -55,9 +67,7 @@ export class IssueFormComponent implements OnInit {
     tasks.removeAt(index);
   }
 
-  get taskControls(): FormGroup[] {
-    return (this.issueForm.get('tasks') as FormArray).controls as FormGroup[];
-  }
+
 
   onSubmit(): void {
     if (this.issueForm.invalid) return;
