@@ -4,7 +4,7 @@
     padding: $spacing-base;
     padding-left: calc(250px + $spacing-base);
     background-color: $background-color;
-    min-height: calc(100vh - 2 * $spacing-base); // Account for padding
+    min-height: calc(100vh - 2 * $spacing-base);
 
     .issue-list-header {
         display: flex;
@@ -19,6 +19,9 @@
     }
 
     .issue-list-content {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: $spacing-base;
         width: 100%;
     }
 
@@ -29,30 +32,29 @@
         border: none;
         border-radius: $border-radius;
         cursor: pointer;
-        font-weight: $font-weight-bold;
+        transition: background-color $transition-base;
 
         &:hover {
-            background-color: darken($primary-color, 10%);
+            background-color: $hover-color;
         }
     }
 
     .no-issues {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: calc(100vh - 200px);
-        gap: $spacing-large;
+        text-align: center;
+        padding: $spacing-large;
 
         p {
-            font-size: $font-size-large;
+            margin-bottom: $spacing-base;
             color: $text-muted;
-            font-weight: $font-weight-bold;
         }
+    }
+}
 
-        .create-button {
-            padding: $spacing-base $spacing-large;
-            font-size: $font-size-base;
+// Responsive design for smaller screens
+@media screen and (max-width: 1024px) {
+    .issue-list {
+        .issue-list-content {
+            grid-template-columns: 1fr; // Switch to single column
         }
     }
 }

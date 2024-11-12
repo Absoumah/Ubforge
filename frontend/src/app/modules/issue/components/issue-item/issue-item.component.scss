@@ -1,158 +1,101 @@
 @import '../../../../../styles/theme.scss';
 
 .issue-item {
-    background-color: $light-color;
+    background: $light-color;
     border-radius: $border-radius;
     padding: $spacing-base;
+    box-shadow: $box-shadow;
     margin-bottom: $spacing-base;
-    box-shadow: 0 2px 4px rgba($text-color, 0.1);
-    transition: box-shadow $transition-base;
-
-    &:hover {
-        box-shadow: 0 4px 8px rgba($text-color, 0.15);
-    }
 
     .issue-header {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: $spacing-small;
+        align-items: center;
+        margin-bottom: $spacing-base;
 
         .issue-title {
             display: flex;
             align-items: center;
-            gap: $spacing-small;
+            gap: $spacing-base;
 
             h3 {
                 margin: 0;
-                color: $primary-color;
+                color: $text-color;
                 font-size: $font-size-large;
+                font-weight: $font-weight-bold;
             }
 
             .category-badge {
-                padding: $spacing-xxs $spacing-xs;
-                background-color: $secondary-color;
+                background: $secondary-color;
                 color: $light-color;
+                padding: $spacing-xs $spacing-small;
                 border-radius: $border-radius;
                 font-size: $font-size-small;
-                text-transform: uppercase;
-            }
-        }
-
-        .issue-dates {
-            text-align: right;
-            font-size: $font-size-small;
-            color: $text-muted;
-
-            span {
-                display: block;
-            }
-        }
-
-        .issue-actions {
-            display: flex;
-            gap: $spacing-small;
-            margin-top: $spacing-small;
-
-            button {
-                padding: $spacing-xs $spacing-base;
-                border: none;
-                border-radius: $border-radius;
-                cursor: pointer;
-                font-size: $font-size-base;
-                font-weight: $font-weight-bold;
-                transition: background-color $transition-base;
-
-                &.edit-button {
-                    background-color: $primary-color;
-                    color: $light-color;
-
-                    &:hover {
-                        background-color: darken($primary-color, 10%);
-                    }
-                }
-
-                &.delete-button {
-                    background-color: $danger-color;
-                    color: $light-color;
-
-                    &:hover {
-                        background-color: darken($danger-color, 10%);
-                    }
-                }
             }
         }
     }
 
     .issue-description {
+        color: $text-muted;
+        margin: $spacing-base 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-clamp: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .issue-dates {
+        display: flex;
+        gap: $spacing-large;
         margin-bottom: $spacing-base;
-        color: $text-color;
-        line-height: 1.5;
+        color: $text-muted;
+        font-size: $font-size-small;
+
+        span {
+            display: flex;
+            align-items: center;
+            gap: $spacing-xs;
+        }
     }
 
     .issue-tasks {
+        background: $background-color;
+        border-radius: $border-radius;
+        padding: $spacing-base;
         margin-top: $spacing-base;
 
         .tasks-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            padding: $spacing-small;
-            background-color: rgba($secondary-color, 0.1);
-            border-radius: $border-radius;
-
             h4 {
-                margin: 0;
-                font-size: $font-size-base;
+                margin: 0 0 $spacing-small 0;
+                color: $text-color;
                 font-weight: $font-weight-bold;
-                color: $secondary-color;
-            }
-
-            .toggle-icon {
-                font-size: $font-size-large;
-                color: $secondary-color;
-                transition: transform $transition-base;
-
-                &.expanded {
-                    transform: rotate(180deg);
-                }
             }
         }
 
         .tasks-list {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height $transition-base;
-
-            &.expanded {
-                max-height: 1000px; // Large enough to accommodate content
-            }
+            border-top: 1px solid $border-color;
+            margin-top: $spacing-small;
+            padding-top: $spacing-small;
 
             .task-item {
                 display: flex;
                 align-items: center;
                 gap: $spacing-small;
-                padding: $spacing-small 0;
-                border-bottom: 1px solid $border-color;
-
-                &:last-child {
-                    border-bottom: none;
-                }
+                padding: $spacing-xs 0;
+                background: $light-color;
+                border-radius: $border-radius;
+                margin-bottom: $spacing-xs;
+                padding: $spacing-small;
 
                 input[type="checkbox"] {
-                    cursor: pointer;
+                    margin: 0;
                 }
 
-                span {
-                    flex: 1;
-                    font-size: $font-size-base;
-                    color: $text-color;
-
-                    &.completed {
-                        text-decoration: line-through;
-                        color: $text-muted;
-                    }
+                .completed {
+                    text-decoration: line-through;
+                    color: $text-muted;
                 }
             }
         }
