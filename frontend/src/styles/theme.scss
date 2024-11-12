@@ -9,6 +9,7 @@ $active-color: darken($primary-color, 20%);
 $light-color: #ffffff; // White
 $danger-color: #dc3545; // Red for errors
 $accent-color: #0073d1; // Accent blue
+$text-muted: #6c757d;
 
 // Fonts
 $font-family: 'Roboto', sans-serif;
@@ -20,9 +21,12 @@ $font-weight-normal: 400;
 $font-weight-bold: 700;
 
 // Spacing
+// Spacing
 $spacing-base: 16px;
 $spacing-large: 24px;
 $spacing-small: 8px;
+$spacing-xs: 4px;
+$spacing-xxs: 2px;
 
 // Border Radius
 $border-radius: 4px;

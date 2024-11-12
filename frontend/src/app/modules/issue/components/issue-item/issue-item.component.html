@@ -5,25 +5,28 @@
             <span class="category-badge">{{ issue.category }}</span>
         </div>
         <div class="issue-dates">
-            <span>Reported: {{ issue.reportedDate | date:'shortDate' }}</span>
-            <span>Due: {{ issue.dueDate | date:'shortDate' }}</span>
-        </div>
-        <div class="issue-actions">
-            <button (click)="edit.emit(issue.id)">Edit</button>
-            <button (click)="delete.emit(issue.id)">Delete</button>
+            <span>Reported: {{ issue.reportedDate | date: 'shortDate' }}</span>
+            <span>Due: {{ issue.dueDate | date: 'shortDate' }}</span>
         </div>
     </div>
 
     <p class="issue-description">{{ issue.description }}</p>
 
+    <div class="issue-actions">
+        <button class="edit-button" (click)="edit.emit(issue.id)">Edit</button>
+        <button class="delete-button" (click)="delete.emit(issue.id)">Delete</button>
+    </div>
+
     <div class="issue-tasks">
         <div class="tasks-header" (click)="toggleTasks()">
             <h4>Tasks ({{ getCompletedTasksCount() }}/{{ issue.tasks.length }})</h4>
-            <span class="toggle-icon">{{ isTasksExpanded ? '▼' : '▶' }}</span>
+            <span class="toggle-icon" [ngClass]="{ 'expanded': isTasksExpanded }">
+                {{ isTasksExpanded ? '▼' : '▲' }}
+            </span>
         </div>
-        <div class="tasks-list" *ngIf="isTasksExpanded">
+        <div class="tasks-list" [ngClass]="{ 'expanded': isTasksExpanded }">
             <div class="task-item" *ngFor="let task of issue.tasks">
-                <input type="checkbox" [checked]="task.completed" disabled>
+                <input type="checkbox" [checked]="task.completed" disabled />
                 <span [class.completed]="task.completed">{{ task.description }}</span>
             </div>
         </div>

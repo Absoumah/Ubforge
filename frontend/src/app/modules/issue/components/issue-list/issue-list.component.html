@@ -1,1 +1,19 @@
-<p>issue-list works!</p>
+<div class="issue-list">
+    <div class="issue-list-header">
+        <h2>Issues</h2>
+        <button *ngIf="issues.length" class="create-button" (click)="createIssue()">Create Issue +</button>
+    </div>
+
+    <div *ngIf="issues.length; else noIssues" class="issue-list-content">
+        <app-issue-item *ngFor="let issue of issues" [issue]="issue" (edit)="editIssue($event)"
+            (delete)="deleteIssue($event)">
+        </app-issue-item>
+    </div>
+
+    <ng-template #noIssues>
+        <div class="no-issues">
+            <p>No issues found</p>
+            <button class="create-button" (click)="createIssue()">Create Issue +</button>
+        </div>
+    </ng-template>
+</div>

@@ -36,7 +36,7 @@ export class IssueFormComponent implements OnInit {
       title: ['', [Validators.required, Validators.maxLength(100)]],
       category: ['', Validators.required],
       description: ['', [Validators.required, Validators.maxLength(500)]],
-      reportedDate: ['', Validators.required],
+      reportedDate: [new Date().toISOString().split('T')[0], Validators.required],
       dueDate: ['', Validators.required],
       tasks: this.fb.array([])
     });
