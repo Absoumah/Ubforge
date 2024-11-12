@@ -12,10 +12,7 @@
 
     <p class="issue-description">{{ issue.description }}</p>
 
-    <div class="issue-actions">
-        <button class="edit-button" (click)="edit.emit(issue.id)">Edit</button>
-        <button class="delete-button" (click)="delete.emit(issue.id)">Delete</button>
-    </div>
+
 
     <div class="issue-tasks">
         <div class="tasks-header" (click)="toggleTasks()">
@@ -30,5 +27,11 @@
                 <span [class.completed]="task.completed">{{ task.description }}</span>
             </div>
         </div>
+    </div>
+
+
+    <div class="issue-actions">
+        <button class="edit-button" (click)="edit.emit(issue.id)"></button>
+        <button class="delete-button" (click)="delete.emit(issue.id)"></button>
     </div>
 </div>

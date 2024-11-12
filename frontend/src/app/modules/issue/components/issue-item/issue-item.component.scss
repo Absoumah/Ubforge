@@ -6,17 +6,16 @@
     padding: $spacing-base;
     box-shadow: $box-shadow;
     margin-bottom: $spacing-base;
+    position: relative;
 
     .issue-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         margin-bottom: $spacing-base;
 
         .issue-title {
             display: flex;
             align-items: center;
             gap: $spacing-base;
+            margin-bottom: $spacing-base;
 
             h3 {
                 margin: 0;
@@ -35,6 +34,26 @@
         }
     }
 
+    .issue-dates {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-small;
+        margin-bottom: $spacing-base;
+        color: $text-muted;
+        font-size: $font-size-small;
+
+        span {
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+
+            &:before {
+                content: '📅';
+                font-size: $font-size-base;
+            }
+        }
+    }
+
     .issue-description {
         color: $text-muted;
         margin: $spacing-base 0;
@@ -46,17 +65,32 @@
         text-overflow: ellipsis;
     }
 
-    .issue-dates {
+    .issue-actions {
+        position: absolute;
+        bottom: $spacing-base;
+        left: $spacing-base;
         display: flex;
-        gap: $spacing-large;
-        margin-bottom: $spacing-base;
-        color: $text-muted;
-        font-size: $font-size-small;
+        gap: $spacing-small;
 
-        span {
-            display: flex;
-            align-items: center;
-            gap: $spacing-xs;
+        button {
+            background: none;
+            border: none;
+            padding: $spacing-xs;
+            cursor: pointer;
+            color: $text-muted;
+            transition: color $transition-base;
+
+            &.edit-button:before {
+                content: '✏️';
+            }
+
+            &.delete-button:before {
+                content: '🗑️';
+            }
+
+            &:hover {
+                color: $primary-color;
+            }
         }
     }
 
@@ -65,10 +99,16 @@
         border-radius: $border-radius;
         padding: $spacing-base;
         margin-top: $spacing-base;
+        margin-bottom: 2.5rem; // Add space for the absolute positioned buttons
 
         .tasks-header {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
             h4 {
-                margin: 0 0 $spacing-small 0;
+                margin: 0;
                 color: $text-color;
                 font-weight: $font-weight-bold;
             }
@@ -83,7 +123,6 @@
                 display: flex;
                 align-items: center;
                 gap: $spacing-small;
-                padding: $spacing-xs 0;
                 background: $light-color;
                 border-radius: $border-radius;
                 margin-bottom: $spacing-xs;
