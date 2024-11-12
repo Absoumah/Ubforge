@@ -1,0 +1,58 @@
+@import '../../../../../styles/theme.scss';
+
+.issue-item {
+    background-color: $light-color;
+    border-radius: $border-radius;
+    padding: $spacing-base;
+    margin-bottom: $spacing-base;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .issue-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-small;
+
+        .issue-title {
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+
+            h3 {
+                margin: 0;
+                color: $primary-color;
+            }
+
+            .category-badge {
+                padding: 4px 8px;
+                background-color: $secondary-color;
+                color: $light-color;
+                border-radius: $border-radius;
+                font-size: $font-size-small;
+            }
+        }
+    }
+
+    .issue-tasks {
+        margin-top: $spacing-base;
+
+        .tasks-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+            padding: $spacing-small 0;
+
+            .completed {
+                text-decoration: line-through;
+                color: $text-muted;
+            }
+        }
+    }
+}
