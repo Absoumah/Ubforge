@@ -38,6 +38,22 @@ export const routes: Routes = [
             .then(m => m.ProjectFormComponent)
     },
     {
+        path: 'issues',
+        loadComponent: () => import('./modules/issue/components/issue-list/issue-list.component')
+            .then(m => m.IssueListComponent)
+    },
+    {
+        path: 'issues/create',
+        loadComponent: () => import('./modules/issue/components/issue-form/issue-form.component')
+            .then(m => m.IssueFormComponent)
+
+    },
+    {
+        path: 'issues/edit/:id',
+        loadComponent: () => import('./modules/issue/components/issue-form/issue-form.component')
+            .then(m => m.IssueFormComponent)
+    },
+    {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

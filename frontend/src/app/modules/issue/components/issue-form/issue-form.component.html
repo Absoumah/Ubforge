@@ -1,1 +1,54 @@
-<p>issue-form works!</p>
+<div class="issue-form-container">
+    <h2>{{ isEditMode ? 'Edit Issue' : 'Create Issue' }}</h2>
+    <form [formGroup]="issueForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input id="title" type="text" formControlName="title">
+            <div class="error" *ngIf="issueForm.get('title')?.invalid && issueForm.get('title')?.touched">
+                <small *ngIf="issueForm.get('title')?.errors?.['required']">Title is required</small>
+                <small *ngIf="issueForm.get('title')?.errors?.['maxlength']">Title cannot exceed 100 characters</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" formControlName="category">
+                <option value="">Select a category</option>
+                <option *ngFor="let category of categories" [value]="category">{{category}}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" formControlName="description" rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="reportedDate">Reported Date</label>
+            <input id="reportedDate" type="date" formControlName="reportedDate"
+                [value]="issueForm.get('reportedDate')?.value | date:'yyyy-MM-dd'" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="dueDate">Due Date</label>
+            <input id="dueDate" type="date" formControlName="dueDate">
+        </div>
+
+        <div class="tasks-section">
+            <h3>Resolution Tasks</h3>
+            <button type="button" (click)="addTask()">Add Task</button>
+
+            <div formArrayName="tasks">
+                <div *ngFor="let task of taskControls; let i=index" [formGroupName]="i" class="task-item">
+                    <input type="text" formControlName="description" placeholder="Task description">
+                    <input type="checkbox" formControlName="completed">
+                    <button type="button" (click)="removeTask(i)">Remove</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" [disabled]="issueForm.invalid">Save Issue</button>
+        </div>
+    </form>
+</div>
