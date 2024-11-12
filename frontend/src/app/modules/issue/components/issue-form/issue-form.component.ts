@@ -36,7 +36,7 @@ export class IssueFormComponent implements OnInit {
       title: ['', [Validators.required, Validators.maxLength(100)]],
       category: ['', Validators.required],
       description: ['', [Validators.required, Validators.maxLength(500)]],
-      reportedDate: [new Date(), Validators.required],
+      reportedDate: ['', Validators.required],
       dueDate: ['', Validators.required],
       tasks: this.fb.array([])
     });
@@ -55,8 +55,8 @@ export class IssueFormComponent implements OnInit {
     tasks.removeAt(index);
   }
 
-  get taskControls() {
-    return (this.issueForm.get('tasks') as FormArray).controls;
+  get taskControls(): FormGroup[] {
+    return (this.issueForm.get('tasks') as FormArray).controls as FormGroup[];
   }
 
   onSubmit(): void {
