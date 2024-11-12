@@ -1,9 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Task, TaskPriority, AssignedUser } from '../../models/issue';
 
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Observable } from 'rxjs';
+import { TaskService } from '../../services/task.service';
 
 
 @Component({
@@ -26,32 +28,25 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
     ])
   ]
 })
-export class TaskFormComponent {
+export class TaskFormComponent implements OnInit {
   @Input() taskGroup!: FormGroup;
   @Output() removeTask = new EventEmitter<void>();
+  @Output() taskChange = new EventEmitter<FormGroup>();
 
   readonly priorities = Object.values(TaskPriority);
+  availableUsers$: Observable<AssignedUser[]>;
+
   showDescription = false;
   showAssignment = false;
   showEstimation = false;
 
-  // TODO: Mock data - in real app would come from a service
-  availableUsers: AssignedUser[] = [
-    { id: 1, firstName: 'John', lastName: 'Doe' },
-    { id: 2, firstName: 'Jane', lastName: 'Smith' },
-    { id: 3, firstName: 'Mike', lastName: 'Johnson' }
-  ];
+  constructor(private taskService: TaskService) {
+    this.availableUsers$ = this.taskService.getAvailableUsers();
+  }
 
-  constructor() { }
-
-  static createTaskForm(fb: FormBuilder): FormGroup {
-    return fb.group({
-      id: [Date.now()],
-      name: ['', Validators.required],
-      description: [''],
-      priority: [TaskPriority.MEDIUM, Validators.required],
-      assignedTo: [[]],
-      estimatedHours: [0, [Validators.required, Validators.min(0)]]
+  ngOnInit(): void {
+    this.taskGroup.valueChanges.subscribe(() => {
+      this.taskChange.emit(this.taskGroup);
     });
   }
 

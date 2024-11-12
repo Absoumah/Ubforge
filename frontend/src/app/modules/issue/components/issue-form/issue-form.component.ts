@@ -5,6 +5,7 @@ import { IssueService } from '../../services/issue.service';
 import { Issue, IssueCategory, TaskPriority } from '../../models/issue';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskFormComponent } from '../task-form/task-form.component';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-issue-form',
@@ -23,6 +24,7 @@ export class IssueFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private issueService: IssueService,
+    private taskService: TaskService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
@@ -47,9 +49,13 @@ export class IssueFormComponent implements OnInit {
 
   addTask(): void {
     const tasks = this.issueForm.get('tasks') as FormArray;
-    tasks.push(TaskFormComponent.createTaskForm(this.fb));
+    tasks.push(this.taskService.createTaskForm());
   }
 
+  onTaskChange(index: number, taskForm: FormGroup): void {
+    const tasks = this.issueForm.get('tasks') as FormArray;
+    tasks.at(index).patchValue(taskForm.value);
+  }
   // Optional: Add type safety for task controls
   get taskControls(): FormGroup<{
     id: FormControl<number>;

@@ -39,7 +39,7 @@
             <button type="button" (click)="addTask()">Add Task</button>
             <div formArrayName="tasks">
                 <app-task-form *ngFor="let task of taskControls; let i=index" [taskGroup]="task"
-                    (removeTask)="removeTask(i)">
+                    (removeTask)="removeTask(i)" (taskChange)="onTaskChange(i, $event)">
                 </app-task-form>
             </div>
         </div>
