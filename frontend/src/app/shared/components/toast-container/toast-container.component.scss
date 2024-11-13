@@ -1,0 +1,12 @@
+@import '../../../../styles/theme.scss';
+
+
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+}
