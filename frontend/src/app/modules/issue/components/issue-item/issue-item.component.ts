@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Issue } from '../../models/issue';
+import { TaskItemComponent } from '../task-item/task-item.component';
 
 @Component({
   selector: 'app-issue-item',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TaskItemComponent],
   templateUrl: './issue-item.component.html',
   styleUrls: ['./issue-item.component.scss']
 })

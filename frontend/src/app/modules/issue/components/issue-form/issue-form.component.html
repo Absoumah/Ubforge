@@ -37,13 +37,10 @@
         <div class="tasks-section">
             <h3>Resolution Tasks</h3>
             <button type="button" (click)="addTask()">Add Task</button>
-
             <div formArrayName="tasks">
-                <div *ngFor="let task of taskControls; let i=index" [formGroupName]="i" class="task-item">
-                    <input type="text" formControlName="description" placeholder="Task description">
-                    <input type="checkbox" formControlName="completed">
-                    <button type="button" (click)="removeTask(i)">Remove</button>
-                </div>
+                <app-task-form *ngFor="let task of taskControls; let i=index" [taskGroup]="task"
+                    (removeTask)="removeTask(i)" (taskChange)="onTaskChange(i, $event)">
+                </app-task-form>
             </div>
         </div>
 

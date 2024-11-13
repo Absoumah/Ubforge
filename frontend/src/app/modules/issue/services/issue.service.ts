@@ -34,4 +34,7 @@ export class IssueService {
     this.issues = this.issues.filter(issue => issue.id !== id);
     this.issuesSubject.next([...this.issues]);
   }
+
+
+
 }

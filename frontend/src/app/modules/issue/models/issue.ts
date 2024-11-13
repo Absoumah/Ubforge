@@ -1,8 +1,8 @@
-export interface Task {
-    id: number;
-    description: string;
-    completed: boolean;
-}
+// TODO : separate the task and issue model into separate files
+
+import { Task } from "./task.interface";
+
+
 
 export interface Issue {
     id: number;
