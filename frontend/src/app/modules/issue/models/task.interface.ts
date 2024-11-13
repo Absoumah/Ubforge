@@ -1,5 +1,6 @@
 import { TaskPriority } from './task-priority.enum';
 import { AssignedUser } from './assigned-user.interface';
+import { TaskStatus } from './task-status.enum';
 
 export interface Task {
     id: number;
@@ -9,7 +10,10 @@ export interface Task {
     assignedTo: AssignedUser[];
     estimatedHours: number;
     completed: boolean;
+    status: TaskStatus;
+    dueDate: Date;
 }
+
 
 export interface TaskForm {
     id: number;
@@ -18,4 +22,6 @@ export interface TaskForm {
     priority: TaskPriority;
     assignedTo: number[];
     estimatedHours: number;
+    status: TaskStatus;
+    dueDate: Date;
 }

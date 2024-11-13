@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import { IssueService } from '../../services/issue.service';
-import { Issue, IssueCategory, TaskPriority } from '../../models/issue';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { TaskService } from '../../services/task.service';
+import { Issue, IssueCategory } from '../../models/issue';
 
 @Component({
   selector: 'app-issue-form',
@@ -34,8 +34,6 @@ export class IssueFormComponent implements OnInit {
     this.checkEditMode();
   }
 
-
-
   private initializeForm(): void {
     this.issueForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(100)]],
@@ -54,26 +52,24 @@ export class IssueFormComponent implements OnInit {
 
   onTaskChange(index: number, taskForm: FormGroup): void {
     const tasks = this.issueForm.get('tasks') as FormArray;
-    tasks.at(index).patchValue(taskForm.value);
+    // prevent recursion
+    const currentValue = tasks.at(index).value;
+    const newValue = taskForm.value;
+
+    if (JSON.stringify(currentValue) !== JSON.stringify(newValue)) {
+      tasks.at(index).patchValue(newValue, { emitEvent: false });
+    }
   }
-  // Optional: Add type safety for task controls
-  get taskControls(): FormGroup<{
-    id: FormControl<number>;
-    name: FormControl<string>;
-    description: FormControl<string>;
-    priority: FormControl<TaskPriority>;
-    assignedTo: FormControl<number[]>;
-    estimatedHours: FormControl<number>;
-  }>[] {
-    return (this.issueForm.get('tasks') as FormArray).controls as FormGroup[];
-  }
+
 
   removeTask(index: number): void {
     const tasks = this.issueForm.get('tasks') as FormArray;
     tasks.removeAt(index);
   }
 
-
+  get taskControls(): FormGroup[] {
+    return (this.issueForm.get('tasks') as FormArray).controls as FormGroup[];
+  }
 
   onSubmit(): void {
     if (this.issueForm.invalid) return;

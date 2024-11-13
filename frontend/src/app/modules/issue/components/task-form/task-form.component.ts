@@ -1,11 +1,12 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Task, TaskPriority, AssignedUser } from '../../models/issue';
 
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, Subject, takeUntil } from 'rxjs';
 import { TaskService } from '../../services/task.service';
+import { TaskPriority } from '../../models/task-priority.enum';
+import { AssignedUser } from '../../models/assigned-user.interface';
 
 
 @Component({
@@ -28,7 +29,7 @@ import { TaskService } from '../../services/task.service';
     ])
   ]
 })
-export class TaskFormComponent implements OnInit {
+export class TaskFormComponent implements OnInit, OnDestroy {
   @Input() taskGroup!: FormGroup;
   @Output() removeTask = new EventEmitter<void>();
   @Output() taskChange = new EventEmitter<FormGroup>();
@@ -40,15 +41,30 @@ export class TaskFormComponent implements OnInit {
   showAssignment = false;
   showEstimation = false;
 
+  private destroy$ = new Subject<void>();
+
+
   constructor(private taskService: TaskService) {
     this.availableUsers$ = this.taskService.getAvailableUsers();
   }
 
   ngOnInit(): void {
-    this.taskGroup.valueChanges.subscribe(() => {
-      this.taskChange.emit(this.taskGroup);
-    });
+    this.taskGroup.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.taskChange.emit(this.taskGroup);
+      });
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 
   onRemove(): void {
     this.removeTask.emit();

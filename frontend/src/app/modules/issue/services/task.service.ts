@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { AssignedUser } from '../models/assigned-user.interface';
 import { Task, TaskForm } from '../models/task.interface';
 import { TaskPriority } from '../models/task-priority.enum';
+import { TaskStatus } from '../models/task-status.enum';
 
 @Injectable({
     providedIn: 'root'
@@ -14,11 +15,14 @@ export class TaskService {
     createTaskForm(): FormGroup {
         return this.fb.group({
             id: [Date.now()],
-            name: ['', [Validators.required, Validators.maxLength(100)]],
+            name: ['', Validators.required],
             description: [''],
             priority: [TaskPriority.MEDIUM, Validators.required],
             assignedTo: [[]],
-            estimatedHours: [0, [Validators.required, Validators.min(0)]]
+            estimatedHours: [0],
+            completed: [false],
+            status: [TaskStatus.TODO],
+            dueDate: [null]
         });
     }
 
@@ -35,7 +39,9 @@ export class TaskService {
         return {
             ...formValue,
             completed: false,
-            assignedTo: [] // TODO: Map user IDs to actual users
+            assignedTo: [], // TODO: Map user IDs to actual users, 
+            status: formValue.status || TaskStatus.TODO,
+            dueDate: formValue.dueDate || new Date()
         };
     }
 }
