@@ -16,22 +16,39 @@
                 <option value="">Select a category</option>
                 <option *ngFor="let category of categories" [value]="category">{{category}}</option>
             </select>
+            <div class="error" *ngIf="issueForm.get('category')?.invalid && issueForm.get('category')?.touched">
+                <small *ngIf="issueForm.get('category')?.errors?.['required']">Category is required</small>
+            </div>
         </div>
 
         <div class="form-group">
             <label for="description">Description</label>
             <textarea id="description" formControlName="description" rows="4"></textarea>
+            <div class="error" *ngIf="issueForm.get('description')?.invalid && issueForm.get('description')?.touched">
+                <small *ngIf="issueForm.get('description')?.errors?.['required']">Description is required</small>
+                <small *ngIf="issueForm.get('description')?.errors?.['maxlength']">Description cannot exceed 500
+                    characters</small>
+            </div>
         </div>
 
         <div class="form-group">
             <label for="reportedDate">Reported Date</label>
-            <input id="reportedDate" type="date" formControlName="reportedDate"
-                [value]="issueForm.get('reportedDate')?.value | date:'yyyy-MM-dd'" readonly>
+            <input id="reportedDate" type="date" formControlName="reportedDate" [min]="minReportedDate"
+                [max]="maxReportedDate" [value]="issueForm.get('reportedDate')?.value | date:'yyyy-MM-dd'">
+            <div class="error" *ngIf="issueForm.get('reportedDate')?.invalid && issueForm.get('reportedDate')?.touched">
+                <small *ngIf="issueForm.get('reportedDate')?.errors?.['required']">Reported Date is required</small>
+            </div>
         </div>
 
         <div class="form-group">
             <label for="dueDate">Due Date</label>
-            <input id="dueDate" type="date" formControlName="dueDate">
+            <input id="dueDate" type="date" formControlName="dueDate" [min]="minDueDate" [max]="maxDueDate"
+                [value]="issueForm.get('dueDate')?.value | date:'yyyy-MM-dd'">
+            <div class="error" *ngIf="issueForm.get('dueDate')?.invalid && issueForm.get('dueDate')?.touched">
+                <small *ngIf="issueForm.get('dueDate')?.errors?.['required']">Due Date is required</small>
+                <small *ngIf="issueForm.get('dueDate')?.errors?.['dueDateInvalid']">Due Date cannot be earlier than
+                    Reported Date</small>
+            </div>
         </div>
 
         <div class="tasks-section">

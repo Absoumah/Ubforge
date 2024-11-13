@@ -7,6 +7,7 @@ import { TaskFormComponent } from '../task-form/task-form.component';
 import { TaskService } from '../../services/task.service';
 import { Issue, IssueCategory } from '../../models/issue';
 import { TaskForm } from '../../models/task.interface';
+import { dueDateValidator } from '../../validators/due-date.validator';
 
 @Component({
   selector: 'app-issue-form',
@@ -21,6 +22,10 @@ export class IssueFormComponent implements OnInit {
   isEditMode = false;
   issueId: number | null = null;
   errorMessage: string | null = null;
+  minReportedDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]; // 30 days ago
+  maxReportedDate = new Date().toISOString().split('T')[0]; // today
+  minDueDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]; // tomorrow
+  maxDueDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]; // 1 year from now
 
   constructor(
     private fb: FormBuilder,
@@ -40,10 +45,13 @@ export class IssueFormComponent implements OnInit {
       title: ['', [Validators.required, Validators.maxLength(100)]],
       category: ['', Validators.required],
       description: ['', [Validators.required, Validators.maxLength(500)]],
-      reportedDate: [new Date().toISOString().split('T')[0], Validators.required],
-      dueDate: ['', Validators.required],
+      reportedDate: [Date(), [Validators.required]],
+      dueDate: ['', [Validators.required]],
       tasks: this.fb.array([])
     });
+
+    const reportedDateControl = this.issueForm.get('reportedDate');
+    this.issueForm.get('dueDate')?.addValidators(dueDateValidator(reportedDateControl!));
   }
 
   private checkEditMode(): void {
