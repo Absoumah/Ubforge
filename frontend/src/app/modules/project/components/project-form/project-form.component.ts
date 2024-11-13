@@ -25,8 +25,8 @@ export class ProjectFormComponent implements OnInit {
     private projectService: ProjectService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastService: ToastService,
-  ) { }
+    private toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.initializeForm();
@@ -49,7 +49,7 @@ export class ProjectFormComponent implements OnInit {
   }
 
   private createUrlControl(): FormControl {
-    return this.fb.control('', [Validators.required, Validators.pattern('https?://.+')]);
+    return this.fb.control('', [Validators.required, Validators.pattern(/^(http|https):\/\/[^ "]+$/)]);
   }
 
   private createCategoryControl(): FormControl {
@@ -57,15 +57,11 @@ export class ProjectFormComponent implements OnInit {
   }
 
   private createDescriptionControl(): FormControl {
-    return this.fb.control('', [Validators.required, Validators.maxLength(500)]);
+    return this.fb.control('', [Validators.required, Validators.maxLength(200)]);
   }
 
   private createAssignedUsersArray(): FormArray {
-    return this.fb.array([
-      this.fb.group({ id: 1, firstName: 'John', lastName: 'Doe' }),
-      this.fb.group({ id: 2, firstName: 'Jane', lastName: 'Smith' }),
-      this.fb.group({ id: 3, firstName: 'Alice', lastName: 'Johnson' })
-    ]);
+    return this.fb.array([]);
   }
 
   private loadCategories(): void {
@@ -103,7 +99,6 @@ export class ProjectFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.projectForm.invalid) {
-      console.error('Form is invalid');
       this.toastService.error('Please fill all required fields correctly');
       return;
     }

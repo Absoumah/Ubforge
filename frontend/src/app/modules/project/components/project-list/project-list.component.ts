@@ -5,6 +5,7 @@ import { Project } from '../../models/project.model';
 import { ProjectItemComponent } from '../project-item/project-item.component';
 import { Router, RouterModule } from '@angular/router';
 import { DialogService } from '../../../../shared/services/dialog.service';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-project-list',
@@ -19,26 +20,24 @@ export class ProjectListComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private router: Router,
-    private dialogService: DialogService) { }
+    private dialogService: DialogService,
+    private toastService: ToastService
+  ) {}
 
-  // Get all projects on init from the ProjectService
   ngOnInit(): void {
     this.projectService.getProjects().subscribe((projects) => {
       this.projects = projects;
     });
   }
 
-  // create a new project
   createProject(): void {
     this.router.navigate(['/projects/create']);
   }
 
-  // edit a project
   editProject(id: number): void {
     this.router.navigate(['/projects/edit', id]);
   }
 
-  // delete a project
   async deleteProject(id: number): Promise<void> {
     const confirmed = await this.dialogService.confirm({
       title: 'Delete Project',
@@ -49,6 +48,9 @@ export class ProjectListComponent implements OnInit {
 
     if (confirmed) {
       this.projectService.deleteProject(id);
+      this.toastService.success('Project deleted successfully');
+    } else {
+      this.toastService.info('Project deletion cancelled');
     }
   }
 }
