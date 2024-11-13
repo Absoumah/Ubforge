@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IssueService } from '../../services/issue.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { TaskService } from '../../services/task.service';
 import { Issue, IssueCategory } from '../../models/issue';
+import { TaskForm } from '../../models/task.interface';
 
 @Component({
   selector: 'app-issue-form',
@@ -45,53 +46,6 @@ export class IssueFormComponent implements OnInit {
     });
   }
 
-  addTask(): void {
-    const tasks = this.issueForm.get('tasks') as FormArray;
-    tasks.push(this.taskService.createTaskForm());
-  }
-
-  onTaskChange(index: number, taskForm: FormGroup): void {
-    const tasks = this.issueForm.get('tasks') as FormArray;
-    // prevent recursion
-    const currentValue = tasks.at(index).value;
-    const newValue = taskForm.value;
-
-    if (JSON.stringify(currentValue) !== JSON.stringify(newValue)) {
-      tasks.at(index).patchValue(newValue, { emitEvent: false });
-    }
-  }
-
-
-  removeTask(index: number): void {
-    const tasks = this.issueForm.get('tasks') as FormArray;
-    tasks.removeAt(index);
-  }
-
-  get taskControls(): FormGroup[] {
-    return (this.issueForm.get('tasks') as FormArray).controls as FormGroup[];
-  }
-
-  onSubmit(): void {
-    if (this.issueForm.invalid) return;
-
-    const issue: Issue = {
-      id: this.issueId || Date.now(),
-      ...this.issueForm.value
-    };
-
-    try {
-      if (this.isEditMode) {
-        this.issueService.updateIssue(issue);
-      } else {
-        this.issueService.addIssue(issue);
-      }
-      this.router.navigate(['/issues']);
-    } catch (error) {
-      this.errorMessage = 'An error occurred while saving the issue.';
-      console.error(error);
-    }
-  }
-
   private checkEditMode(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -109,6 +63,54 @@ export class IssueFormComponent implements OnInit {
         const tasks = this.issueForm.get('tasks') as FormArray;
         tasks.push(this.fb.group(task));
       });
+    }
+  }
+
+  addTask(): void {
+    const tasks = this.issueForm.get('tasks') as FormArray;
+    tasks.push(this.taskService.createTaskForm());
+  }
+
+  removeTask(index: number): void {
+    const tasks = this.issueForm.get('tasks') as FormArray;
+    tasks.removeAt(index);
+  }
+
+  onTaskChange(index: number, taskForm: FormGroup): void {
+    const tasks = this.issueForm.get('tasks') as FormArray;
+    const currentValue = tasks.at(index).value;
+    const newValue = taskForm.value;
+
+    if (JSON.stringify(currentValue) !== JSON.stringify(newValue)) {
+      tasks.at(index).patchValue(newValue, { emitEvent: false });
+    }
+  }
+
+  get taskControls(): FormGroup[] {
+    return (this.issueForm.get('tasks') as FormArray).controls as FormGroup[];
+  }
+
+  onSubmit(): void {
+    if (this.issueForm.invalid) return;
+
+    const issue: Issue = {
+      id: this.issueId || Date.now(),
+      ...this.issueForm.value,
+      tasks: this.issueForm.value.tasks.map((task: TaskForm) => this.taskService.mapFormToTask(task))
+    };
+
+    console.log('Issue Data on Submit:', issue); // Log issue data on submit
+
+    try {
+      if (this.isEditMode) {
+        this.issueService.updateIssue(issue);
+      } else {
+        this.issueService.addIssue(issue);
+      }
+      this.router.navigate(['/issues']);
+    } catch (error) {
+      this.errorMessage = 'An error occurred while saving the issue.';
+      console.error(error);
     }
   }
 }

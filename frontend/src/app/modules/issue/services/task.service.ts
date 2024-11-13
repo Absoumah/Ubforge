@@ -10,6 +10,12 @@ import { TaskStatus } from '../models/task-status.enum';
     providedIn: 'root'
 })
 export class TaskService {
+    private availableUsers: AssignedUser[] = [
+        { id: 1, firstName: 'John', lastName: 'Doe' },
+        { id: 2, firstName: 'Jane', lastName: 'Smith' },
+        { id: 3, firstName: 'Mike', lastName: 'Johnson' }
+    ];
+
     constructor(private fb: FormBuilder) { }
 
     createTaskForm(): FormGroup {
@@ -27,19 +33,20 @@ export class TaskService {
     }
 
     getAvailableUsers(): Observable<AssignedUser[]> {
-        // TODO: Replace with actual API call
-        return of([
-            { id: 1, firstName: 'John', lastName: 'Doe' },
-            { id: 2, firstName: 'Jane', lastName: 'Smith' },
-            { id: 3, firstName: 'Mike', lastName: 'Johnson' }
-        ]);
+        return of(this.availableUsers);
     }
 
     mapFormToTask(formValue: TaskForm): Task {
+        const assignedTo = formValue.assignedTo.map(userId =>
+            this.availableUsers.find(user => user.id === userId)
+        ).filter(user => user !== undefined) as AssignedUser[];
+
+        console.log('Assigned Users:', assignedTo); // Log assigned users
+
         return {
             ...formValue,
+            assignedTo,
             completed: false,
-            assignedTo: [], // TODO: Map user IDs to actual users, 
             status: formValue.status || TaskStatus.TODO,
             dueDate: formValue.dueDate || new Date()
         };

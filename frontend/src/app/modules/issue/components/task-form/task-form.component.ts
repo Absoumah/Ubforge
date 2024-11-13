@@ -1,13 +1,11 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { trigger, style, animate, transition } from '@angular/animations';
 import { debounceTime, distinctUntilChanged, Observable, Subject, takeUntil } from 'rxjs';
 import { TaskService } from '../../services/task.service';
 import { TaskPriority } from '../../models/task-priority.enum';
 import { AssignedUser } from '../../models/assigned-user.interface';
-
 
 @Component({
   selector: 'app-task-form',
@@ -19,12 +17,10 @@ import { AssignedUser } from '../../models/assigned-user.interface';
     trigger('slideInOut', [
       transition(':enter', [
         style({ opacity: 0, height: 0 }),
-        animate('200ms ease-out',
-          style({ opacity: 1, height: '*' }))
+        animate('200ms ease-out', style({ opacity: 1, height: '*' }))
       ]),
       transition(':leave', [
-        animate('200ms ease-in',
-          style({ opacity: 0, height: 0 }))
+        animate('200ms ease-in', style({ opacity: 0, height: 0 }))
       ])
     ])
   ]
@@ -43,7 +39,6 @@ export class TaskFormComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-
   constructor(private taskService: TaskService) {
     this.availableUsers$ = this.taskService.getAvailableUsers();
   }
@@ -56,6 +51,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
+        console.log('Task Form Value Changes:', this.taskGroup.value); // Log task form value changes
         this.taskChange.emit(this.taskGroup);
       });
   }
@@ -64,7 +60,6 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 
   onRemove(): void {
     this.removeTask.emit();
