@@ -4,6 +4,7 @@ import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-project-form',
@@ -23,7 +24,8 @@ export class ProjectFormComponent implements OnInit {
     private fb: FormBuilder,
     private projectService: ProjectService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastService: ToastService,
   ) { }
 
   ngOnInit(): void {
@@ -102,6 +104,7 @@ export class ProjectFormComponent implements OnInit {
   onSubmit(): void {
     if (this.projectForm.invalid) {
       console.error('Form is invalid');
+      this.toastService.error('Please fill all required fields correctly');
       return;
     }
 
@@ -113,13 +116,14 @@ export class ProjectFormComponent implements OnInit {
     try {
       if (this.isEditMode) {
         this.projectService.updateProject(project);
+        this.toastService.success('Project updated successfully');
       } else {
         this.projectService.addProject(project);
+        this.toastService.success('Project created successfully');
       }
-
       this.router.navigate(['/projects']);
     } catch (error) {
-      this.handleError(error);
+      this.toastService.error('An error occurred while saving the project');
     }
   }
 

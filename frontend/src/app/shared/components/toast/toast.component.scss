@@ -1,0 +1,51 @@
+@import '../../../../styles/theme.scss';
+
+.toast {
+    padding: $spacing-base;
+    margin: $spacing-small;
+    border-radius: $border-radius;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    min-width: 300px;
+    max-width: 500px;
+    cursor: pointer;
+
+    &.success {
+        background-color: rgba($accent-color, 0.9);
+        color: $light-color;
+    }
+
+    &.error {
+        background-color: rgba($danger-color, 0.9);
+        color: $light-color;
+    }
+
+    &.info {
+        background-color: rgba($primary-color, 0.9);
+        color: $light-color;
+    }
+
+    &.warning {
+        background-color: rgba($warning-color, 0.9);
+        color: $light-color;
+    }
+
+    .toast-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $spacing-base;
+    }
+
+    .toast-close {
+        background: none;
+        border: none;
+        color: currentColor;
+        font-size: 1.5rem;
+        cursor: pointer;
+        opacity: 0.7;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
