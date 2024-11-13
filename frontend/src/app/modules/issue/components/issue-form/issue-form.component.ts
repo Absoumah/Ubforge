@@ -59,9 +59,20 @@ export class IssueFormComponent implements OnInit {
     const issue = this.issueService.getIssueById(id);
     if (issue) {
       this.issueForm.patchValue(issue);
+      const tasks = this.issueForm.get('tasks') as FormArray;
+      tasks.clear(); // Clear existing tasks
       issue.tasks.forEach(task => {
-        const tasks = this.issueForm.get('tasks') as FormArray;
-        tasks.push(this.fb.group(task));
+        tasks.push(this.fb.group({
+          id: [task.id],
+          name: [task.name, Validators.required],
+          description: [task.description],
+          priority: [task.priority, Validators.required],
+          assignedTo: [task.assignedTo.map(user => user.id)], // Assuming assignedTo is an array of user IDs
+          estimatedHours: [task.estimatedHours],
+          completed: [task.completed],
+          status: [task.status],
+          dueDate: [task.dueDate]
+        }));
       });
     }
   }
