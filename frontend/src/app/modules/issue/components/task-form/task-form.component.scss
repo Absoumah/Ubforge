@@ -1,0 +1,121 @@
+@import '../../../../../styles/theme.scss';
+
+.task-form {
+    background: $light-color;
+    border-radius: $border-radius;
+    padding: $spacing-base;
+    margin-bottom: $spacing-base;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid $border-color;
+
+    .basic-info {
+        display: flex;
+        gap: $spacing-base;
+        align-items: center;
+
+        .name-field {
+            flex: 2;
+        }
+
+        .priority-field {
+            select {
+                color: $text-color;
+                appearance: none; // Remove default arrow
+                background: white url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='%23000000' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") no-repeat;
+                background-position: calc(100% - 8px) center;
+                padding-right: 28px;
+
+                option {
+                    color: $text-color;
+                    background-color: white;
+                }
+            }
+        }
+    }
+
+    .form-group {
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: $spacing-small;
+            border: 1px solid $border-color;
+            border-radius: $border-radius;
+            background-color: white;
+            font-size: $font-size-base;
+
+            &:focus {
+                border-color: $primary-color;
+                outline: none;
+                box-shadow: 0 0 0 2px rgba($primary-color, 0.1);
+            }
+        }
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: $spacing-small;
+        margin: $spacing-base 0;
+
+        .toggle-button {
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+            padding: $spacing-small $spacing-base;
+            border: 1px solid $border-color;
+            border-radius: $border-radius;
+            background: white;
+            color: $text-muted;
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: rgba($primary-color, 0.05);
+            }
+
+            &.active {
+                background: $primary-color;
+                color: white;
+                border-color: $primary-color;
+            }
+
+            .icon {
+                font-size: 1.1em;
+            }
+        }
+    }
+
+    .expandable-sections {
+        .section {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+
+            &.expanded {
+                max-height: 200px;
+                margin-top: $spacing-base;
+            }
+        }
+    }
+
+    .remove-button {
+        padding: $spacing-small;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: $border-radius;
+        background: rgba($danger-color, 0.1);
+        color: $danger-color;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: $danger-color;
+            color: white;
+        }
+    }
+}

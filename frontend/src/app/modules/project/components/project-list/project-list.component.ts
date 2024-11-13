@@ -4,6 +4,8 @@ import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
 import { ProjectItemComponent } from '../project-item/project-item.component';
 import { Router, RouterModule } from '@angular/router';
+import { DialogService } from '../../../../shared/services/dialog.service';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-project-list',
@@ -15,27 +17,40 @@ import { Router, RouterModule } from '@angular/router';
 export class ProjectListComponent implements OnInit {
   projects: Project[] = [];
 
-  constructor(private projectService: ProjectService, private router: Router) { }
+  constructor(
+    private projectService: ProjectService,
+    private router: Router,
+    private dialogService: DialogService,
+    private toastService: ToastService
+  ) {}
 
-  // Get all projects on init from the ProjectService
   ngOnInit(): void {
     this.projectService.getProjects().subscribe((projects) => {
       this.projects = projects;
     });
   }
 
-  // create a new project
   createProject(): void {
     this.router.navigate(['/projects/create']);
   }
 
-  // edit a project
   editProject(id: number): void {
     this.router.navigate(['/projects/edit', id]);
   }
 
-  // delete a project
-  deleteProject(id: number): void {
-    this.projectService.deleteProject(id);
+  async deleteProject(id: number): Promise<void> {
+    const confirmed = await this.dialogService.confirm({
+      title: 'Delete Project',
+      message: 'Are you sure you want to delete this project? This action cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel'
+    });
+
+    if (confirmed) {
+      this.projectService.deleteProject(id);
+      this.toastService.success('Project deleted successfully');
+    } else {
+      this.toastService.info('Project deletion cancelled');
+    }
   }
 }
