@@ -4,6 +4,7 @@ import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
 import { ProjectItemComponent } from '../project-item/project-item.component';
 import { Router, RouterModule } from '@angular/router';
+import { DialogService } from '../../../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-project-list',
@@ -15,7 +16,10 @@ import { Router, RouterModule } from '@angular/router';
 export class ProjectListComponent implements OnInit {
   projects: Project[] = [];
 
-  constructor(private projectService: ProjectService, private router: Router) { }
+  constructor(
+    private projectService: ProjectService,
+    private router: Router,
+    private dialogService: DialogService) { }
 
   // Get all projects on init from the ProjectService
   ngOnInit(): void {
@@ -35,7 +39,16 @@ export class ProjectListComponent implements OnInit {
   }
 
   // delete a project
-  deleteProject(id: number): void {
-    this.projectService.deleteProject(id);
+  async deleteProject(id: number): Promise<void> {
+    const confirmed = await this.dialogService.confirm({
+      title: 'Delete Project',
+      message: 'Are you sure you want to delete this project? This action cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel'
+    });
+
+    if (confirmed) {
+      this.projectService.deleteProject(id);
+    }
   }
 }
