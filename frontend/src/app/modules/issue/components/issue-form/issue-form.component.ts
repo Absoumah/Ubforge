@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { IssueService } from '../../services/issue.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TaskFormComponent } from '../task-form/task-form.component';
 import { TaskService } from '../../services/task.service';
 import { Issue, IssueCategory } from '../../models/issue';
 import { TaskForm } from '../../models/task.interface';
+import { ToastService } from '../../../../shared/services/toast.service';
+import { CommonModule } from '@angular/common';
+import { TaskFormComponent } from '../task-form/task-form.component';
 import { dueDateValidator } from '../../validators/due-date.validator';
 
 @Component({
@@ -32,7 +33,8 @@ export class IssueFormComponent implements OnInit {
     private issueService: IssueService,
     private taskService: TaskService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastService: ToastService // Inject the ToastService
   ) { }
 
   ngOnInit(): void {
@@ -110,7 +112,10 @@ export class IssueFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.issueForm.invalid) return;
+    if (this.issueForm.invalid) {
+      this.toastService.error('Please fill all required fields correctly');
+      return;
+    }
 
     const issue: Issue = {
       id: this.issueId || Date.now(),
@@ -123,12 +128,15 @@ export class IssueFormComponent implements OnInit {
     try {
       if (this.isEditMode) {
         this.issueService.updateIssue(issue);
+        this.toastService.success('Issue updated successfully');
       } else {
         this.issueService.addIssue(issue);
+        this.toastService.success('Issue created successfully');
       }
       this.router.navigate(['/issues']);
     } catch (error) {
       this.errorMessage = 'An error occurred while saving the issue.';
+      this.toastService.error(this.errorMessage);
       console.error(error);
     }
   }

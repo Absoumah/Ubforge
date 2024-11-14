@@ -31,11 +31,15 @@ export class IssueListComponent implements OnInit {
   }
 
   createIssue(): void {
-    this.router.navigate(['/issues/create']);
+    this.router.navigate(['/issues/create']).then(() => {
+      this.toastService.success('Navigated to create issue page');
+    });
   }
 
   editIssue(id: number): void {
-    this.router.navigate(['/issues/edit', id]);
+    this.router.navigate(['/issues/edit', id]).then(() => {
+      this.toastService.success('Navigated to edit issue page');
+    });
   }
 
   async deleteIssue(id: number): Promise<void> {
