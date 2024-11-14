@@ -54,6 +54,11 @@ export const routes: Routes = [
             .then(m => m.IssueFormComponent)
     },
     {
+        path: 'issues/:id',
+        loadComponent: () => import('./modules/issue/components/issue-detail/issue-detail.component')
+            .then(m => m.IssueDetailComponent)
+    },
+    {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
