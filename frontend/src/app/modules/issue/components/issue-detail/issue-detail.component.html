@@ -1,1 +1,27 @@
-<p>issue-detail works!</p>
+<div class="issue-detail" *ngIf="issue">
+    <div class="issue-header">
+        <div class="title-category">
+            <h2>{{ issue.title }}</h2>
+            <span class="category-badge">{{ issue.category }}</span>
+        </div>
+        <div class="buttons">
+            <button class="edit-button" (click)="onEdit()">Edit Issue</button>
+            <button class="delete-button" (click)="onDelete()">Delete Issue</button>
+        </div>
+    </div>
+
+    <div class="issue-dates">
+        <span>Reported: {{ issue.reportedDate | date:'shortDate' }}</span>
+        <span>Due: {{ issue.dueDate | date:'shortDate' }}</span>
+    </div>
+
+    <div class="issue-description">
+        <h3>Description</h3>
+        <p>{{ issue.description }}</p>
+    </div>
+
+    <div class="issue-tasks">
+        <h3>Tasks ({{ issue.tasks.length }})</h3>
+        <app-task-item *ngFor="let task of issue.tasks" [task]="task"></app-task-item>
+    </div>
+</div>

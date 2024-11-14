@@ -1,0 +1,106 @@
+@import '../../../../../styles/theme.scss';
+
+.issue-detail {
+    padding: $spacing-base;
+    padding-left: calc(310px + $spacing-base);
+    max-width: 1200px;
+
+    .issue-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: $spacing-base;
+
+        .title-category {
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+
+            h2 {
+                margin: 0;
+                font-size: $font-size-large;
+                font-weight: $font-weight-bold;
+                color: $text-color;
+            }
+
+            .category-badge {
+                background: $secondary-color;
+                color: $light-color;
+                padding: $spacing-xs $spacing-small;
+                border-radius: $border-radius;
+                font-size: $font-size-small;
+            }
+        }
+
+        .buttons {
+            display: flex;
+            gap: $spacing-small;
+
+            .edit-button,
+            .delete-button {
+                background: $primary-color;
+                color: $light-color;
+                border: none;
+                padding: $spacing-small $spacing-base;
+                border-radius: $border-radius;
+                cursor: pointer;
+                transition: background-color $transition-base;
+
+                &:hover {
+                    background-color: $hover-color;
+                }
+            }
+
+            .delete-button {
+                background: $danger-color;
+
+                &:hover {
+                    background-color: darken($danger-color, 10%);
+                }
+            }
+        }
+    }
+
+    .issue-dates {
+        display: flex;
+        gap: $spacing-large;
+        color: $text-muted;
+        margin-bottom: $spacing-large;
+
+        span {
+            display: flex;
+            align-items: center;
+            gap: $spacing-xs;
+
+            &:before {
+                content: '📅';
+            }
+        }
+    }
+
+    .issue-description,
+    .issue-tasks {
+        background: $light-color;
+        border-radius: $border-radius;
+        padding: $spacing-base;
+        margin-bottom: $spacing-base;
+        box-shadow: $box-shadow;
+
+        h3 {
+            margin: 0 0 $spacing-base 0;
+            font-size: $font-size-base;
+            font-weight: $font-weight-bold;
+        }
+    }
+
+    .issue-tasks {
+        app-task-item {
+            display: block;
+            margin-bottom: $spacing-small;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}

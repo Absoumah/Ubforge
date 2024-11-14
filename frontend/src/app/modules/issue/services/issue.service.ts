@@ -28,10 +28,27 @@ export class IssueService {
             priority: TaskPriority.HIGH,
             status: TaskStatus.IN_PROGRESS,
             completed: false,
-            assignedTo: [{ id: 1, firstName: "John", lastName: "Doe" }],
+            assignedTo: [
+              {
+                id: 1,
+                firstName: "John",
+                lastName: "Doe"
+              },
+              {
+                id: 2,
+                firstName: "Jane",
+                lastName: "Smith"
+              },
+              {
+                id: 3,
+                firstName: "Mike",
+                lastName: "Johnson"
+              }
+            ],
             estimatedHours: 4,
             dueDate: new Date("2024-03-10")
-          }
+          },
+
         ]
       },
       {
