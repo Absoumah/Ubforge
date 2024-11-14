@@ -7,16 +7,21 @@ import { IssueItemComponent } from '../issue-item/issue-item.component';
 import { DialogService } from '../../../../shared/services/dialog.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
+import { IssueFilterComponent } from '../../../../shared/components/issue-filter/issue-filter.component';
+import { FilterService } from '../../../../shared/services/filter.service';
+import { combineLatest } from 'rxjs';
+import { IssueFilter } from '../../../../shared/models/filter.model';
 
 @Component({
   selector: 'app-issue-list',
   standalone: true,
-  imports: [CommonModule, IssueItemComponent, PaginationComponent],
+  imports: [CommonModule, IssueItemComponent, PaginationComponent, IssueFilterComponent],
   templateUrl: './issue-list.component.html',
   styleUrls: ['./issue-list.component.scss']
 })
 export class IssueListComponent implements OnInit {
   issues: Issue[] = [];
+  filteredIssues: Issue[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 4;
   totalPages: number = 1;
@@ -25,25 +30,47 @@ export class IssueListComponent implements OnInit {
     private issueService: IssueService,
     private router: Router,
     private dialogService: DialogService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private filterService: FilterService
   ) { }
 
   ngOnInit(): void {
     this.loadIssues();
+    this.setupFilterSubscription();
+  }
+
+  private setupFilterSubscription(): void {
+    combineLatest([
+      this.issueService.getIssues(),
+      this.filterService.currentFilter$
+    ]).subscribe(([issues, filter]) => {
+      this.issues = issues;
+      this.filterIssues(filter);
+    });
+  }
+
+  private filterIssues(filter: IssueFilter): void {
+    this.filteredIssues = this.issues.filter(issue => {
+      if (!filter.category) return true;
+      return issue.category.toLowerCase() === filter.category.toLowerCase();
+    });
+    this.totalPages = Math.ceil(this.filteredIssues.length / this.itemsPerPage);
+    this.currentPage = 1; // Reset to first page when filter changes
   }
 
   loadIssues(): void {
     this.toastService.info('Loading issues...');
     this.issueService.getIssues().subscribe(issues => {
       this.issues = issues;
+      this.filteredIssues = issues; // init with all issues 
       this.totalPages = Math.ceil(this.issues.length / this.itemsPerPage);
-      this.toastService.success('Issues loaded successfully');
+      // this.toastService.success('Issues loaded successfully');
     });
   }
 
   get paginatedIssues(): Issue[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return this.issues.slice(startIndex, startIndex + this.itemsPerPage);
+    return this.filteredIssues.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
   onPageChange(page: number): void {

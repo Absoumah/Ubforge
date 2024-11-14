@@ -4,6 +4,9 @@
         <button *ngIf="issues.length" class="create-button" (click)="createIssue()">Create Issue +</button>
     </div>
 
+    <!-- filter component -->
+    <app-issue-filter></app-issue-filter>
+
     <div *ngIf="issues.length; else noIssues" class="issue-list-content">
         <app-issue-item *ngFor="let issue of paginatedIssues" [issue]="issue" (edit)="editIssue($event)"
             (delete)="deleteIssue($event)">
