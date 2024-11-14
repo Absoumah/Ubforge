@@ -1,0 +1,11 @@
+<div class="filter-container">
+    <div class="filter-group">
+        <select [(ngModel)]="selectedCategory" (change)="onCategoryChange(selectedCategory)">
+            <option [ngValue]="null">All Categories</option>
+            <option *ngFor="let category of categories" [value]="category">
+                {{category}}
+            </option>
+        </select>
+    </div>
+    <button class="reset-button" (click)="resetFilter()">Reset Filters</button>
+</div>
