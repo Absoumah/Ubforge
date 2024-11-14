@@ -5,10 +5,15 @@
     </div>
 
     <div *ngIf="issues.length; else noIssues" class="issue-list-content">
-        <app-issue-item *ngFor="let issue of issues" [issue]="issue" (edit)="editIssue($event)"
+        <app-issue-item *ngFor="let issue of paginatedIssues" [issue]="issue" (edit)="editIssue($event)"
             (delete)="deleteIssue($event)">
         </app-issue-item>
     </div>
+
+    <!-- *ngIf="issues.length > itemsPerPage" -->
+
+    <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
+    </app-pagination>
 
     <ng-template #noIssues>
         <div class="no-issues">
