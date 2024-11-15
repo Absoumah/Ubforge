@@ -35,16 +35,15 @@ export class IssueItemComponent {
   }
 
   onTaskStatusChange(event: { taskId: number, status: TaskStatus }): void {
-    console.log('Task status change event received:', event);
     const task = this.issue.tasks.find(t => t.id === event.taskId);
     if (task) {
       task.status = event.status;
       task.completed = event.status === TaskStatus.COMPLETED;
+      this.taskStatusChange.emit({
+        issueId: this.issue.id,
+        taskId: event.taskId,
+        status: event.status
+      });
     }
-    this.taskStatusChange.emit({
-      issueId: this.issue.id,
-      taskId: event.taskId,
-      status: event.status
-    });
   }
 }

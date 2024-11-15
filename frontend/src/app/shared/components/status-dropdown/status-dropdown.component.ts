@@ -14,7 +14,7 @@ export class StatusDropdownComponent {
   @Input() currentStatus!: TaskStatus;
   @Output() statusChange = new EventEmitter<TaskStatus>();
 
-  statuses = Object.values(TaskStatus);
+  readonly statuses = Object.values(TaskStatus);
   isOpen = false;
 
   toggleDropdown(): void {
@@ -22,7 +22,10 @@ export class StatusDropdownComponent {
   }
 
   selectStatus(status: TaskStatus): void {
-    this.statusChange.emit(status);
+    if (status !== this.currentStatus) {
+      this.currentStatus = status; // Update local state
+      this.statusChange.emit(status);
+    }
     this.isOpen = false;
   }
 

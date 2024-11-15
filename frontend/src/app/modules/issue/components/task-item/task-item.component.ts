@@ -21,8 +21,11 @@ export class TaskItemComponent {
     return `priority-${this.task.priority.toLowerCase()}`;
   }
 
-  onStatusChange(status: TaskStatus): void {
-    console.log('Task status changed:', status);
-    this.statusChange.emit({ taskId: this.task.id, status });
+  onStatusChange(newStatus: TaskStatus): void {
+    if (newStatus !== this.task.status) {
+      this.task.status = newStatus; // Update local state
+      this.task.completed = newStatus === TaskStatus.COMPLETED;
+      this.statusChange.emit({ taskId: this.task.id, status: newStatus });
+    }
   }
 }
