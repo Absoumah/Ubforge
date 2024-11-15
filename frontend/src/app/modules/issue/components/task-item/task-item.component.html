@@ -5,9 +5,8 @@
             <span class="badge priority" [class]="getPriorityClass()">
                 {{ task.priority }}
             </span>
-            <span class="badge status" [class]="getStatusClass()">
-                {{ task.status.replace('_', ' ') }}
-            </span>
+            <app-status-dropdown [currentStatus]="task.status" (statusChange)="onStatusChange($event)">
+            </app-status-dropdown>
         </div>
     </div>
     <div class="task-row secondary">

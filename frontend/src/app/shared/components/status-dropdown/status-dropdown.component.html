@@ -1,1 +1,12 @@
-<p>status-dropdown works!</p>
+<div class="status-dropdown" (clickOutside)="isOpen = false">
+    <div class="badge" [class]="getStatusClass(currentStatus)" (click)="toggleDropdown()">
+        <span>{{ currentStatus.replace('_', ' ') }}</span>
+        <span class="arrow">▼</span>
+    </div>
+    <div class="dropdown-menu" *ngIf="isOpen">
+        <div class="dropdown-item" *ngFor="let status of statuses" [class]="getStatusClass(status)"
+            (click)="selectStatus(status)">
+            {{ status.replace('_', ' ') }}
+        </div>
+    </div>
+</div>

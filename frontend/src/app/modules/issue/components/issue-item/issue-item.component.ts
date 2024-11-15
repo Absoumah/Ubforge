@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Issue } from '../../models/issue';
 import { TaskItemComponent } from '../task-item/task-item.component';
 import { Router } from '@angular/router';
+import { TaskStatus } from '../../models/task-status.enum';
 
 @Component({
   selector: 'app-issue-item',
@@ -15,6 +16,7 @@ export class IssueItemComponent {
   @Input() issue!: Issue;
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
+  @Output() taskStatusChange = new EventEmitter<{ issueId: number, taskId: number, status: TaskStatus }>();
 
   isTasksExpanded = false;
 
@@ -28,8 +30,21 @@ export class IssueItemComponent {
     return this.issue.tasks.filter(task => task.completed).length;
   }
 
-
   onIssueClick(): void {
     this.router.navigate(['/issues', this.issue.id]);
+  }
+
+  onTaskStatusChange(event: { taskId: number, status: TaskStatus }): void {
+    console.log('Task status change event received:', event);
+    const task = this.issue.tasks.find(t => t.id === event.taskId);
+    if (task) {
+      task.status = event.status;
+      task.completed = event.status === TaskStatus.COMPLETED;
+    }
+    this.taskStatusChange.emit({
+      issueId: this.issue.id,
+      taskId: event.taskId,
+      status: event.status
+    });
   }
 }
