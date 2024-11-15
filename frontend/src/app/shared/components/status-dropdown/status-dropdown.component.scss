@@ -1,0 +1,76 @@
+@import '../../../../styles/theme.scss';
+
+.status-dropdown {
+    position: relative;
+    display: inline-block;
+
+    .badge {
+        padding: $spacing-xs $spacing-small;
+        border-radius: $border-radius;
+        font-size: $font-size-small;
+        font-weight: $font-weight-bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+        min-width: 100px;
+        justify-content: space-between;
+        user-select: none;
+
+        &.status-todo {
+            background: rgba($text-muted, 0.1);
+            color: $text-muted;
+        }
+
+        &.status-in_progress {
+            background: rgba($primary-color, 0.1);
+            color: $primary-color;
+        }
+
+        &.status-completed {
+            background: rgba($accent-color, 0.1);
+            color: $accent-color;
+        }
+
+        .arrow {
+            font-size: 8px;
+        }
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: $light-color;
+        border-radius: $border-radius;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        min-width: 120px;
+        border: 1px solid $border-color;
+
+        .dropdown-item {
+            padding: $spacing-small $spacing-base;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+
+            &:hover {
+                background: rgba($background-color, 0.5);
+            }
+
+            &.status-todo {
+                color: $text-muted;
+            }
+
+            &.status-in_progress {
+                color: $primary-color;
+            }
+
+            &.status-completed {
+                color: $accent-color;
+            }
+        }
+    }
+}
