@@ -12,7 +12,7 @@
     <div class="task-row secondary">
         <div class="assigned-users">
             <app-user-avatar *ngFor="let user of task.assignedTo"
-                [initials]="(user?.firstName?.[0] || '') + (user?.lastName?.[0] || '')">
+                [initials]="(user?.firstName?.charAt(0) || '') + (user?.lastName?.charAt(0) || '')">
             </app-user-avatar>
         </div>
         <div class="due-date" *ngIf="task.dueDate">
