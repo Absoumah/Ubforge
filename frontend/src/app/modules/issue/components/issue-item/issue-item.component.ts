@@ -34,15 +34,15 @@ export class IssueItemComponent {
     this.router.navigate(['/issues', this.issue.id]);
   }
 
-  handleContainerClick(event: MouseEvent): void {
-    // Only navigate if the click was directly on the container
-    // or on elements that are not interactive
-    if ((event.target as HTMLElement).classList.contains('issue-item') ||
-      (event.target as HTMLElement).classList.contains('issue-header') ||
-      (event.target as HTMLElement).classList.contains('issue-description')) {
-      this.onIssueClick();
-    }
-  }
+  // handleContainerClick(event: MouseEvent): void {
+  //   // Only navigate if the click was directly on the container
+  //   // or on elements that are not interactive
+  //   if ((event.target as HTMLElement).classList.contains('issue-item') ||
+  //     (event.target as HTMLElement).classList.contains('issue-header') ||
+  //     (event.target as HTMLElement).classList.contains('issue-description')) {
+  //     this.onIssueClick();
+  //   }
+  // }
 
   onTaskStatusChange(event: { taskId: number, status: TaskStatus }): void {
     const task = this.issue.tasks.find(t => t.id === event.taskId);

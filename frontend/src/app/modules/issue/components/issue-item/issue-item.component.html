@@ -26,7 +26,7 @@
     </div>
 
     <div class="issue-actions">
-        <button class="edit-button" (click)="edit.emit(issue.id)"></button>
-        <button class="delete-button" (click)="delete.emit(issue.id)"></button>
+        <button class="edit-button" (click)="$event.stopPropagation(); edit.emit(issue.id)"></button>
+        <button class="delete-button" (click)="$event.stopPropagation(); delete.emit(issue.id)"></button>
     </div>
 </div>
