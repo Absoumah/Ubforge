@@ -45,11 +45,13 @@ export class IssueFormComponent implements OnInit {
   }
 
   private initializeForm(): void {
+    const today = new Date().toISOString().split('T')[0]; // format today's date as YYYY-MM-DD
+
     this.issueForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(100)]],
       category: ['', Validators.required],
       description: ['', [Validators.required, Validators.maxLength(500)]],
-      reportedDate: [Date(), [Validators.required]],
+      reportedDate: [today, [Validators.required]],
       dueDate: ['', [Validators.required]],
       tasks: this.fb.array([])
     });
@@ -70,20 +72,29 @@ export class IssueFormComponent implements OnInit {
   private loadIssue(id: number): void {
     const issue = this.issueService.getIssueById(id);
     if (issue) {
-      this.issueForm.patchValue(issue);
+      // format dates as YYYY-MM-DD for the date inputs
+      const formattedIssue = {
+        ...issue,
+        reportedDate: issue.reportedDate.toISOString().split('T')[0],
+        dueDate: issue.dueDate.toISOString().split('T')[0]
+      };
+
+      // update form with formatted values
+      this.issueForm.patchValue(formattedIssue);
+
       const tasks = this.issueForm.get('tasks') as FormArray;
-      tasks.clear(); // Clear existing tasks
+      tasks.clear();
       issue.tasks.forEach(task => {
         tasks.push(this.fb.group({
           id: [task.id],
           name: [task.name, Validators.required],
           description: [task.description],
           priority: [task.priority, Validators.required],
-          assignedTo: [task.assignedTo.map(user => user.id)], // Assuming assignedTo is an array of user IDs
+          assignedTo: [task.assignedTo.map(user => user.id)],
           estimatedHours: [task.estimatedHours],
           completed: [task.completed],
           status: [task.status],
-          dueDate: [task.dueDate]
+          dueDate: [task.dueDate?.toISOString().split('T')[0]]
         }));
       });
     }
