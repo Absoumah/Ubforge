@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { dueDateValidator } from '../../validators/due-date.validator';
 
+//TODO: REFACTORING
+
 @Component({
   selector: 'app-issue-form',
   standalone: true,
@@ -34,7 +36,7 @@ export class IssueFormComponent implements OnInit {
     private taskService: TaskService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastService: ToastService // Inject the ToastService
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
