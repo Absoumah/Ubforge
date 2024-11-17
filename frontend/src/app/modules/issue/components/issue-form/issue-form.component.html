@@ -34,7 +34,7 @@
         <div class="form-group">
             <label for="reportedDate">Reported Date</label>
             <input id="reportedDate" type="date" formControlName="reportedDate" [min]="minReportedDate"
-                [max]="maxReportedDate" [value]="issueForm.get('reportedDate')?.value | date:'yyyy-MM-dd'">
+                [max]="maxReportedDate">
             <div class="error" *ngIf="issueForm.get('reportedDate')?.invalid && issueForm.get('reportedDate')?.touched">
                 <small *ngIf="issueForm.get('reportedDate')?.errors?.['required']">Reported Date is required</small>
             </div>
@@ -42,8 +42,7 @@
 
         <div class="form-group">
             <label for="dueDate">Due Date</label>
-            <input id="dueDate" type="date" formControlName="dueDate" [min]="minDueDate" [max]="maxDueDate"
-                [value]="issueForm.get('dueDate')?.value | date:'yyyy-MM-dd'">
+            <input id="dueDate" type="date" formControlName="dueDate" [min]="minDueDate" [max]="maxDueDate">
             <div class="error" *ngIf="issueForm.get('dueDate')?.invalid && issueForm.get('dueDate')?.touched">
                 <small *ngIf="issueForm.get('dueDate')?.errors?.['required']">Due Date is required</small>
                 <small *ngIf="issueForm.get('dueDate')?.errors?.['dueDateInvalid']">Due Date cannot be earlier than
