@@ -1,15 +1,14 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Issue } from '../../models/issue';
-import { TaskItemComponent } from '../task-item/task-item.component';
 import { Router } from '@angular/router';
 import { TaskStatus } from '../../models/task-status.enum';
-import { TaskCarouselComponent } from '../task-carousel/task-carousel.component';
+import { TaskNavigatorComponent } from '../task-navigator/task-navigator.component';
 
 @Component({
   selector: 'app-issue-item',
   standalone: true,
-  imports: [CommonModule, TaskItemComponent],
+  imports: [CommonModule, TaskNavigatorComponent],
   templateUrl: './issue-item.component.html',
   styleUrls: ['./issue-item.component.scss']
 })
@@ -19,29 +18,7 @@ export class IssueItemComponent {
   @Output() delete = new EventEmitter<number>();
   @Output() taskStatusChange = new EventEmitter<{ issueId: number, taskId: number, status: TaskStatus }>();
 
-  currentTaskIndex = 0;
-
   constructor(private router: Router) { }
-
-  get canGoBack(): boolean {
-    return this.currentTaskIndex > 0;
-  }
-
-  get canGoForward(): boolean {
-    return this.currentTaskIndex < this.issue.tasks.length - 1;
-  }
-
-  onPrevTask(): void {
-    if (this.canGoBack) {
-      this.currentTaskIndex--;
-    }
-  }
-
-  onNextTask(): void {
-    if (this.canGoForward) {
-      this.currentTaskIndex++;
-    }
-  }
 
   getCompletedTasksCount(): number {
     return this.issue.tasks.filter(task => task.completed).length;

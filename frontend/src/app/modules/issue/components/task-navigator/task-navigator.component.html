@@ -1,0 +1,14 @@
+<div class="tasks-header">
+    <div class="tasks-navigation">
+        <h4>Tasks ({{ completedCount }}/{{ tasks.length }})</h4>
+        <div class="navigation-controls" *ngIf="tasks.length > 0">
+            <button class="nav-button" [class.disabled]="!canGoBack"
+                (click)="$event.stopPropagation(); onPrevTask()">◀</button>
+            <span class="task-count">Task {{ currentTaskIndex + 1 }} of {{ tasks.length }}</span>
+            <button class="nav-button" [class.disabled]="!canGoForward"
+                (click)="$event.stopPropagation(); onNextTask()">▶</button>
+        </div>
+    </div>
+</div>
+<app-task-item *ngIf="tasks.length > 0" [task]="tasks[currentTaskIndex]" (statusChange)="onTaskStatusChange($event)">
+</app-task-item>

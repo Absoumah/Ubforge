@@ -65,6 +65,14 @@
         text-overflow: ellipsis;
     }
 
+    .issue-tasks {
+        background: $background-color;
+        border-radius: $border-radius;
+        padding: $spacing-base;
+        margin-top: $spacing-base;
+        margin-bottom: 2.5rem;
+    }
+
     .issue-actions {
         position: absolute;
         bottom: $spacing-base;
@@ -90,90 +98,6 @@
 
             &:hover {
                 color: $primary-color;
-            }
-        }
-    }
-
-    .issue-tasks {
-        background: $background-color;
-        border-radius: $border-radius;
-        padding: $spacing-base;
-        margin-top: $spacing-base;
-        margin-bottom: 2.5rem; // Add space for the absolute positioned buttons
-
-        .tasks-header {
-            .tasks-navigation {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: $spacing-base;
-
-                h4 {
-                    margin: 0;
-                    color: $text-color;
-                    font-weight: $font-weight-bold;
-                }
-
-                .navigation-controls {
-                    display: flex;
-                    align-items: center;
-                    gap: $spacing-small;
-
-                    .nav-button {
-                        padding: $spacing-xs $spacing-small;
-                        background: $light-color;
-                        border: none;
-                        border-radius: $border-radius;
-                        cursor: pointer;
-                        color: $text-color;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        transition: all 0.2s ease;
-
-                        &:hover:not(.disabled) {
-                            background: $hover-color;
-                            color: $primary-color;
-                        }
-
-                        &.disabled {
-                            opacity: 0.5;
-                            cursor: not-allowed;
-                        }
-                    }
-
-                    .task-count {
-                        font-size: $font-size-small;
-                        color: $text-muted;
-                        min-width: 100px;
-                        text-align: center;
-                    }
-                }
-            }
-        }
-
-        .tasks-list {
-            border-top: 1px solid $border-color;
-            margin-top: $spacing-small;
-            padding-top: $spacing-small;
-
-            .task-item {
-                display: flex;
-                align-items: center;
-                gap: $spacing-small;
-                background: $light-color;
-                border-radius: $border-radius;
-                margin-bottom: $spacing-xs;
-                padding: $spacing-small;
-
-                input[type="checkbox"] {
-                    margin: 0;
-                }
-
-                .completed {
-                    text-decoration: line-through;
-                    color: $text-muted;
-                }
             }
         }
     }
