@@ -48,6 +48,40 @@ export class IssueService {
             estimatedHours: 4,
             dueDate: new Date("2024-03-10")
           },
+          {
+            id: 7,
+            name: "Fix session timeout issue",
+            description: "Ensure sessions do not expire prematurely",
+            priority: TaskPriority.HIGH,
+            status: TaskStatus.TODO,
+            completed: false,
+            assignedTo: [
+              {
+                id: 1,
+                firstName: "John",
+                lastName: "Doe"
+              }
+            ],
+            estimatedHours: 3,
+            dueDate: new Date("2024-03-12")
+          },
+          {
+            id: 8,
+            name: "Improve error messages",
+            description: "Provide more descriptive error messages on login failure",
+            priority: TaskPriority.MEDIUM,
+            status: TaskStatus.TODO,
+            completed: false,
+            assignedTo: [
+              {
+                id: 2,
+                firstName: "Jane",
+                lastName: "Smith"
+              }
+            ],
+            estimatedHours: 2,
+            dueDate: new Date("2024-03-14")
+          }
 
         ]
       },

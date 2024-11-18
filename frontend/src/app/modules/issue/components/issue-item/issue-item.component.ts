@@ -4,6 +4,7 @@ import { Issue } from '../../models/issue';
 import { TaskItemComponent } from '../task-item/task-item.component';
 import { Router } from '@angular/router';
 import { TaskStatus } from '../../models/task-status.enum';
+import { TaskCarouselComponent } from '../task-carousel/task-carousel.component';
 
 @Component({
   selector: 'app-issue-item',
@@ -18,12 +19,28 @@ export class IssueItemComponent {
   @Output() delete = new EventEmitter<number>();
   @Output() taskStatusChange = new EventEmitter<{ issueId: number, taskId: number, status: TaskStatus }>();
 
-  isTasksExpanded = false;
+  currentTaskIndex = 0;
 
   constructor(private router: Router) { }
 
-  toggleTasks(): void {
-    this.isTasksExpanded = !this.isTasksExpanded;
+  get canGoBack(): boolean {
+    return this.currentTaskIndex > 0;
+  }
+
+  get canGoForward(): boolean {
+    return this.currentTaskIndex < this.issue.tasks.length - 1;
+  }
+
+  onPrevTask(): void {
+    if (this.canGoBack) {
+      this.currentTaskIndex--;
+    }
+  }
+
+  onNextTask(): void {
+    if (this.canGoForward) {
+      this.currentTaskIndex++;
+    }
   }
 
   getCompletedTasksCount(): number {
@@ -33,16 +50,6 @@ export class IssueItemComponent {
   onIssueClick(): void {
     this.router.navigate(['/issues', this.issue.id]);
   }
-
-  // handleContainerClick(event: MouseEvent): void {
-  //   // Only navigate if the click was directly on the container
-  //   // or on elements that are not interactive
-  //   if ((event.target as HTMLElement).classList.contains('issue-item') ||
-  //     (event.target as HTMLElement).classList.contains('issue-header') ||
-  //     (event.target as HTMLElement).classList.contains('issue-description')) {
-  //     this.onIssueClick();
-  //   }
-  // }
 
   onTaskStatusChange(event: { taskId: number, status: TaskStatus }): void {
     const task = this.issue.tasks.find(t => t.id === event.taskId);
