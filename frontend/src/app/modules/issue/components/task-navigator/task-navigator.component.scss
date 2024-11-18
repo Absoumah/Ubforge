@@ -1,0 +1,55 @@
+@import '../../../../../styles/theme.scss';
+
+.tasks-header {
+    .tasks-navigation {
+        margin-bottom: $spacing-base;
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            h4 {
+                margin: 0;
+                color: $text-color;
+                font-weight: $font-weight-bold;
+            }
+
+            .navigation-controls {
+                display: flex;
+                align-items: center;
+                gap: $spacing-small;
+
+                .nav-button {
+                    padding: $spacing-xs $spacing-small;
+                    background: $light-color;
+                    border: none;
+                    border-radius: $border-radius;
+                    cursor: pointer;
+                    color: $text-color;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease;
+
+                    &:hover:not(.disabled) {
+                        background: $hover-color;
+                        color: $primary-color;
+                    }
+
+                    &.disabled {
+                        opacity: 0.5;
+                        cursor: not-allowed;
+                    }
+                }
+
+                .task-count {
+                    font-size: $font-size-small;
+                    color: $text-muted;
+                    min-width: 100px;
+                    text-align: center;
+                }
+            }
+        }
+    }
+}

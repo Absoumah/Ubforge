@@ -65,6 +65,14 @@
         text-overflow: ellipsis;
     }
 
+    .issue-tasks {
+        background: $background-color;
+        border-radius: $border-radius;
+        padding: $spacing-base;
+        margin-top: $spacing-base;
+        margin-bottom: 2.5rem;
+    }
+
     .issue-actions {
         position: absolute;
         bottom: $spacing-base;
@@ -90,52 +98,6 @@
 
             &:hover {
                 color: $primary-color;
-            }
-        }
-    }
-
-    .issue-tasks {
-        background: $background-color;
-        border-radius: $border-radius;
-        padding: $spacing-base;
-        margin-top: $spacing-base;
-        margin-bottom: 2.5rem; // Add space for the absolute positioned buttons
-
-        .tasks-header {
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            h4 {
-                margin: 0;
-                color: $text-color;
-                font-weight: $font-weight-bold;
-            }
-        }
-
-        .tasks-list {
-            border-top: 1px solid $border-color;
-            margin-top: $spacing-small;
-            padding-top: $spacing-small;
-
-            .task-item {
-                display: flex;
-                align-items: center;
-                gap: $spacing-small;
-                background: $light-color;
-                border-radius: $border-radius;
-                margin-bottom: $spacing-xs;
-                padding: $spacing-small;
-
-                input[type="checkbox"] {
-                    margin: 0;
-                }
-
-                .completed {
-                    text-decoration: line-through;
-                    color: $text-muted;
-                }
             }
         }
     }

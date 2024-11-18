@@ -13,16 +13,9 @@
     <p class="issue-description">{{ issue.description }}</p>
 
     <div class="issue-tasks">
-        <div class="tasks-header" (click)="toggleTasks()">
-            <h4>Tasks ({{ getCompletedTasksCount() }}/{{ issue.tasks.length }})</h4>
-            <span class="toggle-icon" [ngClass]="{ 'expanded': isTasksExpanded }">
-                {{ isTasksExpanded ? '▼' : '▲' }}
-            </span>
-        </div>
-        <div class="tasks-list" [ngClass]="{ 'expanded': isTasksExpanded }">
-            <app-task-item *ngFor="let task of issue.tasks" [task]="task" (statusChange)="onTaskStatusChange($event)">
-            </app-task-item>
-        </div>
+        <app-task-navigator [tasks]="issue.tasks" [completedCount]="getCompletedTasksCount()"
+            (statusChange)="onTaskStatusChange($event)">
+        </app-task-navigator>
     </div>
 
     <div class="issue-actions">
