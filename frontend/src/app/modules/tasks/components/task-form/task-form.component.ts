@@ -5,7 +5,7 @@ import { trigger, style, animate, transition } from '@angular/animations';
 import { debounceTime, distinctUntilChanged, Observable, Subject, takeUntil } from 'rxjs';
 import { TaskService } from '../../services/task.service';
 import { TaskPriority } from '../../models/task-priority.enum';
-import { AssignedUser } from '../../models/assigned-user.interface';
+import { AssignedUser } from '../../../issue/models/assigned-user.interface';
 
 @Component({
   selector: 'app-task-form',

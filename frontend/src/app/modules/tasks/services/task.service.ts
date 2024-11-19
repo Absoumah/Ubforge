@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AssignedUser } from '../models/assigned-user.interface';
+import { AssignedUser } from '../../issue/models/assigned-user.interface';
 import { Task, TaskForm } from '../models/task.interface';
 import { TaskPriority } from '../models/task-priority.enum';
 import { TaskStatus } from '../models/task-status.enum';

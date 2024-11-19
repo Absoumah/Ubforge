@@ -60,12 +60,12 @@ export const routes: Routes = [
     },
     {
         path: 'my-tasks',
-        loadComponent: () => import('./modules/issue/components/my-tasks/my-tasks.component')
+        loadComponent: () => import('./modules/tasks/components/my-tasks/my-tasks.component')
             .then(m => m.MyTasksComponent)
     },
     {
         path: 'tasks/:id',
-        loadComponent: () => import('./modules/issue/components/task-detail/task-detail.component')
+        loadComponent: () => import('./modules/tasks/components/task-detail/task-detail.component')
             .then(m => m.TaskDetailComponent)
     },
     {

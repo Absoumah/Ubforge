@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IssueService } from '../../services/issue.service';
-import { TaskService } from '../../services/task.service';
+import { TaskService } from '../../../tasks/services/task.service';
 import { Issue, IssueCategory } from '../../models/issue';
-import { TaskForm } from '../../models/task.interface';
+import { TaskForm } from '../../../tasks/models/task.interface';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { CommonModule } from '@angular/common';
-import { TaskFormComponent } from '../task-form/task-form.component';
+import { TaskFormComponent } from '../../../tasks/components/task-form/task-form.component';
 import { dueDateValidator } from '../../validators/due-date.validator';
 
 //TODO: REFACTORING

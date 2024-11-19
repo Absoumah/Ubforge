@@ -2,8 +2,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Issue } from '../../models/issue';
 import { Router } from '@angular/router';
-import { TaskStatus } from '../../models/task-status.enum';
-import { TaskNavigatorComponent } from '../task-navigator/task-navigator.component';
+import { TaskStatus } from '../../../tasks/models/task-status.enum';
+import { TaskNavigatorComponent } from '../../../tasks/components/task-navigator/task-navigator.component';
 
 @Component({
   selector: 'app-issue-item',

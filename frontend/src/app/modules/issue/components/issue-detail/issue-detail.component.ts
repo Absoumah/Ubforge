@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Issue } from '../../models/issue';
 import { IssueService } from '../../services/issue.service';
-import { TaskItemComponent } from '../task-item/task-item.component';
+import { TaskItemComponent } from '../../../tasks/components/task-item/task-item.component';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { DialogService } from '../../../../shared/services/dialog.service';
 

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TaskStatus } from '../../../modules/issue/models/task-status.enum';
+import { TaskStatus } from '../../../modules/tasks/models/task-status.enum';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 
 @Component({
