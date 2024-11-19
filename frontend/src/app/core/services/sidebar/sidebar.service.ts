@@ -10,7 +10,9 @@ export class SidebarService {
     { id: '1', title: 'Dashboard', route: '/dashboard' },
     { id: '2', title: 'Projects', route: '/projects' },
     { id: '3', title: 'Issues', route: '/issues' },
-    { id: '4', title: 'Settings', route: '/settings' }
+    { id: '5', title: 'My Tasks', route: '/my-tasks' },
+    { id: '5', title: 'Settings', route: '/settings' }
+
   ];
 
   private selectedMenuItemSubject = new BehaviorSubject<MenuItem | null>(null);

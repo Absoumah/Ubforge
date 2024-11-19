@@ -1,0 +1,38 @@
+@import '../../../../../styles/theme.scss';
+
+.my-tasks {
+    padding: $spacing-base;
+    padding-left: calc(310px + $spacing-base);
+    background-color: $background-color;
+    min-height: calc(100vh - 2 * $spacing-base);
+
+    .my-tasks-header {
+        margin-bottom: $spacing-large;
+
+        h2 {
+            font-size: $font-size-large;
+            font-weight: $font-weight-bold;
+            color: $text-color;
+        }
+    }
+
+    .my-tasks-content {
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: $spacing-base;
+        }
+    }
+
+    .no-tasks {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+        text-align: center;
+        color: $text-muted;
+        background: $light-color;
+        border-radius: $border-radius;
+        border: 1px solid $border-color;
+    }
+}

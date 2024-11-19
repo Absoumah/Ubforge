@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AssignedUser } from '../models/assigned-user.interface';
 import { Task, TaskForm } from '../models/task.interface';
 import { TaskPriority } from '../models/task-priority.enum';
@@ -10,6 +11,32 @@ import { TaskStatus } from '../models/task-status.enum';
     providedIn: 'root'
 })
 export class TaskService {
+    private currentUserId = 1; // Mock current user (John Doe)
+    private tasksSubject = new BehaviorSubject<Task[]>([
+        {
+            id: 1,
+            name: 'Implement login page',
+            description: 'Create responsive login page with validation',
+            priority: TaskPriority.HIGH,
+            status: TaskStatus.IN_PROGRESS,
+            completed: false,
+            assignedTo: [{ id: 1, firstName: 'John', lastName: 'Doe' }],
+            estimatedHours: 8,
+            dueDate: new Date('2024-03-25')
+        },
+        {
+            id: 2,
+            name: 'Fix navigation bug',
+            description: 'Address issues with mobile navigation',
+            priority: TaskPriority.MEDIUM,
+            status: TaskStatus.TODO,
+            completed: false,
+            assignedTo: [{ id: 1, firstName: 'John', lastName: 'Doe' }],
+            estimatedHours: 4,
+            dueDate: new Date('2024-03-20')
+        }
+    ]);
+
     private availableUsers: AssignedUser[] = [
         { id: 1, firstName: 'John', lastName: 'Doe' },
         { id: 2, firstName: 'Jane', lastName: 'Smith' },
@@ -17,6 +44,30 @@ export class TaskService {
     ];
 
     constructor(private fb: FormBuilder) { }
+
+    getMyTasks(): Observable<Task[]> {
+        return this.tasksSubject.pipe(
+            map(tasks => tasks.filter(task =>
+                task.assignedTo.some(user => user.id === this.currentUserId)
+            ))
+        );
+    }
+
+    updateTaskStatus(taskId: number, status: TaskStatus): Observable<void> {
+        const tasks = this.tasksSubject.getValue();
+        const taskIndex = tasks.findIndex(t => t.id === taskId);
+
+        if (taskIndex !== -1) {
+            tasks[taskIndex] = {
+                ...tasks[taskIndex],
+                status,
+                completed: status === TaskStatus.COMPLETED
+            };
+            this.tasksSubject.next([...tasks]);
+        }
+
+        return of(void 0);
+    }
 
     createTaskForm(): FormGroup {
         return this.fb.group({
@@ -40,8 +91,6 @@ export class TaskService {
         const assignedTo = formValue.assignedTo.map(userId =>
             this.availableUsers.find(user => user.id === userId)
         ).filter(user => user !== undefined) as AssignedUser[];
-
-        console.log('Assigned Users:', assignedTo); // Log assigned users
 
         return {
             ...formValue,
