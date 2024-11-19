@@ -24,18 +24,8 @@ export const routes: Routes = [
     },
     {
         path: 'projects',
-        loadComponent: () => import('./modules/project/components/project-list/project-list.component')
-            .then(m => m.ProjectListComponent)
-    },
-    {
-        path: 'projects/create',
-        loadComponent: () => import('./modules/project/components/project-form/project-form.component')
-            .then(m => m.ProjectFormComponent)
-    },
-    {
-        path: 'projects/edit/:id',
-        loadComponent: () => import('./modules/project/components/project-form/project-form.component')
-            .then(m => m.ProjectFormComponent)
+        loadChildren: () => import('./modules/project/projects.routes')
+            .then(routes => routes)
     },
     {
         path: 'issues',
