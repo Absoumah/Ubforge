@@ -39,35 +39,9 @@ export const routes: Routes = [
     },
     {
         path: 'issues',
-        loadComponent: () => import('./modules/issue/components/issue-list/issue-list.component')
-            .then(m => m.IssueListComponent)
+        loadChildren: () => import('./modules/issue/issues.routes')
+            .then(routes => routes)
     },
-    {
-        path: 'issues/create',
-        loadComponent: () => import('./modules/issue/components/issue-form/issue-form.component')
-            .then(m => m.IssueFormComponent)
-
-    },
-    {
-        path: 'issues/edit/:id',
-        loadComponent: () => import('./modules/issue/components/issue-form/issue-form.component')
-            .then(m => m.IssueFormComponent)
-    },
-    {
-        path: 'issues/:id',
-        loadComponent: () => import('./modules/issue/components/issue-detail/issue-detail.component')
-            .then(m => m.IssueDetailComponent)
-    },
-    // {
-    //     path: 'my-tasks',
-    //     loadComponent: () => import('./modules/tasks/components/my-tasks/my-tasks.component')
-    //         .then(m => m.MyTasksComponent)
-    // },
-    // {
-    //     path: 'tasks/:id',
-    //     loadComponent: () => import('./modules/tasks/components/task-detail/task-detail.component')
-    //         .then(m => m.TaskDetailComponent)
-    // },
     {
         path: 'tasks',
         loadChildren: () => import('./modules/tasks/tasks.routes')
