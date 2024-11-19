@@ -53,6 +53,12 @@ export class TaskService {
         );
     }
 
+    getTaskById(id: number): Observable<Task | undefined> {
+        return this.tasksSubject.pipe(
+            map(tasks => tasks.find(task => task.id === id))
+        );
+    }
+
     updateTaskStatus(taskId: number, status: TaskStatus): Observable<void> {
         const tasks = this.tasksSubject.getValue();
         const taskIndex = tasks.findIndex(t => t.id === taskId);

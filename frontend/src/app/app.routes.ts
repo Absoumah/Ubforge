@@ -64,6 +64,11 @@ export const routes: Routes = [
             .then(m => m.MyTasksComponent)
     },
     {
+        path: 'tasks/:id',
+        loadComponent: () => import('./modules/issue/components/task-detail/task-detail.component')
+            .then(m => m.TaskDetailComponent)
+    },
+    {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
