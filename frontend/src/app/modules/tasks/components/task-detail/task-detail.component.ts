@@ -37,7 +37,7 @@ export class TaskDetailComponent implements OnInit {
     if (this.task) {
       this.taskService.updateTaskStatus(this.task.id, TaskStatus.COMPLETED)
         .subscribe(() => {
-          this.router.navigate(['/my-tasks']);
+          this.router.navigate(['tasks/my-tasks']);
         });
     }
   }
