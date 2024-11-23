@@ -4,7 +4,6 @@ import { IssueDetailComponent } from './issue-detail.component';
 import { IssueService } from '../../services/issue.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { DialogService } from '../../../../shared/services/dialog.service';
-import { of } from 'rxjs';
 import { Issue } from '../../models/issue';
 
 describe('IssueDetailComponent', () => {
