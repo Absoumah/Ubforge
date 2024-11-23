@@ -20,8 +20,23 @@ describe('ConfirmationDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  // it('should create', () => {
+  //   expect(component).toBeTruthy();
+  // });
+
+  it('should display correct input values', () => {
+    component.title = 'Test Title';
+    component.message = 'Test Message';
+    component.confirmText = 'Yes';
+    component.cancelText = 'No';
+
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('h2').textContent).toContain('Test Title');
+    expect(compiled.querySelector('.dialog-content p').textContent).toContain('Test Message');
+    expect(compiled.querySelector('.btn-primary').textContent.trim()).toBe('Yes');
+    expect(compiled.querySelector('.btn-secondary').textContent.trim()).toBe('No');
   });
 
   it('should display correct input values', () => {
