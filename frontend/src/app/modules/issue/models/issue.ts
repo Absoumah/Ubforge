@@ -1,6 +1,6 @@
 // TODO : separate the task and issue model into separate files
 
-import { Task } from "./task.interface";
+import { Task } from "../../tasks/models/task.interface";
 
 
 

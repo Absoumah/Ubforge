@@ -7,10 +7,10 @@ import { MenuItem } from '../../models/menu-item.model';
 })
 export class SidebarService {
   private menuItems: MenuItem[] = [
-    { id: '1', title: 'Dashboard', route: '/dashboard' },
+    { id: '1', title: 'Dashboard', route: '/dashboard', },
     { id: '2', title: 'Projects', route: '/projects' },
     { id: '3', title: 'Issues', route: '/issues' },
-    { id: '5', title: 'My Tasks', route: '/my-tasks' },
+    { id: '5', title: 'My Tasks', route: '/tasks/my-tasks' },
     { id: '5', title: 'Settings', route: '/settings' }
 
   ];

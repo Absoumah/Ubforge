@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Issue } from '../models/issue';
-import { TaskPriority } from '../models/task-priority.enum';
-import { TaskStatus } from '../models/task-status.enum';
+import { TaskPriority } from '../../tasks/models/task-priority.enum';
+import { TaskStatus } from '../../tasks/models/task-status.enum';
 
 @Injectable({
   providedIn: 'root'

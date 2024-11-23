@@ -1,5 +1,5 @@
 import { TaskPriority } from './task-priority.enum';
-import { AssignedUser } from './assigned-user.interface';
+import { AssignedUser } from '../../issue/models/assigned-user.interface';
 import { TaskStatus } from './task-status.enum';
 
 export interface Task {
