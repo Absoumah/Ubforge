@@ -27,7 +27,7 @@ Notre outil simplifie la gestion des tâches complexes en une interface fluide e
 Notre outil repose sur une pile technologique robuste et moderne pour garantir performance et évolutivité :
 
 ### **Frontend**  
-🌟 **Angular (18.2.x)** : Framework puissant pour des interfaces interactives et réactives.
+🌟 **Angular** : Framework puissant pour des interfaces interactives et réactives.
 
 ### **Backend**  
 🚀 **Spring Boot** : Un backend solide et sécurisé, prêt pour l'échelle.
