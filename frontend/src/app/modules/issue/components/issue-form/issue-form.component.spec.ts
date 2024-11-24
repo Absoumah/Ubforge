@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, ActivatedRoute, convertToParamMap } from '@angular/router';
 import { IssueFormComponent } from './issue-form.component';
 import { IssueService } from '../../services/issue.service';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { Issue } from '../../models/issue';
 
@@ -25,8 +26,9 @@ describe('IssueFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IssueFormComponent],
+      imports: [IssueFormComponent, ReactiveFormsModule],
       providers: [
+        FormBuilder,
         provideRouter([]),
         {
           provide: ActivatedRoute,
