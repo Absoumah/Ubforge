@@ -1,0 +1,27 @@
+<div class="issue-list">
+    <div class="issue-list-header">
+        <h2>Issues</h2>
+        <button *ngIf="issues.length" class="create-button" (click)="createIssue()">Create Issue +</button>
+    </div>
+
+    <!-- filter component -->
+    <app-issue-filter></app-issue-filter>
+
+    <div *ngIf="issues.length; else noIssues" class="issue-list-content">
+        <app-issue-item *ngFor="let issue of paginatedIssues" [issue]="issue" (edit)="editIssue($event)"
+            (delete)="deleteIssue($event)">
+        </app-issue-item>
+    </div>
+
+    <!-- *ngIf="issues.length > itemsPerPage" -->
+
+    <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
+    </app-pagination>
+
+    <ng-template #noIssues>
+        <div class="no-issues">
+            <p>No issues found</p>
+            <button class="create-button" (click)="createIssue()">Create Issue +</button>
+        </div>
+    </ng-template>
+</div>

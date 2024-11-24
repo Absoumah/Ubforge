@@ -1,0 +1,23 @@
+@import '../../../styles/theme.scss';
+
+.settings-container {
+    padding: $spacing-base;
+    background-color: $background-color;
+    color: $text-color;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    max-width: 800px;
+    margin: 0 auto;
+
+    h1 {
+        font-size: $font-size-large;
+        margin-bottom: $spacing-small;
+        font-weight: $font-weight-bold;
+    }
+
+    p {
+        font-size: $font-size-base;
+        margin-bottom: $spacing-base;
+    }
+}

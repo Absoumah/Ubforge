@@ -1,0 +1,104 @@
+@import '../../../../../styles/theme.scss';
+
+.issue-item {
+    background: $light-color;
+    border-radius: $border-radius;
+    padding: $spacing-base;
+    box-shadow: $box-shadow;
+    margin-bottom: $spacing-base;
+    position: relative;
+
+    .issue-header {
+        margin-bottom: $spacing-base;
+
+        .issue-title {
+            display: flex;
+            align-items: center;
+            gap: $spacing-base;
+            margin-bottom: $spacing-base;
+
+            h3 {
+                margin: 0;
+                color: $text-color;
+                font-size: $font-size-large;
+                font-weight: $font-weight-bold;
+            }
+
+            .category-badge {
+                background: $secondary-color;
+                color: $light-color;
+                padding: $spacing-xs $spacing-small;
+                border-radius: $border-radius;
+                font-size: $font-size-small;
+            }
+        }
+    }
+
+    .issue-dates {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-small;
+        margin-bottom: $spacing-base;
+        color: $text-muted;
+        font-size: $font-size-small;
+
+        span {
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+
+            &:before {
+                content: '📅';
+                font-size: $font-size-base;
+            }
+        }
+    }
+
+    .issue-description {
+        color: $text-muted;
+        margin: $spacing-base 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-clamp: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .issue-tasks {
+        background: $background-color;
+        border-radius: $border-radius;
+        padding: $spacing-base;
+        margin-top: $spacing-base;
+        margin-bottom: 2.5rem;
+    }
+
+    .issue-actions {
+        position: absolute;
+        bottom: $spacing-base;
+        left: $spacing-base;
+        display: flex;
+        gap: $spacing-small;
+
+        button {
+            background: none;
+            border: none;
+            padding: $spacing-xs;
+            cursor: pointer;
+            color: $text-muted;
+            transition: color $transition-base;
+
+            &.edit-button:before {
+                content: '✏️';
+            }
+
+            &.delete-button:before {
+                content: '🗑️';
+            }
+
+            &:hover {
+                color: $primary-color;
+            }
+        }
+    }
+}

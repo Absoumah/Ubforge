@@ -1,0 +1,68 @@
+@import '../../../../styles/theme.scss';
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: $spacing-base;
+    // padding: $spacing-base;
+    // background-color: $light-color;
+    border-radius: $border-radius;
+    margin-bottom: $spacing-base;
+    // box-shadow: $box-shadow;
+    // border: 1px solid $border-color;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: $spacing-small;
+
+    // label {
+    //     font-weight: $font-weight-bold;
+    //     color: $text-color;
+    //     font-size: $font-size-base;
+    // }
+
+    select {
+        width: 100%;
+        padding: $spacing-small;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        color: $text-color;
+        appearance: none;
+        background: white url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='%23000000' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") no-repeat;
+        background-position: calc(100% - 8px) center;
+        padding-right: 28px;
+        font-size: $font-size-base;
+
+        option {
+            color: $text-color;
+            background-color: white;
+        }
+
+        &:focus {
+            border-color: $primary-color;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba($primary-color, 0.1);
+        }
+    }
+}
+
+.reset-button {
+    padding: $spacing-small $spacing-base;
+    background-color: $secondary-color;
+    color: $light-color;
+    border: none;
+    border-radius: $border-radius;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+    transition: background-color $transition-base;
+
+    &:hover {
+        background-color: darken($secondary-color, 10%);
+    }
+
+    &:active {
+        background-color: darken($secondary-color, 20%);
+    }
+}

@@ -1,0 +1,74 @@
+@import '../../../../styles/theme.scss';
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.dialog-container {
+    background: $light-color;
+    border-radius: $border-radius;
+    padding: $spacing-base;
+    width: 400px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-header {
+    h2 {
+        margin: 0;
+        color: $text-color;
+        font-size: $font-size-large;
+        font-weight: $font-weight-bold;
+    }
+}
+
+.dialog-content {
+    margin: $spacing-base 0;
+
+    p {
+        margin: 0;
+        color: $text-color;
+        font-size: $font-size-base;
+    }
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-small;
+
+    button {
+        padding: $spacing-small $spacing-base;
+        border-radius: $border-radius;
+        border: none;
+        font-weight: $font-weight-bold;
+        cursor: pointer;
+        min-width: 100px;
+
+        &.btn-secondary {
+            background-color: $background-color;
+            color: $text-color;
+
+            &:hover {
+                background-color: darken($background-color, 5%);
+            }
+        }
+
+        &.btn-primary {
+            background-color: $danger-color;
+            color: $light-color;
+
+            &:hover {
+                background-color: darken($danger-color, 10%);
+            }
+        }
+    }
+}

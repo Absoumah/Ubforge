@@ -1,0 +1,54 @@
+@import '../../../../styles/theme.scss';
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-base;
+    margin-top: $spacing-large;
+
+    .pagination-button {
+        padding: $spacing-small $spacing-base;
+        background-color: $light-color;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        cursor: pointer;
+        transition: all $transition-base;
+
+        &:hover:not(:disabled) {
+            background-color: $primary-color;
+            color: $light-color;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
+    .page-numbers {
+        display: flex;
+        gap: $spacing-small;
+
+        .page-number {
+            padding: $spacing-small;
+            min-width: 32px;
+            border: 1px solid $border-color;
+            border-radius: $border-radius;
+            background-color: $light-color;
+            cursor: pointer;
+            transition: all $transition-base;
+
+            &:hover {
+                background-color: $hover-color;
+                color: $light-color;
+            }
+
+            &.active {
+                background-color: $primary-color;
+                color: $light-color;
+                border-color: $primary-color;
+            }
+        }
+    }
+}
