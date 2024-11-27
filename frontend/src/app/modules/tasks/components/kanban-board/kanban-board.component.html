@@ -1,14 +1,20 @@
-<!-- kanban-board.component.html -->
 <div class="kanban-board">
-    <app-kanban-column title="To Do" [tasks]="todoTasks" [status]="TaskStatus.TODO" listId="todo"
-        [connectedTo]="['inProgress', 'completed']" (dropped)="onDrop($event, TaskStatus.TODO)">
-    </app-kanban-column>
+    <div class="board-header">
+        <h2>Task Board</h2>
+    </div>
 
-    <app-kanban-column title="In Progress" [tasks]="inProgressTasks" [status]="TaskStatus.IN_PROGRESS"
-        listId="inProgress" [connectedTo]="['todo', 'completed']" (dropped)="onDrop($event, TaskStatus.IN_PROGRESS)">
-    </app-kanban-column>
+    <div class="columns-container">
+        <app-kanban-column title="To Do" [tasks]="todoTasks" [status]="TaskStatus.TODO" listId="todo"
+            [connectedTo]="['inProgress', 'completed']" (dropped)="onDrop($event, TaskStatus.TODO)">
+        </app-kanban-column>
 
-    <app-kanban-column title="Completed" [tasks]="completedTasks" [status]="TaskStatus.COMPLETED" listId="completed"
-        [connectedTo]="['todo', 'inProgress']" (dropped)="onDrop($event, TaskStatus.COMPLETED)">
-    </app-kanban-column>
+        <app-kanban-column title="In Progress" [tasks]="inProgressTasks" [status]="TaskStatus.IN_PROGRESS"
+            listId="inProgress" [connectedTo]="['todo', 'completed']"
+            (dropped)="onDrop($event, TaskStatus.IN_PROGRESS)">
+        </app-kanban-column>
+
+        <app-kanban-column title="Completed" [tasks]="completedTasks" [status]="TaskStatus.COMPLETED" listId="completed"
+            [connectedTo]="['todo', 'inProgress']" (dropped)="onDrop($event, TaskStatus.COMPLETED)">
+        </app-kanban-column>
+    </div>
 </div>

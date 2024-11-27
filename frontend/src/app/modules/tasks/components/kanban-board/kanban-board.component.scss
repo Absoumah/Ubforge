@@ -2,10 +2,26 @@
 
 .kanban-board {
     display: flex;
-    gap: $spacing-large;
+    flex-direction: column;
     padding: $spacing-base;
     padding-left: calc(310px + $spacing-base);
     background-color: $background-color;
     min-height: calc(100vh - 2 * $spacing-base);
-    overflow-x: auto;
+
+    .board-header {
+        margin-bottom: $spacing-large;
+
+        h2 {
+            font-size: $font-size-large;
+            font-weight: $font-weight-bold;
+            color: $text-color;
+            margin: 0;
+        }
+    }
+
+    .columns-container {
+        display: flex;
+        gap: $spacing-large;
+        overflow-x: auto;
+    }
 }
