@@ -5,7 +5,8 @@
             <span class="badge priority" [class]="getPriorityClass()">
                 {{ task.priority }}
             </span>
-            <app-status-dropdown [currentStatus]="task.status" (statusChange)="onStatusChange($event)">
+            <app-status-dropdown *ngIf="!hideStatus" [currentStatus]="task.status"
+                (statusChange)="onStatusChange($event)">
             </app-status-dropdown>
         </div>
     </div>

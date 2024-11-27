@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class TaskItemComponent {
   @Input() task!: Task;
+  @Input() hideStatus: boolean = false;
   @Output() statusChange = new EventEmitter<{ taskId: number, status: TaskStatus }>();
 
   constructor(private router: Router) { }
