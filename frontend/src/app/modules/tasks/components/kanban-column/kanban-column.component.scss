@@ -1,0 +1,51 @@
+// kanban-column.component.scss
+@import '../../../../../styles/theme.scss';
+
+.kanban-column {
+    background: $light-color;
+    border-radius: $border-radius;
+    width: 400px; // Increased from 300px
+    min-width: 400px; // Increased from 300px
+    padding: $spacing-large; // Increased padding
+    box-shadow: $box-shadow;
+    max-height: calc(100vh - 2 * $spacing-large); // Ensure it fits in viewport
+    display: flex;
+    flex-direction: column;
+
+    .column-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-large; // Increased margin
+
+        h3 {
+            font-size: $font-size-large; // Increased font size
+            font-weight: $font-weight-bold;
+            margin: 0;
+        }
+
+        .task-count {
+            background: rgba($text-muted, 0.1);
+            color: $text-muted;
+            padding: $spacing-small $spacing-base; // Increased padding
+            border-radius: $border-radius;
+            font-size: $font-size-base; // Increased font size
+        }
+    }
+
+    .tasks-container {
+        min-height: 200px; // Increased minimum height
+        overflow-y: auto; // Allow scrolling within column
+        flex-grow: 1; // Take remaining space
+
+        app-task-item {
+            display: block;
+            margin-bottom: $spacing-base; // Increased margin
+            cursor: move;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}

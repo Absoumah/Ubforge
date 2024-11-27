@@ -1,0 +1,14 @@
+// kanban-board.component.scss
+@import '../../../../../styles/theme.scss';
+
+.kanban-board {
+    display: flex;
+    gap: $spacing-large * 1.5; // Increased gap between columns
+    padding: $spacing-large; // Increased overall padding
+    padding-left: calc(310px + $spacing-large); // Keep sidebar spacing but increase padding
+    background-color: $background-color;
+    min-height: calc(100vh - 2 * $spacing-large);
+    overflow-x: auto;
+    height: 100vh; // Full viewport height
+    box-sizing: border-box;
+}

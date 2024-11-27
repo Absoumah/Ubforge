@@ -1,0 +1,14 @@
+<!-- kanban-board.component.html -->
+<div class="kanban-board">
+    <app-kanban-column title="To Do" [tasks]="todoTasks" [status]="TaskStatus.TODO" listId="todo"
+        [connectedTo]="['inProgress', 'completed']" (dropped)="onDrop($event, TaskStatus.TODO)">
+    </app-kanban-column>
+
+    <app-kanban-column title="In Progress" [tasks]="inProgressTasks" [status]="TaskStatus.IN_PROGRESS"
+        listId="inProgress" [connectedTo]="['todo', 'completed']" (dropped)="onDrop($event, TaskStatus.IN_PROGRESS)">
+    </app-kanban-column>
+
+    <app-kanban-column title="Completed" [tasks]="completedTasks" [status]="TaskStatus.COMPLETED" listId="completed"
+        [connectedTo]="['todo', 'inProgress']" (dropped)="onDrop($event, TaskStatus.COMPLETED)">
+    </app-kanban-column>
+</div>
