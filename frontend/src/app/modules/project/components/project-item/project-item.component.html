@@ -1,6 +1,10 @@
 <div class="project-item">
     <div class="project-item-header">
-        <h3>{{ project.name }}</h3>
+        <div class="title-section">
+            <h3>{{ project.name }}</h3>
+            <app-active-project-badge [isActive]="isActive" (click)="toggleActive()">
+            </app-active-project-badge>
+        </div>
         <div class="project-url-container">
             <a [href]="project.url" target="_blank">{{ project.url }}</a>
         </div>
