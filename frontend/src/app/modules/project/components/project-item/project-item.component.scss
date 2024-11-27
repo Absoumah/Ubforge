@@ -2,34 +2,68 @@
 
 .project-item {
     display: flex;
-    flex-direction: column; // Display elements in a column
+    flex-direction: column;
     width: 100%;
-    min-width: 800px; // Set the minimum width to 800px
+    min-width: 800px;
     padding: $spacing-base;
     border: 1px solid $border-color;
     border-radius: $border-radius;
     background-color: $light-color;
     margin-bottom: $spacing-small;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Add a subtle shadow for a modern look
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     .project-item-header {
         display: flex;
-        flex-direction: row; // Display elements in a row
+        flex-direction: row;
         align-items: center;
         justify-content: space-between;
         width: 100%;
         margin-bottom: $spacing-small;
 
-        h3 {
-            font-size: $font-size-large;
-            margin: 0;
-            color: $primary-color;
-            font-weight: $font-weight-bold;
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+
+            h3 {
+                font-size: $font-size-large;
+                margin: 0;
+                color: $primary-color;
+                font-weight: $font-weight-bold;
+            }
+
+            app-active-project-badge {
+                display: inline-flex;
+                cursor: pointer;
+
+                .active-badge {
+                    padding: $spacing-small $spacing-base;
+                    border-radius: $border-radius;
+                    font-size: $font-size-small;
+                    font-weight: $font-weight-medium;
+                    transition: all $transition-base;
+
+                    &:not(.is-active) {
+                        background-color: $light-gray;
+                        color: $secondary-color;
+                    }
+
+                    &.is-active {
+                        background-color: $success-color;
+                        color: $light-color;
+                    }
+
+                    &:hover {
+                        opacity: 0.9;
+                        transform: scale(1.05);
+                    }
+                }
+            }
         }
 
         .project-url-container {
-            background-color: rgba(0, 128, 0, 0.1); // Green color with transparency
-            border-radius: $border-radius * 2; // More border radius
+            background-color: rgba(0, 128, 0, 0.1);
+            border-radius: $border-radius * 2;
             padding: $spacing-small $spacing-base;
             margin-left: $spacing-base;
 
@@ -37,7 +71,7 @@
                 font-size: $font-size-small;
                 color: $accent-color;
                 text-decoration: none;
-                word-break: break-all; // Ensure long URLs break to the next line
+                word-break: break-all;
 
                 &:hover {
                     text-decoration: underline;
@@ -51,6 +85,12 @@
             margin-left: $spacing-base;
             color: $secondary-color;
             font-weight: $font-weight-normal;
+        }
+
+        .project-assigned-users {
+            display: flex;
+            align-items: center;
+            margin-left: $spacing-base;
         }
 
         .project-item-actions {
@@ -75,19 +115,13 @@
                 }
 
                 &:last-child {
-                    background-color: $danger-color; // Red color for the delete button
+                    background-color: $danger-color;
 
                     &:hover {
                         background-color: darken($danger-color, 10%);
                     }
                 }
             }
-        }
-
-        .project-assigned-users {
-            display: flex;
-            align-items: center;
-            margin-left: $spacing-base;
         }
     }
 
@@ -103,14 +137,14 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             display: -webkit-box;
-            -webkit-line-clamp: 3; // Limit to 3 lines
+            -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
-            line-clamp: 3; // Standard property for limiting to 3 lines
+            line-clamp: 3;
 
             &.expanded {
                 white-space: normal;
-                -webkit-line-clamp: unset; // Remove line clamp when expanded
-                line-clamp: unset; // Remove line clamp when expanded
+                -webkit-line-clamp: unset;
+                line-clamp: unset;
             }
         }
 
