@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskItemComponent } from '../task-item/task-item.component';
 import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task.interface';
 import { TaskStatus } from '../../models/task-status.enum';
+import { ProjectStateService } from '../../../project/services/project-state.service';
+import { Subscription, switchMap, of, combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-my-tasks',
@@ -12,20 +14,34 @@ import { TaskStatus } from '../../models/task-status.enum';
   templateUrl: './my-tasks.component.html',
   styleUrls: ['./my-tasks.component.scss']
 })
-export class MyTasksComponent implements OnInit {
+export class MyTasksComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
+  private subscription?: Subscription;
 
-  constructor(private taskService: TaskService) { }
+  constructor(
+    private taskService: TaskService,
+    private projectStateService: ProjectStateService
+  ) { }
 
   ngOnInit(): void {
-    // Assuming you have a method in TaskService to get user's tasks
-    this.taskService.getMyTasks().subscribe(tasks => {
+    this.subscription = combineLatest([
+      this.projectStateService.getActiveProjectId(),
+      this.taskService.getMyTasks()
+    ]).pipe(
+      map(([projectId, tasks]) => {
+        if (!projectId) return [];
+        return tasks.filter(task => task.projectId === projectId);
+      })
+    ).subscribe(tasks => {
       this.tasks = tasks;
     });
   }
 
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
+  }
+
   onStatusChange(event: { taskId: number, status: TaskStatus }): void {
-    // Handle status change
     this.taskService.updateTaskStatus(event.taskId, event.status).subscribe();
   }
 }
