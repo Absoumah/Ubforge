@@ -12,6 +12,7 @@ export interface Issue {
     reportedDate: Date;
     dueDate: Date;
     tasks: Task[];
+    projectId: number;
 }
 
 export type IssueCategory = 'BugFix' | 'Feature' | 'Enhancement' | 'Documentation';

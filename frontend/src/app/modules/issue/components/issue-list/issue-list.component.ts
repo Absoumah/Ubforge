@@ -9,7 +9,8 @@ import { ToastService } from '../../../../shared/services/toast.service';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { IssueFilterComponent } from '../../../../shared/components/issue-filter/issue-filter.component';
 import { FilterService } from '../../../../shared/services/filter.service';
-import { combineLatest } from 'rxjs';
+import { ProjectStateService } from '../../../project/services/project-state.service';
+import { combineLatest, switchMap, of, take } from 'rxjs';
 import { IssueFilter } from '../../../../shared/models/filter.model';
 
 @Component({
@@ -31,17 +32,22 @@ export class IssueListComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private toastService: ToastService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private projectStateService: ProjectStateService
   ) { }
 
   ngOnInit(): void {
-    this.loadIssues();
     this.setupFilterSubscription();
   }
 
   private setupFilterSubscription(): void {
     combineLatest([
-      this.issueService.getIssues(),
+      this.projectStateService.getActiveProjectId().pipe(
+        switchMap(projectId => {
+          if (!projectId) return of([]);
+          return this.issueService.getIssuesByProject(projectId);
+        })
+      ),
       this.filterService.currentFilter$
     ]).subscribe(([issues, filter]) => {
       this.issues = issues;
@@ -79,9 +85,17 @@ export class IssueListComponent implements OnInit {
   }
 
   createIssue(): void {
-    this.router.navigate(['/issues/create']).then(() => {
-      this.toastService.success('Navigated to create issue page');
-    });
+    this.projectStateService.getActiveProjectId()
+      .pipe(take(1))
+      .subscribe(projectId => {
+        if (!projectId) {
+          this.toastService.error('Please select a project first');
+          return;
+        }
+        this.router.navigate(['/issues/create']).then(() => {
+          this.toastService.success('Navigated to create issue page');
+        });
+      });
   }
 
   editIssue(id: number): void {
