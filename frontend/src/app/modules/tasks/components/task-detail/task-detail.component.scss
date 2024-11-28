@@ -1,0 +1,143 @@
+@import '../../../../../styles/theme.scss';
+
+.task-detail {
+    padding: $spacing-base;
+    padding-left: calc(310px + $spacing-base);
+    background-color: $background-color;
+    min-height: calc(100vh - 2 * $spacing-base);
+
+    .task-detail-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-large;
+
+        h2 {
+            font-size: $font-size-large;
+            font-weight: $font-weight-bold;
+            color: $text-color;
+            margin: 0;
+        }
+
+        .task-badges {
+            display: flex;
+            gap: $spacing-small;
+
+            .badge {
+                padding: $spacing-small $spacing-base;
+                border-radius: $border-radius;
+                font-size: $font-size-small;
+                font-weight: $font-weight-bold;
+
+                &.priority-high {
+                    background: rgba($danger-color, 0.1);
+                    color: $danger-color;
+                }
+
+                &.priority-medium {
+                    background: rgba($secondary-color, 0.1);
+                    color: $secondary-color;
+                }
+
+                &.priority-low {
+                    background: rgba($text-muted, 0.1);
+                    color: $text-muted;
+                }
+
+                &.status-completed {
+                    background: rgba($accent-color, 0.1);
+                    color: $accent-color;
+                }
+
+                &.status-in_progress {
+                    background: rgba($primary-color, 0.1);
+                    color: $primary-color;
+                }
+
+                &.status-todo {
+                    background: rgba($text-muted, 0.1);
+                    color: $text-muted;
+                }
+            }
+        }
+    }
+
+    .task-detail-content {
+        background: $light-color;
+        border-radius: $border-radius;
+        padding: $spacing-large;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        .detail-section {
+            margin-bottom: $spacing-large;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            h3 {
+                font-size: $font-size-base;
+                font-weight: $font-weight-bold;
+                color: $text-color;
+                margin-bottom: $spacing-small;
+            }
+
+            p {
+                color: $text-muted;
+                margin: 0;
+            }
+
+            .assigned-users {
+                display: flex;
+                gap: $spacing-small;
+            }
+
+            .due-date {
+                display: flex;
+                align-items: center;
+                gap: $spacing-small;
+
+                .icon {
+                    font-size: $font-size-base;
+                }
+            }
+        }
+    }
+
+    .task-detail-actions {
+        margin-top: $spacing-large;
+        display: flex;
+        justify-content: flex-end;
+        gap: $spacing-base;
+
+        .secondary-button {
+            padding: $spacing-small $spacing-large;
+            background-color: $light-color;
+            color: $text-color;
+            border: 1px solid $border-color;
+            border-radius: $border-radius;
+            font-weight: $font-weight-bold;
+            cursor: pointer;
+            transition: background-color $transition-base;
+
+            &:hover {
+                background-color: darken($light-color, 5%);
+            }
+        }
+
+        .primary-button {
+            padding: $spacing-small $spacing-large;
+            background-color: $primary-color;
+            color: $light-color;
+            border: none;
+            border-radius: $border-radius;
+            font-weight: $font-weight-bold;
+            cursor: pointer;
+            transition: background-color $transition-base;
+
+            &:hover {
+                background-color: darken($primary-color, 10%);
+            }
+        }
+    }
+}

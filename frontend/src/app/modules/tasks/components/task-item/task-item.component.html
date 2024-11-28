@@ -1,0 +1,24 @@
+<div class="task-item" (click)="onTaskClick()">
+    <div class="task-row primary">
+        <div class="task-name">{{ task.name }}</div>
+        <div class="task-badges">
+            <span class="badge priority" [class]="getPriorityClass()">
+                {{ task.priority }}
+            </span>
+            <app-status-dropdown *ngIf="!hideStatus" [currentStatus]="task.status"
+                (statusChange)="onStatusChange($event)">
+            </app-status-dropdown>
+        </div>
+    </div>
+    <div class="task-row secondary">
+        <div class="assigned-users">
+            <app-user-avatar *ngFor="let user of task.assignedTo"
+                [initials]="(user?.firstName?.charAt(0) || '') + (user?.lastName?.charAt(0) || '')">
+            </app-user-avatar>
+        </div>
+        <div class="due-date" *ngIf="task.dueDate">
+            <span class="icon">📅</span>
+            {{ task.dueDate | date:'shortDate' }}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+@import '../../../../../styles/theme.scss';
+
+.kanban-board {
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-base;
+    padding-left: calc(310px + $spacing-base);
+    background-color: $background-color;
+    min-height: calc(100vh - 2 * $spacing-base);
+
+    .board-header {
+        margin-bottom: $spacing-large;
+
+        h2 {
+            font-size: $font-size-large;
+            font-weight: $font-weight-bold;
+            color: $text-color;
+            margin: 0;
+        }
+    }
+
+    .columns-container {
+        display: flex;
+        gap: $spacing-large;
+        overflow-x: auto;
+    }
+}

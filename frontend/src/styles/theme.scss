@@ -1,0 +1,43 @@
+// Colors
+$primary-color: #1e4e76; // Primary blue
+$secondary-color: #68b2ee; // Secondary blue
+$background-color: #f5f9fa; // Light background
+$light-gray: #f0f0f0; // Light gray for inactive states
+$text-color: #0c1013; // Dark text
+$border-color: #dee2e6; // Light border
+$hover-color: darken($primary-color, 10%);
+$active-color: darken($primary-color, 20%);
+$light-color: #ffffff; // White
+$danger-color: #dc3545; // Red for errors
+$accent-color: #0073d1; // Accent blue
+$text-muted: #6c757d;
+$warning-color: #ffc107;
+$success-color: #28a745; // Green for success states
+
+
+// Fonts
+$font-family: 'Roboto', sans-serif;
+$font-size-base: 16px;
+$font-size-large: 20px;
+$font-size-small: 14px;
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-bold: 700;
+$font-weight-medium: 500;
+
+// Spacing
+// Spacing
+$spacing-base: 16px;
+$spacing-large: 24px;
+$spacing-small: 8px;
+$spacing-xs: 4px;
+$spacing-xxs: 2px;
+
+// Border Radius
+$border-radius: 4px;
+
+// Shadows
+$box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+// Transitions
+$transition-base: 0.3s ease-in-out;

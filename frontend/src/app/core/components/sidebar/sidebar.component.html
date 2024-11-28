@@ -1,0 +1,13 @@
+<nav class="sidebar">
+    <div class="menu-section">
+        <ul>
+            <li *ngFor="let item of menuItems" [routerLink]="[item.route]" routerLinkActive="active"
+                (click)="onSelectMenuItem(item)">
+                {{ item.title }}
+            </li>
+        </ul>
+    </div>
+    <div class="switcher-section" *ngIf="!isProjectsRoute">
+        <app-project-switcher></app-project-switcher>
+    </div>
+</nav>

@@ -1,0 +1,59 @@
+@import '../../../../../styles/theme.scss';
+
+.project-switcher {
+    padding: $spacing-base;
+    border-top: 1px solid rgba($light-color, 0.1);
+    margin-top: auto;
+
+    h3 {
+        color: $light-color;
+        font-size: $font-size-base;
+        margin-bottom: $spacing-base;
+        opacity: 0.8;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 200px;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba($light-color, 0.2);
+            border-radius: $border-radius;
+        }
+    }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-small $spacing-base;
+        cursor: pointer;
+        border-radius: $border-radius;
+        transition: all $transition-base;
+        color: $light-color;
+        margin-bottom: $spacing-xs;
+
+        &:hover {
+            background-color: $hover-color;
+        }
+
+        &.active {
+            background-color: $active-color;
+        }
+
+        .project-name {
+            font-size: $font-size-small;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: $spacing-small;
+        }
+    }
+}

@@ -1,0 +1,65 @@
+@import '../../../../../styles/theme.scss';
+
+.task-edit {
+    padding: $spacing-base;
+    padding-left: calc(310px + $spacing-base);
+    background-color: $background-color;
+    min-height: calc(100vh - 2 * $spacing-base);
+
+    .edit-header {
+        margin-bottom: $spacing-large;
+
+        h2 {
+            font-size: $font-size-large;
+            font-weight: $font-weight-bold;
+            color: $text-color;
+        }
+    }
+
+    .edit-content {
+        background: $light-color;
+        border-radius: $border-radius;
+        padding: $spacing-large;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .edit-actions {
+        margin-top: $spacing-large;
+        display: flex;
+        justify-content: flex-end;
+        gap: $spacing-base;
+
+        button {
+            padding: $spacing-small $spacing-large;
+            border: none;
+            border-radius: $border-radius;
+            font-weight: $font-weight-bold;
+            cursor: pointer;
+            transition: background-color $transition-base;
+
+            &.primary-button {
+                background-color: $primary-color;
+                color: $light-color;
+
+                &:hover {
+                    background-color: darken($primary-color, 10%);
+                }
+
+                &:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+            }
+
+            &.secondary-button {
+                background-color: $light-color;
+                color: $text-color;
+                border: 1px solid $border-color;
+
+                &:hover {
+                    background-color: darken($light-color, 5%);
+                }
+            }
+        }
+    }
+}

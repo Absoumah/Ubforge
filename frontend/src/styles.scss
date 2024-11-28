@@ -1,8 +1,53 @@
-/* styles.scss */
+@import './styles/theme';
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* You can add global styles to this file, and also import other style files */
+body {
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    font-family: $font-family;
+    font-size: $font-size-base;
+    background-color: $background-color;
+    color: $text-color;
+}
+
+a {
+    color: $primary-color;
+    text-decoration: none;
+
+    &:hover {
+        color: $hover-color;
+    }
+}
+
+button {
+    font-family: $font-family;
+    font-size: $font-size-base;
+    padding: $spacing-small $spacing-base;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    transition: background-color $transition-base;
+
+    &:hover {
+        background-color: $hover-color;
+    }
+
+    &:active {
+        background-color: $active-color;
+    }
+}
+
+.container {
+    padding: $spacing-base;
+}
+
+.main-content {
+    padding-left: calc(310px + $spacing-base); // Adjusted for sidebar width and additional spacing
+    padding: $spacing-base;
+}

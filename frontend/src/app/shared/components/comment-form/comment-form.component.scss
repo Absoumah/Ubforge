@@ -1,0 +1,46 @@
+@import '../../../../styles/theme.scss';
+
+.comment-form {
+    .input-container {
+        display: flex;
+        gap: $spacing-small;
+        align-items: stretch;
+    }
+
+    textarea {
+        flex: 1;
+        padding: $spacing-base;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        resize: vertical;
+        font-family: inherit;
+        min-height: 60px;
+    }
+
+    button {
+        padding: 0;
+        background-color: $primary-color;
+        color: $light-color;
+        border: none;
+        border-radius: $border-radius;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        align-self: stretch;
+
+        .material-icons {
+            font-size: 20px;
+        }
+
+        &:hover {
+            background-color: $hover-color;
+        }
+
+        &:disabled {
+            background-color: $secondary-color;
+            cursor: not-allowed;
+        }
+    }
+}

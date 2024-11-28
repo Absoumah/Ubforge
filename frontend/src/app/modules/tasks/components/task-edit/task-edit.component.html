@@ -1,0 +1,17 @@
+<div class="task-edit" *ngIf="taskForm">
+    <div class="edit-header">
+        <h2>Edit Task</h2>
+    </div>
+
+    <app-task-form [taskGroup]="taskForm" (taskChange)="taskForm = $event">
+    </app-task-form>
+
+    <div class="edit-actions">
+        <button class="secondary-button" (click)="onCancel()">
+            Cancel
+        </button>
+        <button class="primary-button" (click)="onSave()" [disabled]="!taskForm.valid">
+            Save Changes
+        </button>
+    </div>
+</div>

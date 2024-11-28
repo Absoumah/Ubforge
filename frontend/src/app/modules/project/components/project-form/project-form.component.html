@@ -1,0 +1,48 @@
+<div class="project-form-container">
+    <h2>Project Settings</h2>
+    <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="project-form">
+        <label>
+            Name
+            <input formControlName="name" type="text" />
+            <div *ngIf="projectForm.get('name')?.invalid && projectForm.get('name')?.touched">
+                <small *ngIf="projectForm.get('name')?.errors?.['required']">Name is required.</small>
+                <small *ngIf="projectForm.get('name')?.errors?.['maxlength']">
+                    Name cannot exceed 20 characters.
+                </small>
+            </div>
+        </label>
+        <label>
+            URL
+            <input formControlName="url" type="text" />
+            <div *ngIf="projectForm.get('url')?.invalid && projectForm.get('url')?.touched">
+                <small *ngIf="projectForm.get('url')?.errors?.['required']">URL is required.</small>
+                <small *ngIf="projectForm.get('url')?.errors?.['pattern']">URL must be a valid URL.</small>
+            </div>
+        </label>
+        <label>
+            Category
+            <select formControlName="category">
+                <option *ngFor="let category of categories" [value]="category">
+                    {{ category }}
+                </option>
+            </select>
+            <div *ngIf="projectForm.get('category')?.invalid && projectForm.get('category')?.touched">
+                <small *ngIf="projectForm.get('category')?.errors?.['required']">Category is required.</small>
+            </div>
+        </label>
+        <label>
+            Description
+            <textarea formControlName="description"></textarea>
+            <div *ngIf="projectForm.get('description')?.invalid && projectForm.get('description')?.touched">
+                <small *ngIf="projectForm.get('description')?.errors?.['required']">Description is required.</small>
+                <small *ngIf="projectForm.get('description')?.errors?.['maxlength']">
+                    Description cannot exceed 500 characters.
+                </small>
+            </div>
+        </label>
+        <button type="submit" [disabled]="projectForm.invalid">Submit</button>
+    </form>
+    <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div>
+</div>
