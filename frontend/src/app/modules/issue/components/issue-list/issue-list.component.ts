@@ -10,7 +10,7 @@ import { PaginationComponent } from '../../../../shared/components/pagination/pa
 import { IssueFilterComponent } from '../../../../shared/components/issue-filter/issue-filter.component';
 import { FilterService } from '../../../../shared/services/filter.service';
 import { ProjectStateService } from '../../../project/services/project-state.service';
-import { combineLatest, switchMap, of } from 'rxjs';
+import { combineLatest, switchMap, of, take } from 'rxjs';
 import { IssueFilter } from '../../../../shared/models/filter.model';
 
 @Component({
@@ -85,15 +85,17 @@ export class IssueListComponent implements OnInit {
   }
 
   createIssue(): void {
-    this.projectStateService.getActiveProjectId().subscribe(projectId => {
-      if (!projectId) {
-        this.toastService.error('Please select a project first');
-        return;
-      }
-      this.router.navigate(['/issues/create']).then(() => {
-        this.toastService.success('Navigated to create issue page');
+    this.projectStateService.getActiveProjectId()
+      .pipe(take(1))
+      .subscribe(projectId => {
+        if (!projectId) {
+          this.toastService.error('Please select a project first');
+          return;
+        }
+        this.router.navigate(['/issues/create']).then(() => {
+          this.toastService.success('Navigated to create issue page');
+        });
       });
-    });
   }
 
   editIssue(id: number): void {
