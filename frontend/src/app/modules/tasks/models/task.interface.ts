@@ -12,6 +12,7 @@ export interface Task {
     completed: boolean;
     status: TaskStatus;
     dueDate: Date;
+    projectId: number;
 }
 
 
@@ -24,6 +25,7 @@ export interface TaskForm {
     estimatedHours: number;
     status: TaskStatus;
     dueDate: Date;
+    projectId: number;
 }
 
 export { TaskPriority, TaskStatus };

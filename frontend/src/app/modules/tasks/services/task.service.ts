@@ -22,7 +22,8 @@ export class TaskService {
             completed: false,
             assignedTo: [{ id: 1, firstName: 'John', lastName: 'Doe' }],
             estimatedHours: 8,
-            dueDate: new Date('2024-03-25')
+            dueDate: new Date('2024-03-25'),
+            projectId: 1,
         },
         {
             id: 2,
@@ -33,7 +34,8 @@ export class TaskService {
             completed: false,
             assignedTo: [{ id: 1, firstName: 'John', lastName: 'Doe' }],
             estimatedHours: 4,
-            dueDate: new Date('2024-03-20')
+            dueDate: new Date('2024-03-20'),
+            projectId: 2,
         }
     ]);
 
@@ -56,6 +58,12 @@ export class TaskService {
     getTaskById(id: number): Observable<Task | undefined> {
         return this.tasksSubject.pipe(
             map(tasks => tasks.find(task => task.id === id))
+        );
+    }
+
+    getTasksByProject(projectId: number): Observable<Task[]> {
+        return this.tasksSubject.pipe(
+            map(tasks => tasks.filter(task => task.projectId === projectId))
         );
     }
 

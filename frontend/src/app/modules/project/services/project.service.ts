@@ -19,7 +19,9 @@ export class ProjectService {
         assignedUsers: [
           { id: 1, firstName: 'John', lastName: 'Doe' },
           { id: 2, firstName: 'Jane', lastName: 'Smith' }
-        ]
+        ],
+        taskIds: [1, 3, 5, 7, 8], // Tasks from issue service and task service
+        issueIds: [1, 3, 5] // Issues related to Project Alpha
       },
       {
         id: 2,
@@ -29,7 +31,9 @@ export class ProjectService {
         description: 'Description for Project Beta',
         assignedUsers: [
           { id: 3, firstName: 'Alice', lastName: 'Johnson' }
-        ]
+        ],
+        taskIds: [2, 4, 6], // Tasks from issue service and task service
+        issueIds: [2, 4, 6] // Issues related to Project Beta
       }
     ];
 
