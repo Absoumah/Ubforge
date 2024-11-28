@@ -3,7 +3,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Issue } from '../models/issue';
 import { TaskPriority } from '../../tasks/models/task-priority.enum';
 import { TaskStatus } from '../../tasks/models/task-status.enum';
-import { Comment } from '../models/comment';
+import { Comment } from '../../../shared/models/comment';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,6 @@ export class IssueService {
         reportedDate: new Date("2024-03-01"),
         dueDate: new Date("2024-03-15"),
         projectId: 1,
-        comments: [],
         tasks: [
           {
             id: 1,
@@ -98,7 +97,6 @@ export class IssueService {
         reportedDate: new Date("2024-03-02"),
         dueDate: new Date("2024-03-30"),
         projectId: 2,
-        comments: [],
         tasks: [
           {
             id: 2,
@@ -122,7 +120,6 @@ export class IssueService {
         reportedDate: new Date("2024-03-03"),
         dueDate: new Date("2024-04-15"),
         projectId: 1,
-        comments: [],
         tasks: [
           {
             id: 3,
@@ -146,7 +143,6 @@ export class IssueService {
         reportedDate: new Date("2024-03-04"),
         dueDate: new Date("2024-03-20"),
         projectId: 2,
-        comments: [],
         tasks: [
           {
             id: 4,
@@ -170,7 +166,6 @@ export class IssueService {
         reportedDate: new Date("2024-03-05"),
         dueDate: new Date("2024-03-25"),
         projectId: 1,
-        comments: [],
         tasks: [
           {
             id: 5,
@@ -194,7 +189,6 @@ export class IssueService {
         reportedDate: new Date("2024-03-06"),
         dueDate: new Date("2024-04-06"),
         projectId: 2,
-        comments: [],
         tasks: [
           {
             id: 6,
@@ -252,31 +246,4 @@ export class IssueService {
     this.issuesSubject.next([...this.issues]);
   }
 
-  // Add these methods just before the final closing bracket in issue.service.ts
-
-  addComment(issueId: number, comment: Comment): void {
-    const issue = this.getIssueById(issueId);
-    if (issue) {
-      if (!issue.comments) {
-        issue.comments = [];
-      }
-      issue.comments.push(comment);
-      // Notify subscribers of the change
-      this.issuesSubject.next([...this.issues]);
-    }
-  }
-
-  getComments(issueId: number): Comment[] {
-    const issue = this.getIssueById(issueId);
-    return issue?.comments || [];
-  }
-
-  deleteComment(issueId: number, commentId: number): void {
-    const issue = this.getIssueById(issueId);
-    if (issue && issue.comments) {
-      issue.comments = issue.comments.filter(c => c.id !== commentId);
-      // Notify subscribers of the change
-      this.issuesSubject.next([...this.issues]);
-    }
-  }
 }

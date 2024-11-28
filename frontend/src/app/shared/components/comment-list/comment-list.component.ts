@@ -1,5 +1,4 @@
-// src/app/modules/issue/components/comment-list/comment-list.component.ts
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Comment } from '../../models/comment';
 
@@ -12,4 +11,9 @@ import { Comment } from '../../models/comment';
 })
 export class CommentListComponent {
   @Input() comments: Comment[] = [];
+  @Output() deleteComment = new EventEmitter<number>();
+
+  onDeleteComment(commentId: number): void {
+    this.deleteComment.emit(commentId);
+  }
 }

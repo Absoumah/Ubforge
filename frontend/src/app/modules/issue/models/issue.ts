@@ -1,7 +1,7 @@
 // TODO : separate the task and issue model into separate files
 
 import { Task } from "../../tasks/models/task.interface";
-import { Comment } from "./comment";
+import { Comment } from "../../../shared/models/comment";
 
 
 
@@ -14,7 +14,7 @@ export interface Issue {
     dueDate: Date;
     tasks: Task[];
     projectId: number;
-    comments: Comment[];
+    // comments: Comment[];
 }
 
 export type IssueCategory = 'BugFix' | 'Feature' | 'Enhancement' | 'Documentation';
