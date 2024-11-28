@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { HelloWorldComponent } from './modules/hello-world/hello-world.component';
+import { ProjectGuard } from './modules/project/guards/project.guard';
 
 export const routes: Routes = [
     // we'll keep here, for now
@@ -29,11 +30,13 @@ export const routes: Routes = [
     },
     {
         path: 'issues',
+        canActivate: [ProjectGuard],
         loadChildren: () => import('./modules/issue/issues.routes')
             .then(routes => routes)
     },
     {
         path: 'tasks',
+        canActivate: [ProjectGuard],
         loadChildren: () => import('./modules/tasks/tasks.routes')
             .then(routes => routes)
     },
