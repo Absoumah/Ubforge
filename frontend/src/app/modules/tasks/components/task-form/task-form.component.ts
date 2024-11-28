@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilChanged, Observable, Subject, takeUntil } fr
 import { TaskService } from '../../services/task.service';
 import { TaskPriority } from '../../models/task-priority.enum';
 import { AssignedUser } from '../../../issue/models/assigned-user.interface';
+import { ProjectStateService } from '../../../project/services/project-state.service';
 
 @Component({
   selector: 'app-task-form',
@@ -39,11 +40,24 @@ export class TaskFormComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private taskService: TaskService) {
+  constructor(
+    private taskService: TaskService,
+    private projectStateService: ProjectStateService
+  ) {
     this.availableUsers$ = this.taskService.getAvailableUsers();
   }
 
   ngOnInit(): void {
+    // Set project ID when component initializes
+    this.projectStateService.getActiveProjectId()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(projectId => {
+        if (projectId) {
+          this.taskGroup.patchValue({ projectId });
+        }
+      });
+
+    // Monitor form changes
     this.taskGroup.valueChanges
       .pipe(
         debounceTime(300),
@@ -51,7 +65,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        console.log('Task Form Value Changes:', this.taskGroup.value); // Log task form value changes
+        console.log('Task Form Value Changes:', this.taskGroup.value);
         this.taskChange.emit(this.taskGroup);
       });
   }

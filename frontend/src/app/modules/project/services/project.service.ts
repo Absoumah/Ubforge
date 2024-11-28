@@ -20,8 +20,8 @@ export class ProjectService {
           { id: 1, firstName: 'John', lastName: 'Doe' },
           { id: 2, firstName: 'Jane', lastName: 'Smith' }
         ],
-        taskIds: [1, 3, 5, 7, 8], // Tasks from issue service and task service
-        issueIds: [1, 3, 5] // Issues related to Project Alpha
+        taskIds: [1, 3, 5, 7, 8],
+        issueIds: [1, 3, 5]
       },
       {
         id: 2,
@@ -32,8 +32,8 @@ export class ProjectService {
         assignedUsers: [
           { id: 3, firstName: 'Alice', lastName: 'Johnson' }
         ],
-        taskIds: [2, 4, 6], // Tasks from issue service and task service
-        issueIds: [2, 4, 6] // Issues related to Project Beta
+        taskIds: [2, 4, 6],
+        issueIds: [2, 4, 6]
       }
     ];
 

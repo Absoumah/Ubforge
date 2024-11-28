@@ -12,30 +12,107 @@ import { TaskStatus } from '../models/task-status.enum';
 })
 export class TaskService {
     private currentUserId = 1; // Mock current user (John Doe)
+    // task.service.ts
     private tasksSubject = new BehaviorSubject<Task[]>([
         {
             id: 1,
-            name: 'Implement login page',
-            description: 'Create responsive login page with validation',
+            name: 'Investigate login failures',
+            description: 'Check server logs for authentication errors',
             priority: TaskPriority.HIGH,
             status: TaskStatus.IN_PROGRESS,
             completed: false,
-            assignedTo: [{ id: 1, firstName: 'John', lastName: 'Doe' }],
-            estimatedHours: 8,
-            dueDate: new Date('2024-03-25'),
-            projectId: 1,
+            assignedTo: [
+                { id: 1, firstName: 'John', lastName: 'Doe' },
+                { id: 2, firstName: 'Jane', lastName: 'Smith' },
+                { id: 3, firstName: 'Mike', lastName: 'Johnson' }
+            ],
+            estimatedHours: 4,
+            dueDate: new Date('2024-03-10'),
+            projectId: 1
         },
         {
             id: 2,
-            name: 'Fix navigation bug',
-            description: 'Address issues with mobile navigation',
+            name: 'Create dark theme variables',
+            description: 'Define color palette for dark mode',
             priority: TaskPriority.MEDIUM,
             status: TaskStatus.TODO,
             completed: false,
-            assignedTo: [{ id: 1, firstName: 'John', lastName: 'Doe' }],
-            estimatedHours: 4,
+            assignedTo: [{ id: 2, firstName: 'Jane', lastName: 'Smith' }],
+            estimatedHours: 6,
             dueDate: new Date('2024-03-20'),
-            projectId: 2,
+            projectId: 2
+        },
+        {
+            id: 3,
+            name: 'Profile dashboard performance',
+            description: 'Use Chrome DevTools to identify bottlenecks',
+            priority: TaskPriority.HIGH,
+            status: TaskStatus.TODO,
+            completed: false,
+            assignedTo: [{ id: 3, firstName: 'Mike', lastName: 'Johnson' }],
+            estimatedHours: 8,
+            dueDate: new Date('2024-04-01'),
+            projectId: 1
+        },
+        {
+            id: 4,
+            name: 'Document new endpoints',
+            description: 'Add OpenAPI specifications',
+            priority: TaskPriority.LOW,
+            status: TaskStatus.COMPLETED,
+            completed: true,
+            assignedTo: [{ id: 4, firstName: 'Sarah', lastName: 'Wilson' }],
+            estimatedHours: 3,
+            dueDate: new Date('2024-03-18'),
+            projectId: 2
+        },
+        {
+            id: 5,
+            name: 'Fix mobile navigation',
+            description: 'Address hamburger menu issues',
+            priority: TaskPriority.MEDIUM,
+            status: TaskStatus.IN_PROGRESS,
+            completed: false,
+            assignedTo: [{ id: 5, firstName: 'Alex', lastName: 'Brown' }],
+            estimatedHours: 5,
+            dueDate: new Date('2024-03-22'),
+            projectId: 1
+        },
+        {
+            id: 6,
+            name: 'Design new settings UI',
+            description: 'Create mockups for new preferences',
+            priority: TaskPriority.MEDIUM,
+            status: TaskStatus.TODO,
+            completed: false,
+            assignedTo: [{ id: 6, firstName: 'Emily', lastName: 'Davis' }],
+            estimatedHours: 7,
+            dueDate: new Date('2024-03-28'),
+            projectId: 2
+        },
+        {
+            id: 7,
+            name: 'Fix session timeout issue',
+            description: 'Ensure sessions do not expire prematurely',
+            priority: TaskPriority.HIGH,
+            status: TaskStatus.TODO,
+            completed: false,
+            assignedTo: [{ id: 1, firstName: 'John', lastName: 'Doe' }],
+            estimatedHours: 3,
+            dueDate: new Date('2024-03-12'),
+            projectId: 1
+        },
+        {
+            id: 8,
+            name: 'Improve error messages',
+            description: 'Provide more descriptive error messages on login failure',
+            priority: TaskPriority.MEDIUM,
+            status: TaskStatus.TODO,
+            completed: false,
+            assignedTo: [{ id: 2, firstName: 'Jane', lastName: 'Smith' }],
+            estimatedHours: 2,
+            dueDate: new Date('2024-03-14'),
+            projectId: 1
         }
     ]);
 
@@ -93,7 +170,8 @@ export class TaskService {
             estimatedHours: [0],
             completed: [false],
             status: [TaskStatus.TODO],
-            dueDate: [null]
+            dueDate: [null],
+            projectId: [null, Validators.required]
         });
     }
 
