@@ -108,6 +108,22 @@
         margin-top: $spacing-large;
         display: flex;
         justify-content: flex-end;
+        gap: $spacing-base;
+
+        .secondary-button {
+            padding: $spacing-small $spacing-large;
+            background-color: $light-color;
+            color: $text-color;
+            border: 1px solid $border-color;
+            border-radius: $border-radius;
+            font-weight: $font-weight-bold;
+            cursor: pointer;
+            transition: background-color $transition-base;
+
+            &:hover {
+                background-color: darken($light-color, 5%);
+            }
+        }
 
         .primary-button {
             padding: $spacing-small $spacing-large;
