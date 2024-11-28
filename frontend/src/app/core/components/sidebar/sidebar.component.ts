@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { SidebarService } from '../../../core/services/sidebar/sidebar.service';
 import { MenuItem } from '../../../core/models/menu-item.model';
+import { ProjectSwitcherComponent } from '../../../modules/project/components/project-switcher/project-switcher.component';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ProjectSwitcherComponent],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
