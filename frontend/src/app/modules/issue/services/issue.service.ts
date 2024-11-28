@@ -3,6 +3,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Issue } from '../models/issue';
 import { TaskPriority } from '../../tasks/models/task-priority.enum';
 import { TaskStatus } from '../../tasks/models/task-status.enum';
+import { Comment } from '../../../shared/models/comment';
 
 @Injectable({
   providedIn: 'root'
@@ -244,4 +245,5 @@ export class IssueService {
     this.issues = this.issues.filter(issue => issue.id !== id);
     this.issuesSubject.next([...this.issues]);
   }
+
 }

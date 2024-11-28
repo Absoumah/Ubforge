@@ -1,0 +1,38 @@
+@import '../../../../styles/theme.scss';
+
+.comments-section {
+    margin-top: $spacing-large;
+
+    h3 {
+        margin-bottom: $spacing-base;
+        font-weight: $font-weight-bold;
+    }
+}
+
+.comment-item {
+    background: $light-color;
+    border-radius: $border-radius;
+    padding: $spacing-base;
+    margin-bottom: $spacing-base;
+    box-shadow: $box-shadow;
+
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: $spacing-small;
+
+        .author {
+            font-weight: $font-weight-bold;
+            color: $text-color;
+        }
+
+        .date {
+            color: $text-muted;
+            font-size: $font-size-small;
+        }
+    }
+
+    .content {
+        color: $text-color;
+    }
+}
