@@ -7,7 +7,7 @@
             </li>
         </ul>
     </div>
-    <div class="switcher-section">
+    <div class="switcher-section" *ngIf="!isProjectsRoute">
         <app-project-switcher></app-project-switcher>
     </div>
 </nav>

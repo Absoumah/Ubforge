@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subscription, filter } from 'rxjs';
 import { SidebarService } from '../../../core/services/sidebar/sidebar.service';
 import { MenuItem } from '../../../core/models/menu-item.model';
 import { ProjectSwitcherComponent } from '../../../modules/project/components/project-switcher/project-switcher.component';
@@ -16,16 +16,31 @@ import { ProjectSwitcherComponent } from '../../../modules/project/components/pr
 export class SidebarComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = [];
   selectedItem: MenuItem | null = null;
+  isProjectsRoute: boolean = false;
   private subscription: Subscription = new Subscription();
 
-  constructor(private sidebarService: SidebarService) { }
+  constructor(
+    private sidebarService: SidebarService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.menuItems = this.sidebarService.getMenuItems();
+
     this.subscription.add(
       this.sidebarService.selectedMenuItem$.subscribe(
         item => this.selectedItem = item
       )
+    );
+
+    this.subscription.add(
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+      ).subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.isProjectsRoute = event.url.includes('/projects');
+        }
+      })
     );
   }
 
