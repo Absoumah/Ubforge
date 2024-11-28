@@ -8,6 +8,7 @@
             <span>Reported: {{ issue.reportedDate | date: 'shortDate' }}</span>
             <span>Due: {{ issue.dueDate | date: 'shortDate' }}</span>
         </div>
+        <span class="comment-count">{{issue.comments.length || 0}} comments</span>
     </div>
 
     <p class="issue-description">{{ issue.description }}</p>

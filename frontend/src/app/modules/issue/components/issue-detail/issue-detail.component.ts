@@ -6,11 +6,14 @@ import { IssueService } from '../../services/issue.service';
 import { TaskItemComponent } from '../../../tasks/components/task-item/task-item.component';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { DialogService } from '../../../../shared/services/dialog.service';
+import { CommentListComponent } from '../comment-list/comment-list.component';
+import { CommentFormComponent } from '../comment-form/comment-form.component';
+import { Comment } from '../../models/comment';
 
 @Component({
   selector: 'app-issue-detail',
   standalone: true,
-  imports: [CommonModule, TaskItemComponent],
+  imports: [CommonModule, TaskItemComponent, CommentListComponent, CommentFormComponent],
   templateUrl: './issue-detail.component.html',
   styleUrls: ['./issue-detail.component.scss']
 })
@@ -52,6 +55,24 @@ export class IssueDetailComponent implements OnInit {
       this.router.navigate(['/issues']);
     } else {
       this.toastService.info('Issue deletion cancelled');
+    }
+  }
+
+  onCommentSubmit(content: string): void {
+    if (this.issue) {
+      const newComment: Comment = {
+        id: Date.now(),
+        issueId: this.issue.id,
+        content,
+        author: 'Current User', // Replace with actual user
+        createdAt: new Date()
+      };
+
+      this.issueService.addComment(this.issue.id, newComment);
+      this.toastService.success('Comment added successfully');
+
+      // Refresh issue data to get updated comments
+      this.issue = this.issueService.getIssueById(this.issue.id);
     }
   }
 }

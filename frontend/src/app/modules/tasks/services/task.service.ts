@@ -193,19 +193,19 @@ export class TaskService {
         };
     }
 
-updateTask(taskId: number, updatedTask: Task): Observable<void> {
-    const tasks = this.tasksSubject.getValue();
-    const taskIndex = tasks.findIndex(t => t.id === taskId);
-  
-    if (taskIndex !== -1) {
-      tasks[taskIndex] = {
-        ...tasks[taskIndex],
-        ...updatedTask,
-        id: taskId 
-      };
-      this.tasksSubject.next([...tasks]);
+    updateTask(taskId: number, updatedTask: Task): Observable<void> {
+        const tasks = this.tasksSubject.getValue();
+        const taskIndex = tasks.findIndex(t => t.id === taskId);
+
+        if (taskIndex !== -1) {
+            tasks[taskIndex] = {
+                ...tasks[taskIndex],
+                ...updatedTask,
+                id: taskId
+            };
+            this.tasksSubject.next([...tasks]);
+        }
+
+        return of(void 0);
     }
-  
-    return of(void 0);
-  }
 }

@@ -1,0 +1,43 @@
+@import '../../../../../styles/theme.scss';
+
+.comment-form {
+    margin-top: $spacing-base;
+
+    textarea {
+        width: 100%;
+        padding: $spacing-base;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        resize: vertical;
+        font-family: inherit;
+
+        &:focus {
+            outline: none;
+            border-color: $primary-color;
+        }
+    }
+
+    button {
+        margin-top: $spacing-base;
+        padding: $spacing-small $spacing-base;
+        background-color: $primary-color;
+        color: $light-color;
+        border: none;
+        border-radius: $border-radius;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $hover-color;
+        }
+
+        &:disabled {
+            background-color: $secondary-color;
+            cursor: not-allowed;
+        }
+    }
+
+    .error small {
+        color: $danger-color;
+        font-size: $font-size-small;
+    }
+}

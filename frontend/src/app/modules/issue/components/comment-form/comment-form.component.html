@@ -1,0 +1,12 @@
+<form [formGroup]="commentForm" (ngSubmit)="onSubmit()" class="comment-form">
+    <div class="form-group">
+        <textarea formControlName="content" placeholder="Add a comment..." rows="3">
+      </textarea>
+        <div class="error" *ngIf="commentForm.get('content')?.invalid && commentForm.get('content')?.touched">
+            <small *ngIf="commentForm.get('content')?.errors?.['required']">Comment is required</small>
+            <small *ngIf="commentForm.get('content')?.errors?.['maxlength']">Comment cannot exceed 500
+                characters</small>
+        </div>
+    </div>
+    <button type="submit" [disabled]="!commentForm.valid">Add Comment</button>
+</form>

@@ -24,4 +24,7 @@
         <h3>Tasks ({{ issue.tasks.length }})</h3>
         <app-task-item *ngFor="let task of issue.tasks" [task]="task"></app-task-item>
     </div>
+
+    <app-comment-list [comments]="issue.comments"></app-comment-list>
+    <app-comment-form (submitComment)="onCommentSubmit($event)"></app-comment-form>
 </div>
