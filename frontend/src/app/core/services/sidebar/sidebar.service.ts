@@ -12,7 +12,8 @@ export class SidebarService {
     { id: '3', title: 'Issues', route: '/issues' },
     { id: '4', title: 'My Tasks', route: '/tasks/my-tasks' },
     { id: '5', title: 'Board', route: '/tasks/board' },
-    { id: '6', title: 'Settings', route: '/settings' }
+    { id: '6', title: 'Releases', route: '/releases' },
+    { id: '7', title: 'Settings', route: '/settings' }
 
   ];
 
