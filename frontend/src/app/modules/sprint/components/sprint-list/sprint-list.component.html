@@ -1,1 +1,19 @@
-<p>sprint-list works!</p>
+<div class="sprint-list">
+    <div class="sprint-list-header">
+        <h2>Sprints</h2>
+        <button class="create-button" (click)="createSprint()">Create Sprint</button>
+    </div>
+
+    <div class="sprint-list-content">
+        <ng-container *ngIf="sprints.length > 0; else noSprints">
+            <!-- <app-sprint-item *ngFor="let sprint of sprints" [sprint]="sprint" (deleted)="onSprintDeleted($event)">
+            </app-sprint-item> -->
+        </ng-container>
+    </div>
+
+    <ng-template #noSprints>
+        <div class="no-sprints">
+            <p>No sprints found. Create your first sprint to get started.</p>
+        </div>
+    </ng-template>
+</div>

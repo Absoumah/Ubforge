@@ -1,12 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SprintItemComponent } from '../sprint-item/sprint-item.component';
+import { SprintService } from '../../services/sprint.service';
+import { Sprint } from '../../models/sprint.interface';
 
 @Component({
   selector: 'app-sprint-list',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, SprintItemComponent],
   templateUrl: './sprint-list.component.html',
-  styleUrl: './sprint-list.component.scss'
+  styleUrls: ['./sprint-list.component.scss']
 })
-export class SprintListComponent {
+export class SprintListComponent implements OnInit {
+  sprints: Sprint[] = [];
 
+  constructor(private sprintService: SprintService) { }
+
+  ngOnInit(): void {
+    this.loadSprints();
+  }
+
+  private loadSprints(): void {
+  }
 }
