@@ -60,10 +60,12 @@ export class ReleaseService {
   }
 
   getReleases(): Observable<Release[]> {
-    return this.projectStateService.getActiveProjectId().pipe(
-      map(projectId => {
-        if (!projectId) return [];
-        return this.releases.filter(release => release.projectId === projectId);
+    return this.releasesSubject.pipe(
+      map(releases => {
+        let activeProjectId: number | null = null;
+        this.projectStateService.getActiveProjectId().subscribe(id => activeProjectId = id);
+        if (!activeProjectId) return [];
+        return releases.filter(release => release.projectId === activeProjectId);
       })
     );
   }
