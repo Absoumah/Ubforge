@@ -1,4 +1,3 @@
-<!-- src/app/modules/release/components/release-list/release-list.component.html -->
 <div class="release-list">
     <div class="release-list-header">
         <h2>Releases</h2>
@@ -8,21 +7,8 @@
     </div>
 
     <div class="release-list-content">
-        <div *ngFor="let release of releases$ | async" class="release-item">
-            <div class="release-header">
-                <div class="version-name">
-                    <h3>{{release.version}}</h3>
-                    <span class="release-name">{{release.name}}</span>
-                </div>
-                <span class="status-badge" [ngClass]="release.status.toLowerCase()">
-                    {{release.status}}
-                </span>
-            </div>
-            <p class="description">{{release.description}}</p>
-            <div class="release-date">
-                Release Date: {{release.releaseDate | date}}
-            </div>
-        </div>
+        <app-release-item *ngFor="let release of releases$ | async" [release]="release" (edit)="onEdit($event)"
+            (delete)="onDelete($event)"></app-release-item>
     </div>
 
     <div *ngIf="(releases$ | async)?.length === 0" class="no-releases">
