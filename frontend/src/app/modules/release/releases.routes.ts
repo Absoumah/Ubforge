@@ -12,6 +12,11 @@ export default [
             .then(m => m.ReleaseFormComponent)
     },
     {
+        path: ':id', 
+        loadComponent: () => import('./components/release-detail/release-detail.component')
+        .then(m => m.ReleaseDetailComponent)
+    },
+    {
         path: 'edit/:id',
         loadComponent: () => import('./components/release-form/release-form.component')
             .then(m => m.ReleaseFormComponent)
