@@ -1,1 +1,35 @@
-<p>sprint-item works!</p>
+<div class="sprint-item" (click)="viewSprint()">
+    <div class="sprint-header">
+        <div class="sprint-info">
+            <h3>{{sprint.name}}</h3>
+            <span class="status-badge" [class]="statusClass">
+                {{sprint.status}}
+            </span>
+        </div>
+        <div class="sprint-actions">
+            <button class="edit-button" (click)="editSprint($event)">Edit</button>
+            <button class="delete-button" (click)="deleteSprint($event)">Delete</button>
+        </div>
+    </div>
+
+    <div class="sprint-dates">
+        <span class="date">
+            {{sprint.startDate | date:'mediumDate'}} - {{sprint.endDate | date:'mediumDate'}}
+        </span>
+    </div>
+
+    <p class="description" *ngIf="sprint.description">
+        {{sprint.description}}
+    </p>
+
+    <div class="sprint-stats">
+        <div class="stat">
+            <span class="label">Tasks:</span>
+            <span class="value">{{sprint.tasks.length}}</span>
+        </div>
+        <div class="stat">
+            <span class="label">Issues:</span>
+            <span class="value">{{sprint.issues.length}}</span>
+        </div>
+    </div>
+</div>
