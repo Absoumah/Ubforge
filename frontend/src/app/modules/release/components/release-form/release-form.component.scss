@@ -1,0 +1,86 @@
+@import '../../../../../styles/theme.scss';
+
+.release-form-container {
+    padding: $spacing-base;
+    padding-left: calc(310px + $spacing-base);
+    background-color: $background-color;
+    color: $text-color;
+    border-radius: $border-radius;
+    max-width: 1200px;
+
+    h2 {
+        font-size: $font-size-large;
+        margin-bottom: $spacing-large;
+        font-weight: $font-weight-bold;
+    }
+}
+
+.release-form {
+    .form-group {
+        margin-bottom: $spacing-base;
+
+        label {
+            display: block;
+            margin-bottom: $spacing-small;
+            font-weight: $font-weight-bold;
+            color: $text-color;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: $spacing-small;
+            border: 1px solid $border-color;
+            border-radius: $border-radius;
+            font-size: $font-size-base;
+            color: $text-color;
+            background-color: $light-color;
+            transition: border-color $transition-base;
+
+            &:focus {
+                border-color: $primary-color;
+                outline: none;
+                box-shadow: 0 0 0 2px rgba($primary-color, 0.1);
+            }
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .error {
+            margin-top: $spacing-small;
+
+            small {
+                color: $danger-color;
+                font-size: $font-size-small;
+            }
+        }
+    }
+
+    button[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: $spacing-base;
+        background-color: $primary-color;
+        color: $light-color;
+        border: none;
+        border-radius: $border-radius;
+        font-size: $font-size-base;
+        font-weight: $font-weight-bold;
+        cursor: pointer;
+        transition: background-color $transition-base;
+
+        &:hover {
+            background-color: $hover-color;
+        }
+
+        &:disabled {
+            background-color: $secondary-color;
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    }
+}

@@ -1,0 +1,19 @@
+<div class="release-item" (click)="onReleaseClick()">
+    <div class="release-header">
+        <div class="version-name">
+            <h3>{{release.version}}</h3>
+            <span class="release-name">{{release.name}}</span>
+        </div>
+        <span class="status-badge" [ngClass]="release.status.toLowerCase()">
+            {{release.status}}
+        </span>
+    </div>
+    <p class="description">{{release.description}}</p>
+    <div class="release-date">
+        Release Date: {{release.releaseDate | date}}
+    </div>
+    <div class="actions">
+        <button class="edit-button" (click)="onEdit($event)">Edit</button>
+        <button class="delete-button" (click)="onDelete($event)">Delete</button>
+    </div>
+</div>

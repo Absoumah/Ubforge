@@ -41,6 +41,12 @@ export const routes: Routes = [
             .then(routes => routes)
     },
     {
+        path: 'releases',
+        canActivate: [ProjectGuard],
+        loadChildren: () => import('./modules/release/releases.routes')
+            .then(routes => routes)
+    },
+    {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
@@ -49,7 +55,8 @@ export const routes: Routes = [
         path: '**',
         loadComponent: () => import('./core/components/not-found/not-found.component')
             .then(m => m.NotFoundComponent)
-    }
+    },
+
     // TODO: add a 404 page
 ];
 
