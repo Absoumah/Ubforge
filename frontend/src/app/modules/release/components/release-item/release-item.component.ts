@@ -28,6 +28,6 @@ export class ReleaseItemComponent {
   }
 
   onReleaseClick(): void {
-    this.router.navigate(['/releases/edit', this.release.id]);
+    this.router.navigate(['/releases', this.release.id]);
   }
 }
