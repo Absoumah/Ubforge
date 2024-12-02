@@ -71,4 +71,12 @@ public class TaskService {
         return taskRepository.save(task);
     }
         
+
+    public Task addToRelease(int taskId, int releaseId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        task.setReleaseId(releaseId);
+        return taskRepository.save(task);
+    }
 }

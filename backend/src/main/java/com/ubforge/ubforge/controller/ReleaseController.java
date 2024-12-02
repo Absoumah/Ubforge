@@ -31,6 +31,18 @@ public class ReleaseController {
         return releaseService.getReleaseById(id);
     }
 
+    //get status of release
+    @GetMapping("/getReleaseStatus/{id}")
+    public String getReleaseStatus(@PathVariable int id) {
+        return releaseService.getReleaseStatus(id);
+    }
+
+    //put status of release
+    @PostMapping("/setReleaseStatus/{id}/{status}")
+    public String setReleaseStatus(@PathVariable int id, @PathVariable String status) {
+        return releaseService.setReleaseStatus(id, status);
+    }
+
     @PostMapping("/create")
     public Release createRelease(@RequestBody Release release) {
         return releaseService.createRelease(release);

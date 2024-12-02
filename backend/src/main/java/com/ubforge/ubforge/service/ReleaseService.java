@@ -28,4 +28,22 @@ public class ReleaseService {
     public void deleteRelease(int id) {
         releaseRepository.deleteById(id);
     }
+
+    public String getReleaseStatus(int id) {
+        Release release = releaseRepository.findById(id).orElse(null);
+        if (release == null) {
+            return "Release not found";
+        }
+        return release.getStatus();
+    }
+
+    public String setReleaseStatus(int id, String status) {
+        Release release = releaseRepository.findById(id).orElse(null);
+        if (release == null) {
+            return "Release not found";
+        }
+        release.setStatus(status);
+        releaseRepository.save(release);
+        return "Status updated";
+    }
 }

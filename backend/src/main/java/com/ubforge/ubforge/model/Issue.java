@@ -50,8 +50,16 @@ public class Issue {
     @Column(name = "issue_date_created")
     private Date issue_date_created;
 
-    // @OneToMany(mappedBy = "issue")
-    // private List<Task> tasks;
+    @Column(name = "release_id")
+    private Integer releaseId;
+
+    public Integer getReleaseId() {
+        return releaseId;
+    }
+
+    public void setReleaseId(Integer releaseId) {
+        this.releaseId = releaseId;
+    }
 
     public User getIssue_author() {
         return issue_author;

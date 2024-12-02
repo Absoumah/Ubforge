@@ -53,4 +53,12 @@ public class IssueService {
         issue.getAssignedTo().add(user);
         return issueRepository.save(issue);
     }
+
+    public Issue addToRelease(int issueId, int releaseId) {
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() -> new RuntimeException("Issue not found"));
+
+        issue.setReleaseId(releaseId);
+        return issueRepository.save(issue);
+    }
 }

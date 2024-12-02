@@ -43,6 +43,17 @@ public class Task {
     @Column(name = "task_priority")
     private String task_priority;
 
+    @Column(name = "release_id")
+    private Integer releaseId;
+
+    public Integer getReleaseId() {
+        return releaseId;
+    }
+
+    public void setReleaseId(Integer releaseId) {
+        this.releaseId = releaseId;
+    }
+
     public String getTask_priority() {
         return task_priority;
     }

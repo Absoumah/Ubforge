@@ -78,4 +78,12 @@ public class TaskController {
         return ResponseEntity.ok(taskService.updateTaskStatus(taskId, status));
     }
 
+    //add task to release
+    @PutMapping("/addToRelease/{taskId}/{releaseId}")
+    public ResponseEntity<Task> addToRelease(@PathVariable int taskId, @PathVariable int releaseId) {
+        return ResponseEntity.ok(taskService.addToRelease(taskId, releaseId));
+    }
+
+
+
 }

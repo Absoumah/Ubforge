@@ -60,4 +60,9 @@ public class IssueController {
         return ResponseEntity.ok(issueService.assignToUser(issueId, userId));
     }
 
+    //add task to release
+    @PutMapping("/addToRelease/{issueId}/{releaseId}")
+    public ResponseEntity<Issue> addToRelease(@PathVariable int issueId, @PathVariable int releaseId) {
+        return ResponseEntity.ok(issueService.addToRelease(issueId, releaseId));
+    }
 }
