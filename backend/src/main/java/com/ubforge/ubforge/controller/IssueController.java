@@ -54,4 +54,10 @@ public class IssueController {
         return ResponseEntity.ok().build();
     }
 
+    //assign issue to user
+    @PutMapping("/assignToUser/{issueId}/{userId}")
+    public ResponseEntity<Issue> assignToUser(@PathVariable int issueId, @PathVariable int userId) {
+        return ResponseEntity.ok(issueService.assignToUser(issueId, userId));
+    }
+
 }

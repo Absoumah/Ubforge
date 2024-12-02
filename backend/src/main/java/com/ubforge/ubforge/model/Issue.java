@@ -1,22 +1,18 @@
 package com.ubforge.ubforge.model;
 
 import java.sql.Date;
-import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.CascadeType;
 
 @Entity
 @Table(name = "issues")
@@ -42,11 +38,11 @@ public class Issue {
     @JoinColumn(name = "issue_author", referencedColumnName = "user_id")    
     private User issue_author;
 
-    // @ManyToMany
-    // @JoinTable(name = "assignedIssues",
-    //         joinColumns = @JoinColumn(name = "issue_id", referencedColumnName = "issue_id"),
-    //         inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
-    // private List<User> assignedTo;
+    @ManyToMany
+    @JoinTable(name = "assignedIssues",
+            joinColumns = @JoinColumn(name = "issue_id", referencedColumnName = "issue_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+    private Set<User> assignedTo;
 
     @Column(name = "project_id")    
     private int project_id;
@@ -119,6 +115,14 @@ public class Issue {
 
     public void setProject_id(int project_id) {
         this.project_id = project_id;
+    }
+
+    public Set<User> getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(Set<User> assignedTo) {
+        this.assignedTo = assignedTo;
     }
     
     

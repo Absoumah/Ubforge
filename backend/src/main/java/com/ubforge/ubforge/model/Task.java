@@ -28,7 +28,7 @@ public class Task {
     private String task_status;
 
     @Column(name = "issue_id")
-    private int issue_id;
+    private int issueId;
 
     @Column(name = "task_author")
     private int task_author;
@@ -60,11 +60,11 @@ public class Task {
     }
 
     public int getIssue_id() {
-        return issue_id;
+        return issueId;
     }
 
-    public void setIssue_id(int issue_id) {
-        this.issue_id = issue_id;
+    public void setIssue_id(int issueId) {
+        this.issueId = issueId;
     }
 
     public int getTask_id() {

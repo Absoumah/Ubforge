@@ -60,4 +60,16 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
 
+    //get tasks by issue id
+    @GetMapping("/getByIssueId/{issueId}")
+    public ResponseEntity<Iterable<Task>> getTasksByIssueId(@PathVariable int issueId) {
+        return ResponseEntity.ok(taskService.getTasksByIssueId(issueId));
+    }
+
+    //assign task to user
+    @PutMapping("/assignTaskToUser/{taskId}/{userId}")
+    public ResponseEntity<Task> assignTaskToUser(@PathVariable int taskId, @PathVariable int userId) {
+        return ResponseEntity.ok(taskService.assignTaskToUser(taskId, userId));
+    }
+
 }
