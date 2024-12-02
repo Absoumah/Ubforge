@@ -72,4 +72,10 @@ public class TaskController {
         return ResponseEntity.ok(taskService.assignTaskToUser(taskId, userId));
     }
 
+    //update task status
+    @PutMapping("/updateStatus/{taskId}/{status}")
+    public ResponseEntity<Task> updateTaskStatus(@PathVariable int taskId, @PathVariable String status) {
+        return ResponseEntity.ok(taskService.updateTaskStatus(taskId, status));
+    }
+
 }

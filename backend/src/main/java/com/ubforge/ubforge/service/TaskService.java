@@ -62,5 +62,13 @@ public class TaskService {
         task.setAssignTo(user);
         return taskRepository.save(task);
     }
+
+    public Task updateTaskStatus(int taskId, String status) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        task.setTaskStatus(status);
+        return taskRepository.save(task);
+    }
         
 }
