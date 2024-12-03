@@ -13,11 +13,12 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { CommentService } from '../../../../shared/services/comment/comment.service';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { Subject } from 'rxjs/internal/Subject';
+import { PriorityBadgeComponent } from '../../../../shared/components/priority-badge/priority-badge.component';
 
 @Component({
   selector: 'app-issue-detail',
   standalone: true,
-  imports: [CommonModule, TaskItemComponent, CommentListComponent, CommentFormComponent],
+  imports: [CommonModule, TaskItemComponent, CommentListComponent, CommentFormComponent, PriorityBadgeComponent],
   templateUrl: './issue-detail.component.html',
   styleUrls: ['./issue-detail.component.scss']
 })
