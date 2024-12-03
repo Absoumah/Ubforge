@@ -6,6 +6,8 @@ import { ProjectStateService } from '../../../project/services/project-state.ser
 import { Sprint } from '../../models/sprint.interface';
 import { Subscription, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../../shared/services/toast.service';
+import { DialogService } from '../../../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-sprint-list',
@@ -21,7 +23,9 @@ export class SprintListComponent implements OnInit, OnDestroy {
   constructor(
     private sprintService: SprintService,
     private projectStateService: ProjectStateService,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {
@@ -36,9 +40,7 @@ export class SprintListComponent implements OnInit, OnDestroy {
     this.subscription = this.projectStateService.getActiveProjectId()
       .pipe(
         switchMap(projectId => {
-          if (!projectId) {
-            return [];
-          }
+          if (!projectId) return [];
           return this.sprintService.getSprintsByProject(projectId.toString());
         })
       )
@@ -47,11 +49,27 @@ export class SprintListComponent implements OnInit, OnDestroy {
       });
   }
 
-  createSprint(): void {
-    this.router.navigate(['/sprints/create']);
+  onEdit(id: string): void {
+    this.router.navigate(['/sprints/edit', id]);
   }
 
-  onSprintDeleted(sprintId: string): void {
-    this.sprintService.deleteSprint(sprintId);
+  async onDelete(id: string): Promise<void> {
+    const confirmed = await this.dialogService.confirm({
+      title: 'Delete Sprint',
+      message: 'Are you sure you want to delete this sprint? This action cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel'
+    });
+
+    if (confirmed) {
+      this.sprintService.deleteSprint(id);
+      this.toastService.success('Sprint deleted successfully');
+    } else {
+      this.toastService.info('Sprint deletion cancelled');
+    }
+  }
+
+  createSprint(): void {
+    this.router.navigate(['/sprints/create']);
   }
 }

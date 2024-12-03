@@ -1,3 +1,4 @@
+<!-- sprint-list.component.html -->
 <div class="sprint-list">
     <div class="sprint-list-header">
         <h2>Sprints</h2>
@@ -6,7 +7,8 @@
 
     <div class="sprint-list-content">
         <ng-container *ngIf="sprints.length > 0; else noSprints">
-            <app-sprint-item *ngFor="let sprint of sprints" [sprint]="sprint" (deleted)="onSprintDeleted($event)">
+            <app-sprint-item *ngFor="let sprint of sprints" [sprint]="sprint" (edit)="onEdit($event)"
+                (delete)="onDelete($event)">
             </app-sprint-item>
         </ng-container>
     </div>
