@@ -30,8 +30,6 @@ public class User {
     @Column(name = "role")
     private String role;
 
-    @ManyToMany(mappedBy = "assignedTo")
-    private Set<Issue> issues;
 
     public int getId() {
         return user_id;

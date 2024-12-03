@@ -1,5 +1,7 @@
 package com.ubforge.ubforge.controller;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,5 +66,11 @@ public class IssueController {
     @PutMapping("/addToRelease/{issueId}/{releaseId}")
     public ResponseEntity<Issue> addToRelease(@PathVariable int issueId, @PathVariable int releaseId) {
         return ResponseEntity.ok(issueService.addToRelease(issueId, releaseId));
+    }
+
+    //get all issues assigned to user
+    @GetMapping("/getAssignedToUser/{userId}")
+    public ResponseEntity<Set<Integer>> findIssueIdsByUserId(@PathVariable int userId) {
+        return ResponseEntity.ok(issueService.findIssueIdsByUserId(userId));
     }
 }

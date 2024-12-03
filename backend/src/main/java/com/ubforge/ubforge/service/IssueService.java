@@ -1,6 +1,7 @@
 package com.ubforge.ubforge.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,5 +61,10 @@ public class IssueService {
 
         issue.setReleaseId(releaseId);
         return issueRepository.save(issue);
+    }
+
+    //find issue by user id
+    public Set<Integer> findIssueIdsByUserId(int userId) {
+        return issueRepository.findIssueIdsByUserId(userId);
     }
 }

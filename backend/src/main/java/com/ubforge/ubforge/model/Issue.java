@@ -38,12 +38,6 @@ public class Issue {
     @JoinColumn(name = "issue_author", referencedColumnName = "user_id")    
     private User issue_author;
 
-    @ManyToMany
-    @JoinTable(name = "assignedIssues",
-            joinColumns = @JoinColumn(name = "issue_id", referencedColumnName = "issue_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
-    private Set<User> assignedTo;
-
     @Column(name = "project_id")    
     private int project_id;
 
@@ -123,17 +117,5 @@ public class Issue {
 
     public void setProject_id(int project_id) {
         this.project_id = project_id;
-    }
-
-    public Set<User> getAssignedTo() {
-        return assignedTo;
-    }
-
-    public void setAssignedTo(Set<User> assignedTo) {
-        this.assignedTo = assignedTo;
-    }
-    
-    
-
-    
+    }   
 }
