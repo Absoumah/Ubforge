@@ -1,0 +1,121 @@
+// sprint-item.component.scss
+@import '../../../../../styles/theme.scss';
+
+.sprint-item {
+    background: $light-color;
+    border-radius: $border-radius;
+    padding: $spacing-base;
+    box-shadow: $box-shadow;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    .sprint-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-base;
+
+        .sprint-info {
+            display: flex;
+            align-items: center;
+            gap: $spacing-base;
+
+            h3 {
+                margin: 0;
+                font-size: $font-size-large;
+                color: $text-color;
+            }
+        }
+
+        .status-badge {
+            padding: $spacing-xs $spacing-small;
+            border-radius: $border-radius;
+            font-size: $font-size-small;
+            font-weight: $font-weight-bold;
+
+            &.planned {
+                background: rgba($secondary-color, 0.1);
+                color: $secondary-color;
+            }
+
+            &.active {
+                background: rgba($primary-color, 0.1);
+                color: $primary-color;
+            }
+
+            &.completed {
+                background: rgba($success-color, 0.1);
+                color: $success-color;
+            }
+        }
+    }
+
+    .sprint-dates {
+        color: $text-muted;
+        font-size: $font-size-small;
+        margin-bottom: $spacing-base;
+    }
+
+    .description {
+        color: $text-muted;
+        margin-bottom: $spacing-base;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .sprint-stats {
+        display: flex;
+        gap: $spacing-large;
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+            color: $text-muted;
+            font-size: $font-size-small;
+
+            .label {
+                font-weight: $font-weight-bold;
+            }
+        }
+    }
+
+    .sprint-actions {
+        display: flex;
+        gap: $spacing-small;
+
+        button {
+            padding: $spacing-xs $spacing-small;
+            border: none;
+            border-radius: $border-radius;
+            cursor: pointer;
+            font-size: $font-size-small;
+            transition: background-color 0.2s ease;
+
+            &.edit-button {
+                background-color: $primary-color;
+                color: $light-color;
+
+                &:hover {
+                    background-color: darken($primary-color, 10%);
+                }
+            }
+
+            &.delete-button {
+                background-color: $danger-color;
+                color: $light-color;
+
+                &:hover {
+                    background-color: darken($danger-color, 10%);
+                }
+            }
+        }
+    }
+}
