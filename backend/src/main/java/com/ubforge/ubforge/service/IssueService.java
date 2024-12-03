@@ -44,15 +44,14 @@ public class IssueService {
     }
     
 
-    public Issue assignToUser(int issueId, int userId) {
+    public void assignToUser(int issueId, int userId) {
         Issue issue = issueRepository.findById(issueId)
                 .orElseThrow(() -> new RuntimeException("Issue not found"));
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        issue.getAssignedTo().add(user);
-        return issueRepository.save(issue);
+        issueRepository.assignToUser(issueId, userId);
     }
 
     public Issue addToRelease(int issueId, int releaseId) {
@@ -63,7 +62,6 @@ public class IssueService {
         return issueRepository.save(issue);
     }
 
-    //find issue by user id
     public Set<Integer> findIssueIdsByUserId(int userId) {
         return issueRepository.findIssueIdsByUserId(userId);
     }

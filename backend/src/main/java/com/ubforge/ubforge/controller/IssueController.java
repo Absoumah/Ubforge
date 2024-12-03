@@ -58,8 +58,9 @@ public class IssueController {
 
     //assign issue to user
     @PutMapping("/assignToUser/{issueId}/{userId}")
-    public ResponseEntity<Issue> assignToUser(@PathVariable int issueId, @PathVariable int userId) {
-        return ResponseEntity.ok(issueService.assignToUser(issueId, userId));
+    public ResponseEntity<Void> assignToUser(@PathVariable int issueId, @PathVariable int userId) {
+        issueService.assignToUser(issueId, userId);
+        return ResponseEntity.ok().build();
     }
 
     //add task to release
