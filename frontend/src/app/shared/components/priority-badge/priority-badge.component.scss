@@ -1,0 +1,25 @@
+@import '../../../../styles/theme.scss';
+
+.badge {
+    padding: $spacing-xs $spacing-small;
+    border-radius: $border-radius;
+    font-size: $font-size-small;
+    font-weight: $font-weight-bold;
+
+    &.priority {
+        &.priority-high {
+            background: rgba($danger-color, 0.1);
+            color: $danger-color;
+        }
+
+        &.priority-medium {
+            background: rgba($secondary-color, 0.1);
+            color: $secondary-color;
+        }
+
+        &.priority-low {
+            background: rgba($text-muted, 0.1);
+            color: $text-muted;
+        }
+    }
+}
