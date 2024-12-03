@@ -21,7 +21,7 @@ export default [
         canActivate: [ProjectGuard]
     },
     {
-        path: ':id/edit',
+        path: 'edit/:id',
         loadComponent: () => import('./components/sprint-form/sprint-form.component')
             .then(m => m.SprintFormComponent),
         canActivate: [ProjectGuard]
