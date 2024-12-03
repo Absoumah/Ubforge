@@ -47,6 +47,10 @@ export const routes: Routes = [
             .then(routes => routes)
     },
     {
+        path: 'sprints',
+        loadChildren: () => import('./modules/sprint/sprint.routes')
+    },
+    {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
