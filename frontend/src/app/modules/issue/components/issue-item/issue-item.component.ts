@@ -7,11 +7,12 @@ import { TaskNavigatorComponent } from '../../../tasks/components/task-navigator
 import { CommentService } from '../../../../shared/services/comment/comment.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
+import { PriorityBadgeComponent } from '../../../../shared/components/priority-badge/priority-badge.component';
 
 @Component({
   selector: 'app-issue-item',
   standalone: true,
-  imports: [CommonModule, TaskNavigatorComponent],
+  imports: [CommonModule, TaskNavigatorComponent, PriorityBadgeComponent],
   templateUrl: './issue-item.component.html',
   styleUrls: ['./issue-item.component.scss']
 })
