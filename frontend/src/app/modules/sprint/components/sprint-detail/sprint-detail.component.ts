@@ -10,7 +10,8 @@ import { TaskItemComponent } from '../../../tasks/components/task-item/task-item
 @Component({
   selector: 'app-sprint-detail',
   standalone: true,
-  imports: [CommonModule, TaskItemComponent],
+  // imports: [CommonModule, TaskItemComponent],
+  imports: [CommonModule],
   templateUrl: './sprint-detail.component.html',
   styleUrls: ['./sprint-detail.component.scss']
 })
