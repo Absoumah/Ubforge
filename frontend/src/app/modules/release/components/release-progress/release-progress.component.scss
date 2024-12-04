@@ -1,0 +1,57 @@
+@import '../../../../../styles/theme.scss';
+
+.progress-container {
+    background: $light-color;
+    border-radius: $border-radius;
+    padding: $spacing-base;
+    margin-bottom: $spacing-base;
+
+    .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-base;
+
+        h3 {
+            font-size: $font-size-base;
+            font-weight: $font-weight-bold;
+            margin: 0;
+        }
+
+        .percentage {
+            font-size: $font-size-large;
+            font-weight: $font-weight-bold;
+            color: $primary-color;
+        }
+    }
+
+    .progress-bar {
+        height: 8px;
+        background: $background-color;
+        border-radius: $border-radius;
+        overflow: hidden;
+        margin-bottom: $spacing-base;
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+    }
+
+    .progress-stats {
+        display: flex;
+        justify-content: space-between;
+
+        .stat {
+            .label {
+                color: $text-muted;
+                font-size: $font-size-small;
+                margin-right: $spacing-small;
+            }
+
+            .value {
+                font-weight: $font-weight-bold;
+            }
+        }
+    }
+}

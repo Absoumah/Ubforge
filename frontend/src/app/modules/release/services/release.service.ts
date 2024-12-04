@@ -95,4 +95,18 @@ export class ReleaseService {
     this.releases = this.releases.filter(release => release.id !== id);
     this.releasesSubject.next([...this.releases]);
   }
+
+  calculateProgress(release: Release): void {
+    const totalIssues = release.issueIds?.length || 0;
+    //TODO: Implement logic to calculate completed issues
+    const completedIssues = 0;
+    const percentage = totalIssues > 0 ? Math.round((completedIssues / totalIssues) * 100) : 0;
+
+    release.progress = {
+      totalIssues,
+      completedIssues,
+      percentage
+    };
+  }
+
 }
