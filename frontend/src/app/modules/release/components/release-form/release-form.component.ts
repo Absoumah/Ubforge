@@ -8,11 +8,13 @@ import { ReleaseService } from '../../services/release.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { ProjectStateService } from '../../../project/services/project-state.service';
 import { take } from 'rxjs/operators';
+import { IssueSelectorComponent } from '../issue-selector/issue-selector.component';
+import { I } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-release-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IssueSelectorComponent],
   templateUrl: './release-form.component.html',
   styleUrl: './release-form.component.scss'
 })
@@ -21,6 +23,8 @@ export class ReleaseFormComponent implements OnInit {
   releaseStatuses = Object.values(ReleaseStatus);
   isEditMode = false;
   releaseId?: number;
+  selectedIssueIds: number[] = [];
+
 
   constructor(
     private fb: FormBuilder,
@@ -36,13 +40,19 @@ export class ReleaseFormComponent implements OnInit {
       description: [''],
       releaseDate: ['', [Validators.required]],
       status: [ReleaseStatus.PLANNED, [Validators.required]],
-      projectId: ['', [Validators.required]]
+      projectId: ['', [Validators.required]],
+      issueIds: [[]]
     });
   }
 
   ngOnInit(): void {
     this.checkEditMode();
     this.setProjectId();
+  }
+
+  onIssueSelectionChange(issueIds: number[]): void {
+    this.selectedIssueIds = issueIds;
+    this.releaseForm.patchValue({ issueIds });
   }
 
   private checkEditMode(): void {
@@ -53,6 +63,7 @@ export class ReleaseFormComponent implements OnInit {
       const release = this.releaseService.getReleaseById(this.releaseId);
       if (release) {
         this.releaseForm.patchValue(release);
+        this.selectedIssueIds = release.issueIds || [];
       }
     }
   }

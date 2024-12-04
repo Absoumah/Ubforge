@@ -1,5 +1,5 @@
 <div class="release-form-container">
-    <h2>Create Release</h2>
+    <h2>{{isEditMode ? 'Edit Release' : 'Create Release'}}</h2>
     <form [formGroup]="releaseForm" (ngSubmit)="onSubmit()" class="release-form">
         <div class="form-group">
             <label for="version">Version</label>
@@ -38,6 +38,15 @@
             </select>
         </div>
 
-        <button type="submit" [disabled]="releaseForm.invalid">Create Release</button>
+        <div class="form-group">
+            <app-issue-selector *ngIf="releaseForm.get('projectId')?.value"
+                [projectId]="releaseForm.get('projectId')?.value" [selectedIssueIds]="selectedIssueIds"
+                (issueSelectionChange)="onIssueSelectionChange($event)">
+            </app-issue-selector>
+        </div>
+
+        <button type="submit" [disabled]="releaseForm.invalid">
+            {{isEditMode ? 'Update Release' : 'Create Release'}}
+        </button>
     </form>
 </div>

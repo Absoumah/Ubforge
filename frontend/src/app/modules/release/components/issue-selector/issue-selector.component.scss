@@ -1,0 +1,81 @@
+@import '../../../../../styles/theme.scss';
+
+.issue-selector {
+    margin-top: $spacing-base;
+
+    h3 {
+        font-size: $font-size-base;
+        margin-bottom: $spacing-base;
+        font-weight: $font-weight-bold;
+    }
+
+    .issue-list {
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        padding: $spacing-small;
+    }
+
+    .issue-item {
+        padding: $spacing-small;
+        border-bottom: 1px solid $border-color;
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        input {
+            margin-right: $spacing-small;
+        }
+
+        .issue-info {
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+
+            .issue-title {
+                font-size: $font-size-base;
+                color: $text-color;
+            }
+
+            .issue-category {
+                padding: 2px $spacing-small;
+                border-radius: $border-radius;
+                font-size: $font-size-small;
+
+                &.bugfix {
+                    background: rgba($danger-color, 0.1);
+                    color: $danger-color;
+                }
+
+                &.feature {
+                    background: rgba($success-color, 0.1);
+                    color: $success-color;
+                }
+
+                &.enhancement {
+                    background: rgba($primary-color, 0.1);
+                    color: $primary-color;
+                }
+
+                &.documentation {
+                    background: rgba($secondary-color, 0.1);
+                    color: $secondary-color;
+                }
+            }
+        }
+    }
+
+    .no-issues {
+        text-align: center;
+        padding: $spacing-base;
+        color: $text-muted;
+    }
+}
