@@ -1,0 +1,8 @@
+<div class="filter-group">
+    <select [(ngModel)]="selectedPriority" (change)="onPriorityChange(selectedPriority)">
+        <option [ngValue]="null">All Priorities</option>
+        <option *ngFor="let priority of priorities" [value]="priority">
+            {{priority}}
+        </option>
+    </select>
+</div>

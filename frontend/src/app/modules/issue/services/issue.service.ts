@@ -4,6 +4,7 @@ import { Issue } from '../models/issue';
 import { TaskPriority } from '../../tasks/models/task-priority.enum';
 import { TaskStatus } from '../../tasks/models/task-status.enum';
 import { Comment } from '../../../shared/models/comment';
+import { IssuePriority } from '../models/issue-priority.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class IssueService {
         reportedDate: new Date("2024-03-01"),
         dueDate: new Date("2024-03-15"),
         projectId: 1,
+        priority: IssuePriority.HIGH,
         tasks: [
           {
             id: 1,
@@ -97,6 +99,7 @@ export class IssueService {
         reportedDate: new Date("2024-03-02"),
         dueDate: new Date("2024-03-30"),
         projectId: 2,
+        priority: IssuePriority.MEDIUM,
         tasks: [
           {
             id: 2,
@@ -120,6 +123,7 @@ export class IssueService {
         reportedDate: new Date("2024-03-03"),
         dueDate: new Date("2024-04-15"),
         projectId: 1,
+        priority: IssuePriority.HIGH,
         tasks: [
           {
             id: 3,
@@ -143,6 +147,7 @@ export class IssueService {
         reportedDate: new Date("2024-03-04"),
         dueDate: new Date("2024-03-20"),
         projectId: 2,
+        priority: IssuePriority.LOW,
         tasks: [
           {
             id: 4,
@@ -166,6 +171,7 @@ export class IssueService {
         reportedDate: new Date("2024-03-05"),
         dueDate: new Date("2024-03-25"),
         projectId: 1,
+        priority: IssuePriority.MEDIUM,
         tasks: [
           {
             id: 5,
@@ -189,6 +195,7 @@ export class IssueService {
         reportedDate: new Date("2024-03-06"),
         dueDate: new Date("2024-04-06"),
         projectId: 2,
+        priority: IssuePriority.LOW,
         tasks: [
           {
             id: 6,

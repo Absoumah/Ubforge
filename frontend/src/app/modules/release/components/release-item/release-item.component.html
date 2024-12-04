@@ -12,6 +12,9 @@
     <div class="release-date">
         Release Date: {{release.releaseDate | date}}
     </div>
+    <div class="progress-section">
+        <app-progress-bar [progress]="progress"></app-progress-bar>
+    </div>
     <div class="actions">
         <button class="edit-button" (click)="onEdit($event)">Edit</button>
         <button class="delete-button" (click)="onDelete($event)">Delete</button>

@@ -1,13 +1,5 @@
 @import '../../../../styles/theme.scss';
 
-.filter-container {
-    display: flex;
-    align-items: center;
-    gap: $spacing-base;
-    border-radius: $border-radius;
-    margin-bottom: $spacing-base;
-}
-
 .filter-group {
     display: flex;
     align-items: center;
@@ -35,24 +27,5 @@
             outline: none;
             box-shadow: 0 0 0 2px rgba($primary-color, 0.1);
         }
-    }
-}
-
-.reset-button {
-    padding: $spacing-small $spacing-base;
-    background-color: $secondary-color;
-    color: $light-color;
-    border: none;
-    border-radius: $border-radius;
-    font-weight: $font-weight-bold;
-    cursor: pointer;
-    transition: background-color $transition-base;
-
-    &:hover {
-        background-color: darken($secondary-color, 10%);
-    }
-
-    &:active {
-        background-color: darken($secondary-color, 20%);
     }
 }

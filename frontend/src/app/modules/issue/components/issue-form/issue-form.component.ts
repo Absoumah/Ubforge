@@ -10,6 +10,7 @@ import { ToastService } from '../../../../shared/services/toast.service';
 import { ProjectStateService } from '../../../project/services/project-state.service';
 import { take } from 'rxjs/operators';
 import { dueDateValidator } from '../../validators/due-date.validator';
+import { IssuePriority } from '../../models/issue-priority.enum';
 
 @Component({
   selector: 'app-issue-form',
@@ -21,6 +22,7 @@ import { dueDateValidator } from '../../validators/due-date.validator';
 export class IssueFormComponent implements OnInit {
   issueForm!: FormGroup;
   categories: IssueCategory[] = ['BugFix', 'Feature', 'Enhancement', 'Documentation'];
+  priorities = Object.values(IssuePriority);
   isEditMode = false;
   issueId: number | null = null;
   errorMessage: string | null = null;
@@ -57,6 +59,7 @@ export class IssueFormComponent implements OnInit {
     this.issueForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(100)]],
       category: ['', Validators.required],
+      priority: [IssuePriority.MEDIUM, Validators.required],
       description: ['', [Validators.required, Validators.maxLength(500)]],
       reportedDate: [today, [Validators.required]],
       dueDate: ['', [Validators.required]],
