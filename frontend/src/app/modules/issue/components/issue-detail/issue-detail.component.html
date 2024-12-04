@@ -3,6 +3,7 @@
         <div class="title-category">
             <h2>{{ issue.title }}</h2>
             <span class="category-badge">{{ issue.category }}</span>
+            <app-priority-badge [priority]="issue.priority"></app-priority-badge>
         </div>
         <div class="buttons">
             <button class="edit-button" (click)="onEdit()">Edit Issue</button>

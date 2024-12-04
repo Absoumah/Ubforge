@@ -3,6 +3,7 @@
         <div class="issue-title">
             <h3>{{ issue.title }}</h3>
             <span class="category-badge">{{ issue.category }}</span>
+            <app-priority-badge [priority]="issue.priority"></app-priority-badge>
         </div>
         <div class="issue-dates">
             <span>Reported: {{ issue.reportedDate | date: 'shortDate' }}</span>
