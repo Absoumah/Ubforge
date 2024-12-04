@@ -7,6 +7,11 @@ export interface Release {
     status: string;
     projectId: number;
     issueIds?: number[];
+    progress?: {
+        totalIssues: number;
+        completedIssues: number;
+        percentage: number;
+    };
 }
 
 export enum ReleaseStatus {
