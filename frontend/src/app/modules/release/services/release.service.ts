@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Release, ReleaseStatus } from '../models/release';
 import { ProjectStateService } from '../../project/services/project-state.service';
+import { IssueService } from '../../issue/services/issue.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class ReleaseService {
   private releases: Release[] = [];
   private releasesSubject = new BehaviorSubject<Release[]>([]);
 
-  constructor(private projectStateService: ProjectStateService) {
+  constructor(private projectStateService: ProjectStateService,
+    private issueService: IssueService) {
     this.initializeMockReleases();
   }
 
@@ -96,17 +98,27 @@ export class ReleaseService {
     this.releasesSubject.next([...this.releases]);
   }
 
-  calculateProgress(release: Release): void {
-    const totalIssues = release.issueIds?.length || 0;
-    //TODO: Implement logic to calculate completed issues
-    const completedIssues = 0;
-    const percentage = totalIssues > 0 ? Math.round((completedIssues / totalIssues) * 100) : 0;
+  calculateProgress(releaseId: number): Observable<number> {
+    return this.issueService.getIssues().pipe(
+      map(issues => {
+        const release = this.getReleaseById(releaseId);
+        if (!release?.issueIds?.length) return 0;
 
-    release.progress = {
-      totalIssues,
-      completedIssues,
-      percentage
-    };
+        const releaseIssues = issues.filter(issue =>
+          release.issueIds?.includes(issue.id)
+        );
+
+        if (!releaseIssues.length) return 0;
+
+        const totalTasks = releaseIssues.reduce((sum, issue) =>
+          sum + issue.tasks.length, 0);
+
+        const completedTasks = releaseIssues.reduce((sum, issue) =>
+          sum + issue.tasks.filter(task => task.completed).length, 0);
+
+        return totalTasks ? Math.round((completedTasks / totalTasks) * 100) : 0;
+      })
+    );
   }
 
 }
