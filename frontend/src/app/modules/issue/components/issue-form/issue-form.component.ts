@@ -93,7 +93,7 @@ export class IssueFormComponent implements OnInit {
 
       const tasks = this.issueForm.get('tasks') as FormArray;
       tasks.clear();
-
+      
       if (issue.tasks) {
         issue.tasks.forEach(task => {
           const taskForm = this.taskService.createTaskForm();
