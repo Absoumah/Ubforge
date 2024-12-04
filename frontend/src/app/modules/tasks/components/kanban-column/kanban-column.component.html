@@ -1,0 +1,11 @@
+<div class="kanban-column">
+    <div class="column-header">
+        <h3>{{ title }}</h3>
+        <span class="task-count">{{ tasks.length }}</span>
+    </div>
+    <div class="tasks-container" cdkDropList [id]="listId" [cdkDropListData]="tasks"
+        [cdkDropListConnectedTo]="connectedTo" (cdkDropListDropped)="onDrop($event)">
+        <app-task-item *ngFor="let task of tasks" [task]="task" cdkDrag [cdkDragData]="task" [hideStatus]="true">
+        </app-task-item>
+    </div>
+</div>

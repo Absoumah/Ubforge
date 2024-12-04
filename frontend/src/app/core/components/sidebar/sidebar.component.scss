@@ -8,29 +8,40 @@
     left: 60px;
     border-right: 1px solid $border-color;
     background-color: $primary-color;
-    overflow-y: auto;
     z-index: 1000;
     box-shadow: $box-shadow;
+    display: flex;
+    flex-direction: column;
 
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
+    .menu-section {
+        flex: 1;
+        overflow-y: auto;
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            padding: $spacing-base;
+            cursor: pointer;
+            transition: background-color $transition-base;
+            color: $light-color;
+
+            &:hover {
+                background-color: $hover-color;
+            }
+
+            &.active {
+                background-color: $active-color;
+                font-weight: $font-weight-bold;
+            }
+        }
     }
 
-    li {
-        padding: $spacing-base;
-        cursor: pointer;
-        transition: background-color $transition-base;
-        color: $light-color;
-
-        &:hover {
-            background-color: $hover-color;
-        }
-
-        &.active {
-            background-color: $active-color;
-            font-weight: $font-weight-bold;
-        }
+    .switcher-section {
+        border-top: 1px solid rgba($light-color, 0.1);
+        background-color: $active-color;
     }
 }

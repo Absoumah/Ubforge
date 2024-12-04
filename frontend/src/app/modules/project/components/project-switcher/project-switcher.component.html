@@ -1,0 +1,11 @@
+<div class="project-switcher">
+    <h3>Projects</h3>
+    <ul>
+        <li *ngFor="let project of projects" (click)="setActiveProject(project)"
+            [class.active]="project.id === activeProjectId">
+            <span class="project-name">{{ project.name }}</span>
+            <app-active-project-badge [isActive]="project.id === activeProjectId">
+            </app-active-project-badge>
+        </li>
+    </ul>
+</div>

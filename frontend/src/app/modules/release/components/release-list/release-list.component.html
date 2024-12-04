@@ -1,0 +1,18 @@
+<div class="release-list">
+    <div class="release-list-header">
+        <h2>Releases</h2>
+        <button class="create-button" (click)="createRelease()">
+            Create Release
+        </button>
+    </div>
+
+    <div class="release-list-content">
+        <app-release-item *ngFor="let release of releases$ | async" [release]="release" (edit)="onEdit($event)"
+            (delete)="onDelete($event)"></app-release-item>
+    </div>
+
+    <div *ngIf="(releases$ | async)?.length === 0" class="no-releases">
+        <p>No releases found</p>
+        <button (click)="createRelease()">Create your first release</button>
+    </div>
+</div>

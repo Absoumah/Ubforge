@@ -41,4 +41,10 @@ export class TaskDetailComponent implements OnInit {
         });
     }
   }
+
+  onEdit(): void {
+    if (this.task) {
+      this.router.navigate(['/tasks', this.task.id, 'edit']);
+    }
+  }
 }

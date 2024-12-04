@@ -1,0 +1,20 @@
+<div class="issue-selector">
+    <h3>Assign Issues</h3>
+    <div class="issue-list">
+        <div *ngFor="let issue of projectIssues$ | async" class="issue-item">
+            <label class="checkbox-container">
+                <input type="checkbox" [checked]="isSelected(issue.id)" (change)="toggleIssue(issue.id)">
+                <span class="checkmark"></span>
+                <div class="issue-info">
+                    <span class="issue-title">{{issue.title}}</span>
+                    <span class="issue-category" [ngClass]="issue.category.toLowerCase()">
+                        {{issue.category}}
+                    </span>
+                </div>
+            </label>
+        </div>
+        <div *ngIf="(projectIssues$ | async)?.length === 0" class="no-issues">
+            No issues available for this project
+        </div>
+    </div>
+</div>

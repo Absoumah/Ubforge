@@ -1,0 +1,45 @@
+<div class="release-detail" *ngIf="release">
+    <div class="release-header">
+        <div class="title-section">
+            <h2>{{release.version}}</h2>
+            <span class="status-badge" [ngClass]="release.status.toLowerCase()">
+                {{release.status}}
+            </span>
+        </div>
+        <div class="actions">
+            <button class="edit-button" (click)="onEdit()">Edit Release</button>
+            <button class="delete-button" (click)="onDelete()">Delete Release</button>
+        </div>
+    </div>
+
+    <div class="release-content">
+        <div class="info-section">
+            <h3>{{release.name}}</h3>
+            <div class="release-date">
+                Release Date: {{release.releaseDate | date}}
+            </div>
+        </div>
+
+        <div class="description-section">
+            <h3>Description</h3>
+            <p>{{release.description}}</p>
+        </div>
+
+
+        <div class="issues-section">
+            <div class="section-header" (click)="toggleIssues()">
+                <h3>Related Issues</h3>
+                <span class="toggle-icon" [class.expanded]="isIssuesExpanded">▼</span>
+            </div>
+            <div [@expandCollapse]="isIssuesExpanded ? 'expanded' : 'collapsed'">
+                <div class="issues-list" *ngIf="relatedIssues.length > 0">
+                    <app-issue-item *ngFor="let issue of relatedIssues" [issue]="issue">
+                    </app-issue-item>
+                </div>
+                <p *ngIf="relatedIssues.length === 0" class="no-issues">
+                    No issues assigned to this release
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

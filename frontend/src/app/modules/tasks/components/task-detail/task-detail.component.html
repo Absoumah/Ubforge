@@ -41,6 +41,9 @@
     </div>
 
     <div class="task-detail-actions">
+        <button class="secondary-button" (click)="onEdit()">
+            Edit Task
+        </button>
         <button class="primary-button" (click)="markAsDone()" *ngIf="task.status !== 'COMPLETED'">
             Mark as Done
         </button>

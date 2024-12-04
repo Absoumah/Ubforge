@@ -22,6 +22,17 @@
         </div>
 
         <div class="form-group">
+            <label for="priority">Priority</label>
+            <select id="priority" formControlName="priority">
+                <option value="">Select priority</option>
+                <option *ngFor="let priority of priorities" [value]="priority">{{priority}}</option>
+            </select>
+            <div class="error" *ngIf="issueForm.get('priority')?.invalid && issueForm.get('priority')?.touched">
+                <small *ngIf="issueForm.get('priority')?.errors?.['required']">Priority is required</small>
+            </div>
+        </div>
+
+        <div class="form-group">
             <label for="description">Description</label>
             <textarea id="description" formControlName="description" rows="4"></textarea>
             <div class="error" *ngIf="issueForm.get('description')?.invalid && issueForm.get('description')?.touched">

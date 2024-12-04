@@ -1,0 +1,107 @@
+@import '../../../../../styles/theme.scss';
+
+.release-item {
+    background: $light-color;
+    border-radius: $border-radius;
+    padding: $spacing-base;
+    box-shadow: $box-shadow;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    .release-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-base;
+
+        .version-name {
+            h3 {
+                font-size: $font-size-large;
+                margin: 0;
+            }
+
+            .release-name {
+                color: $text-muted;
+                font-size: $font-size-small;
+            }
+        }
+
+        .status-badge {
+            padding: $spacing-xs $spacing-small;
+            border-radius: $border-radius;
+            font-size: $font-size-small;
+            font-weight: $font-weight-bold;
+
+            &.planned {
+                background: rgba($secondary-color, 0.1);
+                color: $secondary-color;
+            }
+
+            &.in_progress {
+                background: rgba($primary-color, 0.1);
+                color: $primary-color;
+            }
+
+            &.released {
+                background: rgba($success-color, 0.1);
+                color: $success-color;
+            }
+
+            &.delayed {
+                background: rgba($danger-color, 0.1);
+                color: $danger-color;
+            }
+        }
+    }
+
+    .description {
+        color: $text-muted;
+        margin-bottom: $spacing-base;
+    }
+
+    .release-date {
+        color: $text-muted;
+        font-size: $font-size-small;
+    }
+
+    .actions {
+        display: flex;
+        gap: $spacing-small;
+        margin-top: $spacing-base;
+
+        button {
+            padding: $spacing-xs $spacing-small;
+            border: none;
+            border-radius: $border-radius;
+            font-size: $font-size-small;
+            cursor: pointer;
+            transition: background-color $transition-base;
+
+            &.edit-button {
+                background-color: $primary-color;
+                color: $light-color;
+
+                &:hover {
+                    background-color: $hover-color;
+                }
+            }
+
+            &.delete-button {
+                background-color: $danger-color;
+                color: $light-color;
+
+                &:hover {
+                    background-color: darken($danger-color, 10%);
+                }
+            }
+        }
+    }
+
+    .progress-section {
+        margin: $spacing-base 0;
+    }
+}

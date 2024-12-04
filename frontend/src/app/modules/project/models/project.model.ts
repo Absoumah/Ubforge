@@ -7,4 +7,6 @@ export interface Project {
     category: string;
     description: string;
     assignedUsers: User[];
+    taskIds: number[];
+    issueIds: number[];
 }

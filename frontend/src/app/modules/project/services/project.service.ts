@@ -8,6 +8,42 @@ import { Project } from '../models/project.model';
 })
 export class ProjectService {
   private projectsSubject = new BehaviorSubject<Project[]>([]);
+  private initializeMockProjects(): void {
+    const mockProjects: Project[] = [
+      {
+        id: 1,
+        name: 'Project Alpha',
+        url: 'http://example.com/alpha',
+        category: 'Web',
+        description: 'Description for Project Alpha',
+        assignedUsers: [
+          { id: 1, firstName: 'John', lastName: 'Doe' },
+          { id: 2, firstName: 'Jane', lastName: 'Smith' }
+        ],
+        taskIds: [1, 3, 5, 7, 8],
+        issueIds: [1, 3, 5]
+      },
+      {
+        id: 2,
+        name: 'Project Beta',
+        url: 'http://example.com/beta',
+        category: 'Mobile',
+        description: 'Description for Project Beta',
+        assignedUsers: [
+          { id: 3, firstName: 'Alice', lastName: 'Johnson' }
+        ],
+        taskIds: [2, 4, 6],
+        issueIds: [2, 4, 6]
+      }
+    ];
+
+    this.projectsSubject.next(mockProjects);
+  }
+
+  constructor() {
+    this.initializeMockProjects();
+  }
+
   projects$ = this.projectsSubject.asObservable();
 
   getProjects(): Observable<Project[]> {

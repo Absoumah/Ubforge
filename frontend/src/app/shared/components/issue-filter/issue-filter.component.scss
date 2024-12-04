@@ -4,24 +4,14 @@
     display: flex;
     align-items: center;
     gap: $spacing-base;
-    // padding: $spacing-base;
-    // background-color: $light-color;
     border-radius: $border-radius;
     margin-bottom: $spacing-base;
-    // box-shadow: $box-shadow;
-    // border: 1px solid $border-color;
 }
 
 .filter-group {
     display: flex;
     align-items: center;
     gap: $spacing-small;
-
-    // label {
-    //     font-weight: $font-weight-bold;
-    //     color: $text-color;
-    //     font-size: $font-size-base;
-    // }
 
     select {
         width: 100%;

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Issue } from '../models/issue';
 import { TaskPriority } from '../../tasks/models/task-priority.enum';
 import { TaskStatus } from '../../tasks/models/task-status.enum';
+import { Comment } from '../../../shared/models/comment';
+import { IssuePriority } from '../models/issue-priority.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +22,8 @@ export class IssueService {
         category: "BugFix",
         reportedDate: new Date("2024-03-01"),
         dueDate: new Date("2024-03-15"),
+        projectId: 1,
+        priority: IssuePriority.HIGH,
         tasks: [
           {
             id: 1,
@@ -46,7 +50,8 @@ export class IssueService {
               }
             ],
             estimatedHours: 4,
-            dueDate: new Date("2024-03-10")
+            dueDate: new Date("2024-03-10"),
+            projectId: 1
           },
           {
             id: 7,
@@ -63,7 +68,8 @@ export class IssueService {
               }
             ],
             estimatedHours: 3,
-            dueDate: new Date("2024-03-12")
+            dueDate: new Date("2024-03-12"),
+            projectId: 1
           },
           {
             id: 8,
@@ -80,9 +86,9 @@ export class IssueService {
               }
             ],
             estimatedHours: 2,
-            dueDate: new Date("2024-03-14")
+            dueDate: new Date("2024-03-14"),
+            projectId: 1
           }
-
         ]
       },
       {
@@ -92,6 +98,8 @@ export class IssueService {
         category: "Feature",
         reportedDate: new Date("2024-03-02"),
         dueDate: new Date("2024-03-30"),
+        projectId: 2,
+        priority: IssuePriority.MEDIUM,
         tasks: [
           {
             id: 2,
@@ -102,7 +110,8 @@ export class IssueService {
             completed: false,
             assignedTo: [{ id: 2, firstName: "Jane", lastName: "Smith" }],
             estimatedHours: 6,
-            dueDate: new Date("2024-03-20")
+            dueDate: new Date("2024-03-20"),
+            projectId: 2
           }
         ]
       },
@@ -113,6 +122,8 @@ export class IssueService {
         category: "Enhancement",
         reportedDate: new Date("2024-03-03"),
         dueDate: new Date("2024-04-15"),
+        projectId: 1,
+        priority: IssuePriority.HIGH,
         tasks: [
           {
             id: 3,
@@ -123,7 +134,8 @@ export class IssueService {
             completed: false,
             assignedTo: [{ id: 3, firstName: "Mike", lastName: "Johnson" }],
             estimatedHours: 8,
-            dueDate: new Date("2024-04-01")
+            dueDate: new Date("2024-04-01"),
+            projectId: 1
           }
         ]
       },
@@ -134,6 +146,8 @@ export class IssueService {
         category: "Documentation",
         reportedDate: new Date("2024-03-04"),
         dueDate: new Date("2024-03-20"),
+        projectId: 2,
+        priority: IssuePriority.LOW,
         tasks: [
           {
             id: 4,
@@ -144,7 +158,8 @@ export class IssueService {
             completed: true,
             assignedTo: [{ id: 4, firstName: "Sarah", lastName: "Wilson" }],
             estimatedHours: 3,
-            dueDate: new Date("2024-03-18")
+            dueDate: new Date("2024-03-18"),
+            projectId: 2
           }
         ]
       },
@@ -155,6 +170,8 @@ export class IssueService {
         category: "BugFix",
         reportedDate: new Date("2024-03-05"),
         dueDate: new Date("2024-03-25"),
+        projectId: 1,
+        priority: IssuePriority.MEDIUM,
         tasks: [
           {
             id: 5,
@@ -165,7 +182,8 @@ export class IssueService {
             completed: false,
             assignedTo: [{ id: 5, firstName: "Alex", lastName: "Brown" }],
             estimatedHours: 5,
-            dueDate: new Date("2024-03-22")
+            dueDate: new Date("2024-03-22"),
+            projectId: 1
           }
         ]
       },
@@ -176,6 +194,8 @@ export class IssueService {
         category: "Feature",
         reportedDate: new Date("2024-03-06"),
         dueDate: new Date("2024-04-06"),
+        projectId: 2,
+        priority: IssuePriority.LOW,
         tasks: [
           {
             id: 6,
@@ -186,7 +206,8 @@ export class IssueService {
             completed: false,
             assignedTo: [{ id: 6, firstName: "Emily", lastName: "Davis" }],
             estimatedHours: 7,
-            dueDate: new Date("2024-03-28")
+            dueDate: new Date("2024-03-28"),
+            projectId: 2
           }
         ]
       }
@@ -208,6 +229,12 @@ export class IssueService {
     return this.issues.find(issue => issue.id === id);
   }
 
+  getIssuesByProject(projectId: number): Observable<Issue[]> {
+    return this.issuesSubject.pipe(
+      map(issues => issues.filter(issue => issue.projectId === projectId))
+    );
+  }
+
   addIssue(issue: Issue): void {
     this.issues.push(issue);
     this.issuesSubject.next([...this.issues]);
@@ -225,4 +252,5 @@ export class IssueService {
     this.issues = this.issues.filter(issue => issue.id !== id);
     this.issuesSubject.next([...this.issues]);
   }
+
 }

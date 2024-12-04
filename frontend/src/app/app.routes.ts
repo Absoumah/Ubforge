@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { HelloWorldComponent } from './modules/hello-world/hello-world.component';
+import { ProjectGuard } from './modules/project/guards/project.guard';
 
 export const routes: Routes = [
     // we'll keep here, for now
@@ -29,13 +30,25 @@ export const routes: Routes = [
     },
     {
         path: 'issues',
+        canActivate: [ProjectGuard],
         loadChildren: () => import('./modules/issue/issues.routes')
             .then(routes => routes)
     },
     {
         path: 'tasks',
+        canActivate: [ProjectGuard],
         loadChildren: () => import('./modules/tasks/tasks.routes')
             .then(routes => routes)
+    },
+    {
+        path: 'releases',
+        canActivate: [ProjectGuard],
+        loadChildren: () => import('./modules/release/releases.routes')
+            .then(routes => routes)
+    },
+    {
+        path: 'sprints',
+        loadChildren: () => import('./modules/sprint/sprint.routes')
     },
     {
         path: '',
@@ -46,7 +59,8 @@ export const routes: Routes = [
         path: '**',
         loadComponent: () => import('./core/components/not-found/not-found.component')
             .then(m => m.NotFoundComponent)
-    }
+    },
+
     // TODO: add a 404 page
 ];
 
