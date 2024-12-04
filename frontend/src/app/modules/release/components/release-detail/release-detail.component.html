@@ -24,5 +24,22 @@
             <h3>Description</h3>
             <p>{{release.description}}</p>
         </div>
+
+
+        <div class="issues-section">
+            <div class="section-header" (click)="toggleIssues()">
+                <h3>Related Issues</h3>
+                <span class="toggle-icon" [class.expanded]="isIssuesExpanded">▼</span>
+            </div>
+            <div [@expandCollapse]="isIssuesExpanded ? 'expanded' : 'collapsed'">
+                <div class="issues-list" *ngIf="relatedIssues.length > 0">
+                    <app-issue-item *ngFor="let issue of relatedIssues" [issue]="issue">
+                    </app-issue-item>
+                </div>
+                <p *ngIf="relatedIssues.length === 0" class="no-issues">
+                    No issues assigned to this release
+                </p>
+            </div>
+        </div>
     </div>
 </div>

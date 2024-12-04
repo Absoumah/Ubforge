@@ -5,24 +5,48 @@ import { Release } from '../../models/release';
 import { ReleaseService } from '../../services/release.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { DialogService } from '../../../../shared/services/dialog.service';
+import { IssueService } from '../../../issue/services/issue.service';
+import { Issue } from '../../../issue/models/issue';
+import { IssueItemComponent } from '../../../issue/components/issue-item/issue-item.component';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-release-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IssueItemComponent],
   templateUrl: './release-detail.component.html',
-  styleUrls: ['./release-detail.component.scss']
+  styleUrls: ['./release-detail.component.scss'],
+  animations: [
+    trigger('expandCollapse', [
+      state('collapsed', style({
+        height: '0',
+        overflow: 'hidden',
+        opacity: '0'
+      })),
+      state('expanded', style({
+        height: '*',
+        opacity: '1'
+      })),
+      transition('collapsed <=> expanded', [
+        animate('200ms ease-in-out')
+      ])
+    ])
+  ]
 })
 export class ReleaseDetailComponent implements OnInit {
   release?: Release;
+  relatedIssues: Issue[] = [];
+  isIssuesExpanded = false;
+
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private releaseService: ReleaseService,
+    private issueService: IssueService,
     private toastService: ToastService,
     private dialogService: DialogService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -31,6 +55,23 @@ export class ReleaseDetailComponent implements OnInit {
     if (!this.release) {
       this.toastService.error('Release not found');
       this.router.navigate(['/releases']);
+      return;
+    }
+
+    this.loadRelatedIssues();
+  }
+
+  toggleIssues(): void {
+    this.isIssuesExpanded = !this.isIssuesExpanded;
+  }
+
+  private loadRelatedIssues(): void {
+    if (this.release?.issueIds?.length) {
+      this.issueService.getIssues().subscribe(issues => {
+        this.relatedIssues = issues.filter(issue =>
+          this.release?.issueIds?.includes(issue.id)
+        );
+      });
     }
   }
 
