@@ -57,11 +57,15 @@ export class IssueListComponent implements OnInit {
 
   private filterIssues(filter: IssueFilter): void {
     this.filteredIssues = this.issues.filter(issue => {
-      if (!filter.category) return true;
-      return issue.category.toLowerCase() === filter.category.toLowerCase();
+      const categoryMatch = !filter.category || 
+        issue.category.toLowerCase() === filter.category.toLowerCase();
+      const priorityMatch = !filter.priority || 
+        issue.priority === filter.priority;
+      return categoryMatch && priorityMatch;
     });
+    
     this.totalPages = Math.ceil(this.filteredIssues.length / this.itemsPerPage);
-    this.currentPage = 1; // Reset to first page when filter changes
+    this.currentPage = 1;
   }
 
   loadIssues(): void {
