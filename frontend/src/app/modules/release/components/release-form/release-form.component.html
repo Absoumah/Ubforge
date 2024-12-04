@@ -1,5 +1,5 @@
 <div class="release-form-container">
-    <h2>Create Release</h2>
+    <h2>{{isEditMode ? 'Edit Release' : 'Create Release'}}</h2>
     <form [formGroup]="releaseForm" (ngSubmit)="onSubmit()" class="release-form">
         <div class="form-group">
             <label for="version">Version</label>
@@ -45,6 +45,8 @@
             </app-issue-selector>
         </div>
 
-        <button type="submit" [disabled]="releaseForm.invalid">Create Release</button>
+        <button type="submit" [disabled]="releaseForm.invalid">
+            {{isEditMode ? 'Update Release' : 'Create Release'}}
+        </button>
     </form>
 </div>
