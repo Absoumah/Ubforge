@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ubforge.ubforge.model.User;
 import com.ubforge.ubforge.repository.UserRepository;
+import java.util.Set;
+
 
 @Service
 public class UserService {
@@ -34,5 +36,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public Set<Integer> findUserIdsByIssueId(int issueId) {
+        return userRepository.findUserIdsByIssueId(issueId);
+    }
 
 }

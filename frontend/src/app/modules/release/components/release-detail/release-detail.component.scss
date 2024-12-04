@@ -3,7 +3,8 @@
 .release-detail {
     padding: $spacing-base;
     padding-left: calc(310px + $spacing-base);
-    max-width: 1200px;
+    background-color: $background-color;
+    min-height: calc(100vh - 2 * $spacing-base);
 
     .release-header {
         display: flex;
@@ -116,6 +117,91 @@
             p {
                 color: $text-muted;
                 line-height: 1.5;
+            }
+        }
+
+        .issues-section {
+            margin-top: $spacing-large;
+            border-top: 1px solid $border-color;
+            padding-top: $spacing-base;
+
+            .section-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                cursor: pointer;
+                padding: $spacing-small 0;
+                user-select: none;
+
+                &:hover {
+                    h3 {
+                        color: $primary-color;
+                    }
+
+                    .toggle-icon {
+                        color: $primary-color;
+                    }
+                }
+
+                h3 {
+                    font-size: $font-size-base;
+                    font-weight: $font-weight-bold;
+                    margin: 0;
+                    color: $text-color;
+                    transition: color $transition-base;
+                }
+
+                .toggle-icon {
+                    font-size: $font-size-base;
+                    color: $text-muted;
+                    transition: all $transition-base;
+
+                    &.expanded {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+
+            margin-top: $spacing-large;
+            border-top: 1px solid $border-color;
+            padding-top: $spacing-base;
+
+            h3 {
+                font-size: $font-size-base;
+                font-weight: $font-weight-bold;
+                margin-bottom: $spacing-base;
+                color: $text-color;
+            }
+
+            .issues-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+                gap: $spacing-base;
+
+                app-issue-item {
+                    display: block;
+                    height: 100%;
+                }
+            }
+
+            .no-issues {
+                text-align: center;
+                padding: $spacing-large;
+                color: $text-muted;
+                background: $background-color;
+                border-radius: $border-radius;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .release-detail {
+        .release-content {
+            .issues-section {
+                .issues-list {
+                    grid-template-columns: 1fr;
+                }
             }
         }
     }

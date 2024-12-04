@@ -1,0 +1,128 @@
+@import '../../../../../styles/theme.scss';
+
+.sprint-detail {
+    padding: $spacing-base;
+    padding-left: calc(310px + $spacing-base);
+    max-width: 1200px;
+
+    .sprint-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: $spacing-large;
+
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+
+            h2 {
+                margin: 0;
+                font-size: $font-size-large;
+                font-weight: $font-weight-bold;
+                color: $text-color;
+            }
+
+            .status-badge {
+                padding: $spacing-xs $spacing-small;
+                border-radius: $border-radius;
+                font-size: $font-size-small;
+                font-weight: $font-weight-bold;
+
+                &.planned {
+                    background: rgba($secondary-color, 0.1);
+                    color: $secondary-color;
+                }
+
+                &.active {
+                    background: rgba($primary-color, 0.1);
+                    color: $primary-color;
+                }
+
+                &.completed {
+                    background: rgba($success-color, 0.1);
+                    color: $success-color;
+                }
+            }
+        }
+
+        .actions {
+            display: flex;
+            gap: $spacing-small;
+
+            button {
+                padding: $spacing-small $spacing-base;
+                border: none;
+                border-radius: $border-radius;
+                font-size: $font-size-base;
+                cursor: pointer;
+                transition: background-color $transition-base;
+
+                &.edit-button {
+                    background: $primary-color;
+                    color: $light-color;
+
+                    &:hover {
+                        background-color: $hover-color;
+                    }
+                }
+
+                &.delete-button {
+                    background: $danger-color;
+                    color: $light-color;
+
+                    &:hover {
+                        background-color: darken($danger-color, 10%);
+                    }
+                }
+            }
+        }
+    }
+
+    .sprint-content {
+        background: $light-color;
+        border-radius: $border-radius;
+        padding: $spacing-base;
+        box-shadow: $box-shadow;
+
+        .info-section {
+            margin-bottom: $spacing-base;
+
+            .dates {
+                display: flex;
+                gap: $spacing-large;
+                color: $text-muted;
+                font-size: $font-size-small;
+            }
+        }
+
+        .description-section,
+        .tasks-section,
+        .issues-section {
+            margin-bottom: $spacing-large;
+
+            h3 {
+                font-size: $font-size-base;
+                font-weight: $font-weight-bold;
+                margin-bottom: $spacing-base;
+                color: $text-color;
+            }
+
+            p {
+                color: $text-muted;
+                line-height: 1.5;
+            }
+        }
+
+        .tasks-list,
+        .issues-list {
+            display: grid;
+            gap: $spacing-base;
+        }
+
+        .empty-message {
+            color: $text-muted;
+            font-style: italic;
+        }
+    }
+}

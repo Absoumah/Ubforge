@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Set;
+
 
 
 @RestController
@@ -48,6 +50,11 @@ public class UserController {
     @GetMapping("/getAll")
     public ResponseEntity<Iterable<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/getAssignToIssue/{issueId}")
+    public ResponseEntity<Set<Integer>> findUserIdsByIssueId(@PathVariable int issueId) {
+        return ResponseEntity.ok(userService.findUserIdsByIssueId(issueId));
     }
     
     

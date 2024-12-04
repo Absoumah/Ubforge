@@ -25,10 +25,10 @@ public class Task {
     private String task_description;
 
     @Column(name = "task_status")
-    private String task_status;
+    private String taskStatus;
 
     @Column(name = "issue_id")
-    private int issue_id;
+    private int issueId;
 
     @Column(name = "task_author")
     private int task_author;
@@ -42,6 +42,17 @@ public class Task {
 
     @Column(name = "task_priority")
     private String task_priority;
+
+    @Column(name = "release_id")
+    private Integer releaseId;
+
+    public Integer getReleaseId() {
+        return releaseId;
+    }
+
+    public void setReleaseId(Integer releaseId) {
+        this.releaseId = releaseId;
+    }
 
     public String getTask_priority() {
         return task_priority;
@@ -60,11 +71,11 @@ public class Task {
     }
 
     public int getIssue_id() {
-        return issue_id;
+        return issueId;
     }
 
-    public void setIssue_id(int issue_id) {
-        this.issue_id = issue_id;
+    public void setIssue_id(int issueId) {
+        this.issueId = issueId;
     }
 
     public int getTask_id() {
@@ -91,12 +102,12 @@ public class Task {
         this.task_description = task_description;
     }
 
-    public String getTask_status() {
-        return task_status;
+    public String getTaskStatus() {
+        return taskStatus;
     }
 
-    public void setTask_status(String task_status) {
-        this.task_status = task_status;
+    public void setTaskStatus(String taskStatus) {
+        this.taskStatus = taskStatus;
     }
 
     public void setId(int id) {
