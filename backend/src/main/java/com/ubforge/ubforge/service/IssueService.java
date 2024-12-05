@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ubforge.ubforge.model.Issue;
-import com.ubforge.ubforge.model.User;
 import com.ubforge.ubforge.repository.IssueRepository;
 import com.ubforge.ubforge.repository.UserRepository;
 
@@ -45,10 +44,10 @@ public class IssueService {
     
 
     public void assignToUser(int issueId, int userId) {
-        Issue issue = issueRepository.findById(issueId)
+        issueRepository.findById(issueId)
                 .orElseThrow(() -> new RuntimeException("Issue not found"));
 
-        User user = userRepository.findById(userId)
+        userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         issueRepository.assignToUser(issueId, userId);
