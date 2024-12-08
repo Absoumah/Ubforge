@@ -37,6 +37,12 @@
             </select>
         </div>
 
+        <div class="form-group">
+            <app-issue-selector *ngIf="projectId" [projectId]="projectId" [selectedIssueIds]="selectedIssueIds"
+                (issueSelectionChange)="onIssueSelectionChange($event)">
+            </app-issue-selector>
+        </div>
+
         <button type="submit" [disabled]="sprintForm.invalid">
             {{isEditMode ? 'Update' : 'Create'}} Sprint
         </button>

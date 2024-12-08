@@ -1,17 +1,18 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SprintStatus } from '../../models/sprint.interface';
 import { SprintService } from '../../services/sprint.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { ProjectStateService } from '../../../project/services/project-state.service';
+import { IssueSelectorComponent } from '../../../release/components/issue-selector/issue-selector.component';
 import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sprint-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IssueSelectorComponent],
   templateUrl: './sprint-form.component.html',
   styleUrls: ['./sprint-form.component.scss']
 })
@@ -20,6 +21,8 @@ export class SprintFormComponent implements OnInit {
   sprintStatuses = Object.values(SprintStatus);
   isEditMode = false;
   sprintId?: string;
+  projectId?: number;
+  selectedIssueIds: number[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -30,18 +33,22 @@ export class SprintFormComponent implements OnInit {
     private projectStateService: ProjectStateService
   ) {
     this.sprintForm = this.fb.group({
-      name: ['', [Validators.required]],
+      name: ['', Validators.required],
       description: [''],
-      startDate: ['', [Validators.required]],
-      endDate: ['', [Validators.required]],
-      status: [SprintStatus.PLANNED, [Validators.required]],
-      projectId: ['', [Validators.required]]
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      status: [SprintStatus.PLANNED, Validators.required],
+      projectId: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
-    this.checkEditMode();
     this.setProjectId();
+    this.checkEditMode();
+  }
+
+  onIssueSelectionChange(issueIds: number[]): void {
+    this.selectedIssueIds = issueIds;
   }
 
   private checkEditMode(): void {
@@ -56,6 +63,7 @@ export class SprintFormComponent implements OnInit {
             startDate: sprint.startDate.toISOString().split('T')[0],
             endDate: sprint.endDate.toISOString().split('T')[0]
           });
+          this.selectedIssueIds = sprint.issues.map(id => +id);
         }
       });
     }
@@ -66,6 +74,7 @@ export class SprintFormComponent implements OnInit {
       .pipe(take(1))
       .subscribe(projectId => {
         if (projectId) {
+          this.projectId = +projectId;
           this.sprintForm.patchValue({ projectId: projectId.toString() });
         } else {
           this.toastService.error('Please select a project first');
@@ -81,8 +90,8 @@ export class SprintFormComponent implements OnInit {
           ...this.sprintForm.value,
           startDate: new Date(this.sprintForm.value.startDate),
           endDate: new Date(this.sprintForm.value.endDate),
-          tasks: this.isEditMode ? [] : [],
-          issues: this.isEditMode ? [] : []
+          tasks: [],
+          issues: this.selectedIssueIds.map(id => id.toString())
         };
 
         if (this.isEditMode && this.sprintId) {
@@ -95,10 +104,8 @@ export class SprintFormComponent implements OnInit {
 
         this.router.navigate(['/sprints']);
       } catch (error) {
-        this.toastService.error('An error occurred while saving the sprint');
+        this.toastService.error('Error saving sprint');
       }
-    } else {
-      this.toastService.error('Please fill all required fields correctly');
     }
   }
 }

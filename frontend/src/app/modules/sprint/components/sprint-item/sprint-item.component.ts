@@ -1,13 +1,14 @@
+// sprint-item.component.ts
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Sprint } from '../../models/sprint.interface';
-import { DatePipe } from '@angular/common';
+import { ProgressBarComponent } from '../../../shared/components/progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-sprint-item',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, ProgressBarComponent],
   templateUrl: './sprint-item.component.html',
   styleUrls: ['./sprint-item.component.scss']
 })
@@ -20,6 +21,11 @@ export class SprintItemComponent {
 
   get statusClass(): string {
     return this.sprint.status.toLowerCase();
+  }
+
+  get progress(): number {
+    // This should come from the service, and the backend
+    return Math.floor(Math.random() * 100);
   }
 
   editSprint(event: Event): void {
