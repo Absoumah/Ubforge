@@ -73,11 +73,16 @@ export class SprintService {
     this.sprintsSubject.next(sprints);
   }
 
-  deleteSprint(id: string): void {
-    const sprints = this.sprintsSubject.getValue().filter(sprint =>
-      sprint.id !== id
-    );
-    this.sprintsSubject.next(sprints);
+  deleteSprint(id: string): boolean {
+    const currentSprints = this.sprintsSubject.getValue();
+    const sprintExists = currentSprints.some(sprint => sprint.id === id);
+
+    if (sprintExists) {
+      const updatedSprints = currentSprints.filter(sprint => sprint.id !== id);
+      this.sprintsSubject.next(updatedSprints);
+      return true;
+    }
+    return false;
   }
 
   addTaskToSprint(sprintId: string, taskId: string): void {

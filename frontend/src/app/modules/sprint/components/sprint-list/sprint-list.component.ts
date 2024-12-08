@@ -62,8 +62,12 @@ export class SprintListComponent implements OnInit, OnDestroy {
     });
 
     if (confirmed) {
-      this.sprintService.deleteSprint(id);
-      this.toastService.success('Sprint deleted successfully');
+      const deleted = this.sprintService.deleteSprint(id);
+      if (deleted) {
+        this.toastService.success('Sprint deleted successfully');
+      } else {
+        this.toastService.error('Failed to delete sprint');
+      }
     } else {
       this.toastService.info('Sprint deletion cancelled');
     }
