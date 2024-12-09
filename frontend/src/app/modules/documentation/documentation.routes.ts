@@ -4,8 +4,8 @@ import { ProjectGuard } from '../project/guards/project.guard';
 export default [
     {
         path: '',
-        loadComponent: () => import('./components/documentation-view/documentation-view.component')
-            .then(m => m.DocumentationViewComponent),
+        loadComponent: () => import('./components/documentation-list/documentation-list.component')
+            .then(m => m.DocumentationListComponent),
         canActivate: [ProjectGuard]
     },
     {

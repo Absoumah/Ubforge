@@ -1,0 +1,17 @@
+<div class="documentation-list">
+    <div class="documentation-list-header">
+        <h2>Documentation</h2>
+
+        <button class="create-button" (click)="createDoc()">
+            Create Documentation
+        </button>
+    </div>
+
+
+    <ng-template #noDocs>
+        <div class="no-docs">
+            <p>No documentation found</p>
+            <button (click)="createDoc()">Create your first documentation</button>
+        </div>
+    </ng-template>
+</div>
