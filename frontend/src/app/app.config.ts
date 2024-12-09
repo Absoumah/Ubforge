@@ -1,6 +1,8 @@
 import { ApplicationConfig, ErrorHandler, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
+import { MarkdownModule } from 'ngx-markdown';
+
 
 import { routes } from './app.routes';
 
@@ -13,5 +15,7 @@ export const appConfig: ApplicationConfig = {
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     provideAnimations(),
     importProvidersFrom([BrowserAnimationsModule]),
+    // importProvidersFrom([MarkdownModule]),
+    importProvidersFrom([MarkdownModule.forRoot()])
   ]
 };
