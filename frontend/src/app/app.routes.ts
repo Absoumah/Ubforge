@@ -51,6 +51,12 @@ export const routes: Routes = [
         loadChildren: () => import('./modules/sprint/sprint.routes')
     },
     {
+        path: 'documentation',
+        canActivate: [ProjectGuard],
+        loadChildren: () => import('./modules/documentation/documentation.routes')
+            .then(routes => routes)
+    },
+    {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
