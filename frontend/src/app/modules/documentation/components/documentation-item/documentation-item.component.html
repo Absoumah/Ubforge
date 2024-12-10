@@ -12,14 +12,6 @@
         </div>
     </div>
 
-    <div class="doc-content">
-        <div class="preview" [class.expanded]="isExpanded">
-            <markdown [data]="doc.content"></markdown>
-        </div>
-        <button class="expand-button" (click)="toggleExpand(); $event.stopPropagation()">
-            {{isExpanded ? 'Show Less' : 'Show More'}}
-        </button>
-    </div>
 
     <div class="doc-footer">
         <div class="tags" *ngIf="doc.tags?.length">
