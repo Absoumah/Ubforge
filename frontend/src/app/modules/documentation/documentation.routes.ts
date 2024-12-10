@@ -22,8 +22,8 @@ export default [
     },
     {
         path: ':id',
-        loadComponent: () => import('./components/documentation-item/documentation-item.component')
-            .then(m => m.DocumentationItemComponent),
+        loadComponent: () => import('./components/documentation-view/documentation-view.component')
+            .then(m => m.DocumentationViewComponent),
         canActivate: [ProjectGuard]
     }
 ] as Routes;
