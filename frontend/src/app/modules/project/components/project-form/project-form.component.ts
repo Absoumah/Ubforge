@@ -26,7 +26,7 @@ export class ProjectFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private toastService: ToastService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -103,27 +103,36 @@ export class ProjectFormComponent implements OnInit {
       return;
     }
 
-    const project: Project = {
-      id: this.projectId || Date.now(),
+    const projectData: Partial<Project> = {
       ...this.projectForm.value
     };
 
-    try {
-      if (this.isEditMode) {
-        this.projectService.updateProject(project);
-        this.toastService.success('Project updated successfully');
-      } else {
-        this.projectService.addProject(project);
-        this.toastService.success('Project created successfully');
-      }
-      this.router.navigate(['/projects']);
-    } catch (error) {
-      this.toastService.error('An error occurred while saving the project');
+    if (this.isEditMode && this.projectId) {
+      projectData.id = this.projectId;
     }
+
+    const action$ = this.isEditMode ?
+      this.projectService.updateProject(projectData as Project) :
+      this.projectService.addProject(projectData as Project);
+
+    action$.subscribe({
+      next: () => {
+        this.toastService.success(
+          this.isEditMode ? 'Project updated successfully' : 'Project created successfully'
+        );
+        this.router.navigate(['/projects']);
+      },
+      error: (error) => {
+        console.error('Error saving project:', error);
+        this.handleError(error);
+        this.toastService.error('An error occurred while saving the project');
+      }
+    });
   }
 
   private handleError(error: any): void {
     console.error('An error occurred:', error);
     this.errorMessage = 'An error occurred while processing your request. Please try again later.';
   }
+
 }

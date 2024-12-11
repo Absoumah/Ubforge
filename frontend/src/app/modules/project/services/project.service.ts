@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Project } from '../models/project.model';
 import { HttpClient } from '@angular/common/http';
 
@@ -14,6 +14,7 @@ export class ProjectService {
 
   getProjects(): Observable<Project[]> {
     return this.http.get<Project[]>(`${this.apiUrl}/getAll`).pipe(
+      tap(response => console.log('Projects:', response)),
       catchError(this.handleError)
     );
   }
@@ -37,7 +38,9 @@ export class ProjectService {
   }
 
   deleteProject(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`).pipe(
+    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`, {
+      headers: { 'Content-Type': 'application/json' }
+    }).pipe(
       catchError(this.handleError)
     );
   }

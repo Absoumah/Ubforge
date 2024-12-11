@@ -28,13 +28,13 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    // //update project
-    // public void updateProject(int id, Project project) {
-    // if (projectRepository.existsById(id)) {
-    // project.setId(id);
-    // projectRepository.save(project);
-    // }
-    // }
+    // update project
+    public void updateProject(int id, Project project) {
+        if (projectRepository.existsById(id)) {
+            project.setId(id);
+            projectRepository.save(project);
+        }
+    }
 
     // delete project
     public void deleteProject(int id) {
