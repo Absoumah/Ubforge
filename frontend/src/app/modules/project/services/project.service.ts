@@ -33,6 +33,7 @@ export class ProjectService {
 
   updateProject(project: Project): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/update/${project.id}`, project).pipe(
+      tap(response => console.log('Update Project Response:', response)),
       catchError(this.handleError)
     );
   }

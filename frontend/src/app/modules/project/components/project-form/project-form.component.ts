@@ -82,20 +82,34 @@ export class ProjectFormComponent implements OnInit {
   }
 
   private loadProject(): void {
-    try {
-      if (this.projectId !== undefined) {
-        const project = this.projectService.getProjectById(this.projectId!);
+    if (!this.projectId) return;
+
+    this.projectService.getProjectById(this.projectId).subscribe({
+      next: (project) => {
+        console.log('Loaded project:', project);
         if (project) {
-          this.projectForm.patchValue(project);
+          // Initialize form with project data
+          this.projectForm.patchValue({
+            name: project.name,
+            url: project.url,
+            category: project.category,
+            description: project.description,
+            assignedUsers: project.assignedUsers || []
+          });
         } else {
-          console.error('Project with Id: ', this.projectId, ' not found');
+          this.toastService.error('Project not found');
           this.router.navigate(['/projects']);
         }
+      },
+      error: (error) => {
+        console.error('Error loading project:', error);
+        this.handleError(error);
+        this.toastService.error('Failed to load project');
+        this.router.navigate(['/projects']);
       }
-    } catch (error) {
-      this.handleError(error);
-    }
+    });
   }
+
 
   onSubmit(): void {
     if (this.projectForm.invalid) {
@@ -107,12 +121,9 @@ export class ProjectFormComponent implements OnInit {
       ...this.projectForm.value
     };
 
-    if (this.isEditMode && this.projectId) {
-      projectData.id = this.projectId;
-    }
-
+    // Handle both edit and create cases
     const action$ = this.isEditMode ?
-      this.projectService.updateProject(projectData as Project) :
+      this.projectService.updateProject({ ...projectData, id: this.projectId! } as Project) :
       this.projectService.addProject(projectData as Project);
 
     action$.subscribe({
@@ -125,7 +136,9 @@ export class ProjectFormComponent implements OnInit {
       error: (error) => {
         console.error('Error saving project:', error);
         this.handleError(error);
-        this.toastService.error('An error occurred while saving the project');
+        this.toastService.error(
+          this.isEditMode ? 'Failed to update project' : 'Failed to create project'
+        );
       }
     });
   }
@@ -134,5 +147,4 @@ export class ProjectFormComponent implements OnInit {
     console.error('An error occurred:', error);
     this.errorMessage = 'An error occurred while processing your request. Please try again later.';
   }
-
 }
