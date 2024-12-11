@@ -25,7 +25,7 @@ export class SprintItemComponent {
 
   get progress(): number {
     // This should come from the service, and the backend
-    return Math.floor(Math.random() * 100);
+    return Math.floor(0.5 * 100);
   }
 
   editSprint(event: Event): void {
