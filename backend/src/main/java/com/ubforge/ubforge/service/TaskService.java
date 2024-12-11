@@ -9,6 +9,7 @@ import com.ubforge.ubforge.model.Task;
 import com.ubforge.ubforge.model.User;
 import com.ubforge.ubforge.repository.TaskRepository;
 import com.ubforge.ubforge.repository.UserRepository;
+import com.ubforge.ubforge.model.TaskStatus;
 
 @Service
 public class TaskService {
@@ -63,7 +64,7 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public Task updateTaskStatus(int taskId, String status) {
+    public Task updateTaskStatus(int taskId, TaskStatus status) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 

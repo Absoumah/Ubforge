@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.ubforge.ubforge.model.TaskStatus;
 
 
 
@@ -74,7 +75,7 @@ public class TaskController {
 
     //update task status
     @PutMapping("/updateStatus/{taskId}/{status}")
-    public ResponseEntity<Task> updateTaskStatus(@PathVariable int taskId, @PathVariable String status) {
+    public ResponseEntity<Task> updateTaskStatus(@PathVariable int taskId, @PathVariable TaskStatus status) {
         return ResponseEntity.ok(taskService.updateTaskStatus(taskId, status));
     }
 
