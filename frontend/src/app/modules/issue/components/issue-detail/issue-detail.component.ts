@@ -89,9 +89,17 @@ export class IssueDetailComponent implements OnInit, OnDestroy {
     });
 
     if (confirmed && this.issue) {
-      this.issueService.deleteIssue(this.issue.id);
-      this.toastService.success('Issue deleted successfully');
-      this.router.navigate(['/issues']);
+      // Add subscription and error handling
+      this.issueService.deleteIssue(this.issue.id).subscribe({
+        next: () => {
+          this.toastService.success('Issue deleted successfully');
+          this.router.navigate(['/issues']);
+        },
+        error: (error) => {
+          console.error('Error deleting issue:', error);
+          this.toastService.error('Failed to delete issue');
+        }
+      });
     } else {
       this.toastService.info('Issue deletion cancelled');
     }

@@ -57,13 +57,13 @@ export class IssueListComponent implements OnInit {
 
   private filterIssues(filter: IssueFilter): void {
     this.filteredIssues = this.issues.filter(issue => {
-      const categoryMatch = !filter.category || 
+      const categoryMatch = !filter.category ||
         issue.category.toLowerCase() === filter.category.toLowerCase();
-      const priorityMatch = !filter.priority || 
+      const priorityMatch = !filter.priority ||
         issue.priority === filter.priority;
       return categoryMatch && priorityMatch;
     });
-    
+
     this.totalPages = Math.ceil(this.filteredIssues.length / this.itemsPerPage);
     this.currentPage = 1;
   }
@@ -111,16 +111,22 @@ export class IssueListComponent implements OnInit {
   async deleteIssue(id: number): Promise<void> {
     const confirmed = await this.dialogService.confirm({
       title: 'Delete Issue',
-      message: 'Are you sure you want to delete this issue? This action cannot be undone.',
+      message: 'Are you sure you want to delete this issue?',
       confirmText: 'Delete',
       cancelText: 'Cancel'
     });
 
     if (confirmed) {
-      this.issueService.deleteIssue(id);
-      this.toastService.success('Issue deleted successfully');
-    } else {
-      this.toastService.info('Issue deletion cancelled');
+      this.issueService.deleteIssue(id).subscribe({
+        next: () => {
+          this.toastService.success('Issue deleted successfully');
+          // Refresh the issues list
+          this.loadIssues();
+        },
+        error: (error) => {
+          this.toastService.error('Failed to delete issue: ' + error.message);
+        }
+      });
     }
   }
 }
