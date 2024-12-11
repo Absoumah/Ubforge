@@ -5,6 +5,7 @@ import { IssueService } from '../../services/issue.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { DialogService } from '../../../../shared/services/dialog.service';
 import { Issue } from '../../models/issue';
+import { IssuePriority } from '../../models/issue-priority.enum';
 
 describe('IssueDetailComponent', () => {
   let component: IssueDetailComponent;
@@ -17,7 +18,9 @@ describe('IssueDetailComponent', () => {
     description: 'Test Description',
     reportedDate: new Date(),
     dueDate: new Date(),
-    tasks: []
+    tasks: [],
+    projectId: 123,
+    priority: IssuePriority.HIGH
   };
 
   const mockIssueService = {

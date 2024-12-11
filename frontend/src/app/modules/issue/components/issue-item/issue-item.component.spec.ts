@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { IssueItemComponent } from './issue-item.component';
 import { Issue, IssueCategory } from '../../models/issue';
+import { IssuePriority } from '../../models/issue-priority.enum';
 
 describe('IssueItemComponent', () => {
   let component: IssueItemComponent;
@@ -13,7 +14,9 @@ describe('IssueItemComponent', () => {
     description: 'Test Description',
     reportedDate: new Date(),
     dueDate: new Date(),
-    tasks: []
+    tasks: [],
+    priority: IssuePriority.HIGH,
+    projectId: 123
   };
 
   beforeEach(async () => {

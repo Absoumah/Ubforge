@@ -19,7 +19,9 @@ describe('ProjectItemComponent', () => {
     url: 'http://example.com',
     category: 'Development',
     description: 'Test Description',
-    assignedUsers: [mockUser]
+    assignedUsers: [mockUser],
+    taskIds: [1, 2, 3],
+    issueIds: [1, 2, 3],
   };
 
   beforeEach(async () => {

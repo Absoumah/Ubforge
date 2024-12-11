@@ -1,0 +1,126 @@
+@import '../../../../../styles/theme.scss';
+
+.documentation-item {
+    background: $light-color;
+    border-radius: $border-radius;
+    padding: $spacing-base;
+    box-shadow: $box-shadow;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    .doc-header {
+        margin-bottom: $spacing-base;
+
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+            margin-bottom: $spacing-small;
+
+            h3 {
+                margin: 0;
+                font-size: $font-size-large;
+                color: $text-color;
+            }
+
+            .status-badge {
+                padding: $spacing-xs $spacing-small;
+                border-radius: $border-radius;
+                font-size: $font-size-small;
+                font-weight: $font-weight-bold;
+
+                &.draft {
+                    background: rgba($secondary-color, 0.1);
+                    color: $secondary-color;
+                }
+
+                &.in_review {
+                    background: rgba($primary-color, 0.1);
+                    color: $primary-color;
+                }
+
+                &.published {
+                    background: rgba($success-color, 0.1);
+                    color: $success-color;
+                }
+
+                &.archived {
+                    background: rgba($text-muted, 0.1);
+                    color: $text-muted;
+                }
+            }
+        }
+
+        .doc-meta {
+            display: flex;
+            gap: $spacing-base;
+            color: $text-muted;
+            font-size: $font-size-small;
+        }
+    }
+
+    .doc-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: $spacing-base;
+        padding-top: $spacing-base;
+        border-top: 1px solid $border-color;
+
+        .tags {
+            display: flex;
+            gap: $spacing-small;
+            flex-wrap: wrap;
+
+            .tag {
+                background: rgba($primary-color, 0.1);
+                color: $primary-color;
+                padding: $spacing-xs $spacing-small;
+                border-radius: $border-radius;
+                font-size: $font-size-small;
+            }
+        }
+
+        .metadata {
+            color: $text-muted;
+            font-size: $font-size-small;
+            display: flex;
+            gap: $spacing-base;
+        }
+
+        .actions {
+            display: flex;
+            gap: $spacing-small;
+
+            button {
+                padding: $spacing-xs $spacing-small;
+                border: none;
+                border-radius: $border-radius;
+                cursor: pointer;
+                font-size: $font-size-small;
+
+                &.edit-button {
+                    background: $primary-color;
+                    color: $light-color;
+
+                    &:hover {
+                        background: $hover-color;
+                    }
+                }
+
+                &.delete-button {
+                    background: $danger-color;
+                    color: $light-color;
+
+                    &:hover {
+                        background: darken($danger-color, 10%);
+                    }
+                }
+            }
+        }
+    }
+}
