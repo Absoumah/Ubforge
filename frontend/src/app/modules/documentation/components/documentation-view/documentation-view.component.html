@@ -1,1 +1,42 @@
-<p>documentation-view works!</p>
+<!-- documentation-view.component.html -->
+<div class="documentation-view" *ngIf="doc">
+    <div class="view-header">
+        <div class="title-section">
+            <h2>{{doc.title}}</h2>
+            <span class="status-badge" [ngClass]="doc.status.toLowerCase()">
+                {{doc.status}}
+            </span>
+        </div>
+        <div class="actions">
+            <button class="edit-button" (click)="onEdit()">Edit</button>
+            <button class="delete-button" (click)="onDelete()">Delete</button>
+        </div>
+    </div>
+
+    <div class="metadata">
+        <div class="meta-item">
+            <span class="label">Category:</span>
+            <span class="value">{{doc.category}}</span>
+        </div>
+        <div class="meta-item" *ngIf="doc.version">
+            <span class="label">Version:</span>
+            <span class="value">v{{doc.version}}</span>
+        </div>
+        <div class="meta-item">
+            <span class="label">Author:</span>
+            <span class="value">{{doc.author}}</span>
+        </div>
+        <div class="meta-item">
+            <span class="label">Last Updated:</span>
+            <span class="value">{{doc.updatedAt | date}}</span>
+        </div>
+    </div>
+
+    <div class="tags" *ngIf="doc.tags?.length">
+        <span class="tag" *ngFor="let tag of doc.tags">{{tag}}</span>
+    </div>
+
+    <div class="content">
+        <markdown [data]="doc.content"></markdown>
+    </div>
+</div>
