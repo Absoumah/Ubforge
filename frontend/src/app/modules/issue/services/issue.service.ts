@@ -1,232 +1,35 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, tap, map } from 'rxjs/operators';
 import { Issue } from '../models/issue';
-import { TaskPriority } from '../../tasks/models/task-priority.enum';
-import { TaskStatus } from '../../tasks/models/task-status.enum';
-import { Comment } from '../../../shared/models/comment';
-import { IssuePriority } from '../models/issue-priority.enum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IssueService {
-  private issues: Issue[] = [];
+  private apiUrl = 'http://localhost:8081/issue';
   private issuesSubject = new BehaviorSubject<Issue[]>([]);
 
-  private initializeMockIssues(): void {
-    const mockIssues: Issue[] = [
-      {
-        id: 1,
-        title: "Login Page Authentication Bug",
-        description: "Users unable to login with correct credentials intermittently",
-        category: "BugFix",
-        reportedDate: new Date("2024-03-01"),
-        dueDate: new Date("2024-03-15"),
-        projectId: 1,
-        priority: IssuePriority.HIGH,
-        tasks: [
-          {
-            id: 1,
-            name: "Investigate login failures",
-            description: "Check server logs for authentication errors",
-            priority: TaskPriority.HIGH,
-            status: TaskStatus.IN_PROGRESS,
-            completed: false,
-            assignedTo: [
-              {
-                id: 1,
-                firstName: "John",
-                lastName: "Doe"
-              },
-              {
-                id: 2,
-                firstName: "Jane",
-                lastName: "Smith"
-              },
-              {
-                id: 3,
-                firstName: "Mike",
-                lastName: "Johnson"
-              }
-            ],
-            estimatedHours: 4,
-            dueDate: new Date("2024-03-10"),
-            projectId: 1
-          },
-          {
-            id: 7,
-            name: "Fix session timeout issue",
-            description: "Ensure sessions do not expire prematurely",
-            priority: TaskPriority.HIGH,
-            status: TaskStatus.TODO,
-            completed: false,
-            assignedTo: [
-              {
-                id: 1,
-                firstName: "John",
-                lastName: "Doe"
-              }
-            ],
-            estimatedHours: 3,
-            dueDate: new Date("2024-03-12"),
-            projectId: 1
-          },
-          {
-            id: 8,
-            name: "Improve error messages",
-            description: "Provide more descriptive error messages on login failure",
-            priority: TaskPriority.MEDIUM,
-            status: TaskStatus.TODO,
-            completed: false,
-            assignedTo: [
-              {
-                id: 2,
-                firstName: "Jane",
-                lastName: "Smith"
-              }
-            ],
-            estimatedHours: 2,
-            dueDate: new Date("2024-03-14"),
-            projectId: 1
-          }
-        ]
-      },
-      {
-        id: 2,
-        title: "Add Dark Mode Support",
-        description: "Implement system-wide dark mode theme",
-        category: "Feature",
-        reportedDate: new Date("2024-03-02"),
-        dueDate: new Date("2024-03-30"),
-        projectId: 2,
-        priority: IssuePriority.MEDIUM,
-        tasks: [
-          {
-            id: 2,
-            name: "Create dark theme variables",
-            description: "Define color palette for dark mode",
-            priority: TaskPriority.MEDIUM,
-            status: TaskStatus.TODO,
-            completed: false,
-            assignedTo: [{ id: 2, firstName: "Jane", lastName: "Smith" }],
-            estimatedHours: 6,
-            dueDate: new Date("2024-03-20"),
-            projectId: 2
-          }
-        ]
-      },
-      {
-        id: 3,
-        title: "Performance Optimization",
-        description: "Improve load times on the dashboard",
-        category: "Enhancement",
-        reportedDate: new Date("2024-03-03"),
-        dueDate: new Date("2024-04-15"),
-        projectId: 1,
-        priority: IssuePriority.HIGH,
-        tasks: [
-          {
-            id: 3,
-            name: "Profile dashboard performance",
-            description: "Use Chrome DevTools to identify bottlenecks",
-            priority: TaskPriority.HIGH,
-            status: TaskStatus.TODO,
-            completed: false,
-            assignedTo: [{ id: 3, firstName: "Mike", lastName: "Johnson" }],
-            estimatedHours: 8,
-            dueDate: new Date("2024-04-01"),
-            projectId: 1
-          }
-        ]
-      },
-      {
-        id: 4,
-        title: "API Documentation Update",
-        description: "Update API docs with new endpoints",
-        category: "Documentation",
-        reportedDate: new Date("2024-03-04"),
-        dueDate: new Date("2024-03-20"),
-        projectId: 2,
-        priority: IssuePriority.LOW,
-        tasks: [
-          {
-            id: 4,
-            name: "Document new endpoints",
-            description: "Add OpenAPI specifications",
-            priority: TaskPriority.LOW,
-            status: TaskStatus.COMPLETED,
-            completed: true,
-            assignedTo: [{ id: 4, firstName: "Sarah", lastName: "Wilson" }],
-            estimatedHours: 3,
-            dueDate: new Date("2024-03-18"),
-            projectId: 2
-          }
-        ]
-      },
-      {
-        id: 5,
-        title: "Mobile Responsive Layout",
-        description: "Fix layout issues on mobile devices",
-        category: "BugFix",
-        reportedDate: new Date("2024-03-05"),
-        dueDate: new Date("2024-03-25"),
-        projectId: 1,
-        priority: IssuePriority.MEDIUM,
-        tasks: [
-          {
-            id: 5,
-            name: "Fix mobile navigation",
-            description: "Address hamburger menu issues",
-            priority: TaskPriority.MEDIUM,
-            status: TaskStatus.IN_PROGRESS,
-            completed: false,
-            assignedTo: [{ id: 5, firstName: "Alex", lastName: "Brown" }],
-            estimatedHours: 5,
-            dueDate: new Date("2024-03-22"),
-            projectId: 1
-          }
-        ]
-      },
-      {
-        id: 6,
-        title: "User Settings Enhancement",
-        description: "Add new preference options to user settings",
-        category: "Feature",
-        reportedDate: new Date("2024-03-06"),
-        dueDate: new Date("2024-04-06"),
-        projectId: 2,
-        priority: IssuePriority.LOW,
-        tasks: [
-          {
-            id: 6,
-            name: "Design new settings UI",
-            description: "Create mockups for new preferences",
-            priority: TaskPriority.MEDIUM,
-            status: TaskStatus.TODO,
-            completed: false,
-            assignedTo: [{ id: 6, firstName: "Emily", lastName: "Davis" }],
-            estimatedHours: 7,
-            dueDate: new Date("2024-03-28"),
-            projectId: 2
-          }
-        ]
-      }
-    ];
-
-    this.issues = mockIssues;
-    this.issuesSubject.next([...this.issues]);
+  constructor(private http: HttpClient) {
+    this.loadIssues();
   }
 
-  constructor() {
-    this.initializeMockIssues();
+  private loadIssues(): void {
+    this.http.get<Issue[]>(`${this.apiUrl}/getAll`).pipe(
+      tap(issues => this.issuesSubject.next(issues)),
+      catchError(this.handleError)
+    ).subscribe();
   }
 
   getIssues(): Observable<Issue[]> {
     return this.issuesSubject.asObservable();
   }
 
-  getIssueById(id: number): Issue | undefined {
-    return this.issues.find(issue => issue.id === id);
+  getIssueById(id: number): Observable<Issue> {
+    return this.http.get<Issue>(`${this.apiUrl}/get/${id}`).pipe(
+      catchError(this.handleError)
+    );
   }
 
   getIssuesByProject(projectId: number): Observable<Issue[]> {
@@ -235,22 +38,54 @@ export class IssueService {
     );
   }
 
-  addIssue(issue: Issue): void {
-    this.issues.push(issue);
-    this.issuesSubject.next([...this.issues]);
+  addIssue(issue: Issue): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/create`, issue).pipe(
+      tap(() => {
+        const issues = this.issuesSubject.value;
+        this.issuesSubject.next([...issues, issue]);
+      }),
+      catchError(this.handleError)
+    );
   }
 
-  updateIssue(updatedIssue: Issue): void {
-    const index = this.issues.findIndex(issue => issue.id === updatedIssue.id);
-    if (index !== -1) {
-      this.issues[index] = updatedIssue;
-      this.issuesSubject.next([...this.issues]);
-    }
+  updateIssue(id: number, issue: Issue): Observable<Issue> {
+    return this.http.put<Issue>(`${this.apiUrl}/update/${id}`, issue).pipe(
+      tap(updatedIssue => {
+        const issues = this.issuesSubject.value;
+        const index = issues.findIndex(i => i.id === id);
+        if (index !== -1) {
+          issues[index] = updatedIssue;
+          this.issuesSubject.next([...issues]);
+        }
+      }),
+      catchError(this.handleError)
+    );
   }
 
-  deleteIssue(id: number): void {
-    this.issues = this.issues.filter(issue => issue.id !== id);
-    this.issuesSubject.next([...this.issues]);
+  deleteIssue(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`).pipe(
+      tap(() => {
+        const issues = this.issuesSubject.value.filter(issue => issue.id !== id);
+        this.issuesSubject.next(issues);
+      }),
+      catchError(this.handleError)
+    );
   }
 
+  assignIssueToUser(issueId: number, userId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/assignToUser/${issueId}/${userId}`, {}).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getAssignedIssues(userId: number): Observable<number[]> {
+    return this.http.get<number[]>(`${this.apiUrl}/getAssignedToUser/${userId}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: any) {
+    console.error('An error occurred:', error);
+    return throwError(() => new Error('Something went wrong; please try again later.'));
+  }
 }

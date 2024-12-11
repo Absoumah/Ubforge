@@ -38,18 +38,19 @@ export class IssueDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.issue = this.issueService.getIssueById(id);
-
-    if (this.issue) {
-      this.commentService.getComments(this.issue.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(comments => {
-          this.comments$.next(comments);
-        });
-    } else {
-      this.toastService.error('Issue not found');
-      this.router.navigate(['/issues']);
-    }
+    this.issueService.getIssueById(id).subscribe(issue => {
+      this.issue = issue;
+      if (this.issue) {
+        this.commentService.getComments(this.issue.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(comments => {
+            this.comments$.next(comments);
+          });
+      } else {
+        this.toastService.error('Issue not found');
+        this.router.navigate(['/issues']);
+      }
+    });
   }
 
   ngOnDestroy(): void {
