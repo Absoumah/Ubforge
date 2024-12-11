@@ -15,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     provideAnimations(),
     importProvidersFrom([BrowserAnimationsModule]),
+    // comment
     // importProvidersFrom([MarkdownModule]),
     importProvidersFrom([MarkdownModule.forRoot()])
   ]
