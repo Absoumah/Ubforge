@@ -143,7 +143,7 @@ export class IssueFormComponent implements OnInit {
       const formValue = this.issueForm.value;
       const issue: Issue = {
         ...formValue,
-        id: this.isEditMode ? this.issueId! : Date.now(),
+        id: this.isEditMode ? this.issueId! : undefined,
         reportedDate: new Date(formValue.reportedDate),
         dueDate: new Date(formValue.dueDate)
       };
@@ -154,9 +154,14 @@ export class IssueFormComponent implements OnInit {
           this.router.navigate(['/issues']);
         });
       } else {
-        this.issueService.addIssue(issue).subscribe(() => {
-          this.toastService.success('Issue created successfully');
-          this.router.navigate(['/issues']);
+        this.issueService.addIssue(issue).subscribe({
+          next: () => {
+            this.toastService.success('Issue created successfully');
+            this.router.navigate(['/issues']);
+          },
+          error: (error) => {
+            this.toastService.error('Failed to create issue: ' + error.message);
+          }
         });
       }
     } else {
