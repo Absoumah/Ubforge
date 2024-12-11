@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.ubforge.ubforge.model.Test;
+import com.ubforge.ubforge.model.Teste;
 import com.ubforge.ubforge.service.TestService;
 
 @RestController
@@ -21,19 +21,19 @@ public class TestController {
 
     //create a new test with request entity
     @PostMapping("/create")
-    public ResponseEntity<Test> createTest(@RequestBody Test test) {
+    public ResponseEntity<Teste> createTest(@RequestBody Teste test) {
         return ResponseEntity.ok(testService.createTest(test));
     }    
 
     //get all tests
     @GetMapping("/getAll")
-    public ResponseEntity<Iterable<Test>> getAllTests() {
+    public ResponseEntity<Iterable<Teste>> getAllTests() {
         return ResponseEntity.ok(testService.getAllTests());
     }
 
     //update test status by id
     @PutMapping("/updateStatus/{id}")
-    public ResponseEntity<Test> updateTestStatus(@PathVariable int id, @RequestBody Test test) {
+    public ResponseEntity<Teste> updateTestStatus(@PathVariable int id, @RequestBody Teste test) {
         return ResponseEntity.ok(testService.updateTestStatus(id,test));
     }
 

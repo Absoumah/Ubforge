@@ -16,6 +16,7 @@ import com.ubforge.ubforge.service.IssueService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import java.net.URI;
 
 //to do filter pagination and permission
 
@@ -28,8 +29,8 @@ public class IssueController {
 
     @PostMapping("/create")
     public ResponseEntity<Void> createIssue(@RequestBody Issue issue) {
-        issueService.createIssue(issue);
-        return ResponseEntity.ok().build();
+        Issue issueCreated = issueService.createIssue(issue);
+        return ResponseEntity.created(URI.create("/issue/" + issueCreated.getIssue_id())).build();
     }
 
     @GetMapping("/getAll")

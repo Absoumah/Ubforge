@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.net.URI;
 
 import com.ubforge.ubforge.service.CommentService;
 
@@ -23,9 +24,10 @@ public class CommentController {
     private CommentService commentService;
 
     //create comment
-    @PostMapping("/add")
-    public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
-        return ResponseEntity.ok(commentService.createComment(comment));
+    @PostMapping("/create")
+    public ResponseEntity<Void> createComment(@RequestBody Comment comment) {
+        Comment createdComment = commentService.createComment(comment);
+        return ResponseEntity.created(URI.create("/comment/" + createdComment.getId())).build();
     }
 
     //get comment by task id response entity
@@ -44,8 +46,6 @@ public class CommentController {
     @GetMapping("/getAll")
     public ResponseEntity<List<Comment>> getAllComments() {
         return ResponseEntity.ok(commentService.getAllComments());
-    }
-    
-    
+    } 
     
 }
