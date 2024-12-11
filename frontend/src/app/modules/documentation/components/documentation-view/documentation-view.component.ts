@@ -5,6 +5,8 @@ import { MarkdownModule } from 'ngx-markdown';
 import { Documentation } from '../../models/documentation';
 import { DocumentationService } from '../../services/documentation.service';
 import { ToastService } from '../../../../shared/services/toast.service';
+import { ConfirmationDialogComponent } from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { DialogService } from '../../../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-documentation-view',
@@ -20,7 +22,8 @@ export class DocumentationViewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private docService: DocumentationService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {
@@ -37,11 +40,20 @@ export class DocumentationViewComponent implements OnInit {
     this.router.navigate(['/documentation/edit', this.doc?.id]);
   }
 
-  onDelete(): void {
-    if (this.doc) {
+  async onDelete(): Promise<void> {
+    const confirmed = await this.dialogService.confirm({
+      title: 'Delete Documentation',
+      message: 'Are you sure you want to delete this documentation? This action cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel'
+    });
+
+    if (confirmed && this.doc) {
       this.docService.deleteDoc(this.doc.id);
       this.toastService.success('Documentation deleted successfully');
       this.router.navigate(['/documentation']);
+    } else {
+      this.toastService.info('Documentation deletion cancelled');
     }
   }
 }
