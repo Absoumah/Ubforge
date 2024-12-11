@@ -8,6 +8,7 @@ import { Documentation, DocumentCategory, DocumentStatus } from '../../models/do
 import { DocumentationService } from '../../services/documentation.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { ProjectStateService } from '../../../project/services/project-state.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-documentation-form',
@@ -84,24 +85,32 @@ export class DocumentationFormComponent implements OnInit {
       return;
     }
 
-    const formValue = this.docForm.value;
-    const doc: Partial<Documentation> = {
-      ...formValue,
-      tags: formValue.tags ? formValue.tags.split(',').map((tag: string) => tag.trim()) : [],
-      author: 'Current User' // TODO: Get from auth service
-    };
-
-    try {
-      if (this.isEditMode && this.docId) {
-        this.docService.updateDoc({ ...doc, id: this.docId } as Documentation);
-        this.toastService.success('Documentation updated successfully');
-      } else {
-        this.docService.addDoc(doc as Omit<Documentation, 'id' | 'createdAt' | 'updatedAt'>);
-        this.toastService.success('Documentation created successfully');
+    this.projectStateService.getActiveProjectId().pipe(take(1)).subscribe(projectId => {
+      if (!projectId) {
+        this.toastService.error('Please select a project first');
+        return;
       }
-      this.router.navigate(['/documentation']);
-    } catch (error) {
-      this.toastService.error('An error occurred while saving');
-    }
+
+      try {
+        const formValue = this.docForm.value;
+        const doc: Partial<Documentation> = {
+          ...formValue,
+          projectId, // Use the current active project ID
+          tags: formValue.tags ? formValue.tags.split(',').map((tag: string) => tag.trim()) : [],
+          author: 'Current User'
+        };
+
+        if (this.isEditMode && this.docId) {
+          this.docService.updateDoc({ ...doc, id: this.docId } as Documentation);
+          this.toastService.success('Documentation updated successfully');
+        } else {
+          this.docService.addDoc(doc as Omit<Documentation, 'id' | 'createdAt' | 'updatedAt'>);
+          this.toastService.success('Documentation created successfully');
+        }
+        this.router.navigate(['/documentation']);
+      } catch (error) {
+        this.toastService.error('An error occurred while saving');
+      }
+    });
   }
 }
