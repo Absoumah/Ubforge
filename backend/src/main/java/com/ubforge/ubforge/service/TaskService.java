@@ -12,7 +12,7 @@ import com.ubforge.ubforge.repository.UserRepository;
 
 @Service
 public class TaskService {
-    
+
     @Autowired
     private TaskRepository taskRepository;
 
@@ -27,7 +27,7 @@ public class TaskService {
         return taskRepository.findById(id).get();
     }
 
-    public Task updateTask(int id,Task task) {
+    public Task updateTask(int id, Task task) {
         if (taskRepository.existsById(id)) {
             task.setId(id);
             taskRepository.save(task);
@@ -49,8 +49,8 @@ public class TaskService {
 
     public Iterable<Task> getTasksByIssueId(int issueId) {
         return taskRepository.findTasksByIssueId(issueId);
-        
-    } 
+
+    }
 
     public Task assignTaskToUser(int taskId, int userId) {
         Task task = taskRepository.findById(taskId)
@@ -67,10 +67,9 @@ public class TaskService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
-        task.setTaskStatus(status);
+        task.setStatus(status);
         return taskRepository.save(task);
     }
-        
 
     public Task addToRelease(int taskId, int releaseId) {
         Task task = taskRepository.findById(taskId)

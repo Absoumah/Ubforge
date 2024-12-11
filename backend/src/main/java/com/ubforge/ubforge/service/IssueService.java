@@ -17,7 +17,7 @@ public class IssueService {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     public Issue createIssue(Issue issue) {
         return issueRepository.save(issue);
     }
@@ -25,10 +25,10 @@ public class IssueService {
     public List<Issue> getAllIssues() {
         return issueRepository.findAll();
     }
-    
-     public Issue updateIssue(int id, Issue issue) {
+
+    public Issue updateIssue(int id, Issue issue) {
         if (issueRepository.existsById(id)) {
-            issue.setIssue_id(id);
+            issue.setId(id);
             return issueRepository.save(issue);
         }
         return null;
@@ -41,7 +41,6 @@ public class IssueService {
     public Issue getIssueById(int id) {
         return issueRepository.findById(id).orElse(null);
     }
-    
 
     public void assignToUser(int issueId, int userId) {
         issueRepository.findById(issueId)
@@ -53,13 +52,13 @@ public class IssueService {
         issueRepository.assignToUser(issueId, userId);
     }
 
-    public Issue addToRelease(int issueId, int releaseId) {
-        Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() -> new RuntimeException("Issue not found"));
+    // public Issue addToRelease(int issueId, int releaseId) {
+    // Issue issue = issueRepository.findById(issueId)
+    // .orElseThrow(() -> new RuntimeException("Issue not found"));
 
-        issue.setReleaseId(releaseId);
-        return issueRepository.save(issue);
-    }
+    // issue.setReleaseId(releaseId);
+    // return issueRepository.save(issue);
+    // }
 
     public Set<Integer> findIssueIdsByUserId(int userId) {
         return issueRepository.findIssueIdsByUserId(userId);
