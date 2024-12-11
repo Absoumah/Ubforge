@@ -1,6 +1,5 @@
 package com.ubforge.ubforge.model;
 
-
 import java.sql.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -68,8 +67,4 @@ public class Project {
     public void setDateCreated(Date dateCreated) {
         this.project_date_created = dateCreated;
     }
-    
-
-
-
 }

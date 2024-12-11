@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
-
 @RestController
 @RequestMapping("project")
 public class ProjectController {
@@ -43,7 +41,7 @@ public class ProjectController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Void> updateProject(@PathVariable int id, @RequestBody Project project) {
-        projectService.updateProject(id,project);
+        projectService.updateProject(id, project);
         return ResponseEntity.ok().build();
     }
 
@@ -52,5 +50,5 @@ public class ProjectController {
         projectService.deleteProject(id);
         return ResponseEntity.ok().build();
     }
-    
+
 }
