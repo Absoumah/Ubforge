@@ -91,19 +91,8 @@ export class TaskService {
             catchError(this.handleError)
         );
     }
-
-    updateTaskStatus(taskId: number, status: TaskStatus): Observable<Task> {
-        return this.http.put<Task>(`${this.apiUrl}/updateStatus/${taskId}/${status}`, {}).pipe(
-            tap(updatedTask => {
-                const tasks = this.tasksSubject.value;
-                const index = tasks.findIndex(t => t.id === taskId);
-                if (index !== -1) {
-                    tasks[index] = updatedTask;
-                    this.tasksSubject.next([...tasks]);
-                }
-            }),
-            catchError(this.handleError)
-        );
+    updateTaskStatus(taskId: number, newStatus: TaskStatus): Observable<Task> {
+        return this.http.put<Task>(`${this.apiUrl}/updateStatus/${taskId}/${newStatus}`, {});
     }
 
     createTaskForm(): FormGroup {

@@ -11,7 +11,7 @@ export interface Task {
     estimatedHours: number;
     completed: boolean;
     status: TaskStatus;
-    dueDate: Date;
+    dueDate: Date | null;
     projectId: number;
     issueId?: number;
 }
