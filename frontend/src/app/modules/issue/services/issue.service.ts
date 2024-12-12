@@ -17,6 +17,7 @@ export class IssueService {
 
   private loadIssues(): void {
     this.http.get<Issue[]>(`${this.apiUrl}/getAll`).pipe(
+      map(issues => issues.filter(issue => issue !== null)),
       tap(issues => this.issuesSubject.next(issues)),
       catchError(this.handleError)
     ).subscribe();
@@ -34,15 +35,17 @@ export class IssueService {
 
   getIssuesByProject(projectId: number): Observable<Issue[]> {
     return this.issuesSubject.pipe(
-      map(issues => issues.filter(issue => issue.projectId === projectId))
+      map(issues => issues.filter(issue => issue?.projectId === projectId))
     );
   }
 
-  addIssue(issue: Issue): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/create`, issue).pipe(
-      tap(() => {
-        const issues = this.issuesSubject.value;
-        this.issuesSubject.next([...issues, issue]);
+  addIssue(issue: Issue): Observable<Issue> {
+    return this.http.post<Issue>(`${this.apiUrl}/create`, issue).pipe(
+      tap(createdIssue => {
+        if (createdIssue) {
+          const issues = this.issuesSubject.value;
+          this.issuesSubject.next([...issues, createdIssue]);
+        }
       }),
       catchError(this.handleError)
     );
@@ -51,11 +54,13 @@ export class IssueService {
   updateIssue(id: number, issue: Issue): Observable<Issue> {
     return this.http.put<Issue>(`${this.apiUrl}/update/${id}`, issue).pipe(
       tap(updatedIssue => {
-        const issues = this.issuesSubject.value;
-        const index = issues.findIndex(i => i.id === id);
-        if (index !== -1) {
-          issues[index] = updatedIssue;
-          this.issuesSubject.next([...issues]);
+        if (updatedIssue) {
+          const issues = this.issuesSubject.value;
+          const index = issues.findIndex(i => i.id === id);
+          if (index !== -1) {
+            issues[index] = updatedIssue;
+            this.issuesSubject.next([...issues]);
+          }
         }
       }),
       catchError(this.handleError)

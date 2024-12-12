@@ -26,9 +26,9 @@ public class IssueController {
     private IssueService issueService;
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createIssue(@RequestBody Issue issue) {
-        issueService.createIssue(issue);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Issue> createIssue(@RequestBody Issue issue) {
+        Issue createdIssue = issueService.createIssue(issue);
+        return ResponseEntity.ok(createdIssue);
     }
 
     @GetMapping("/getAll")

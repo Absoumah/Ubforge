@@ -141,21 +141,34 @@ export class IssueFormComponent implements OnInit {
   onSubmit(): void {
     if (this.issueForm.valid) {
       const formValue = this.issueForm.value;
+      const projectId = this.issueForm.get('projectId')?.value;
+
+      if (!projectId) {
+        this.toastService.error('No project ID found');
+        return;
+      }
+
       const issue: Issue = {
         ...formValue,
         id: this.isEditMode ? this.issueId! : undefined,
+        projectId: projectId,
         reportedDate: new Date(formValue.reportedDate),
         dueDate: new Date(formValue.dueDate)
       };
 
       if (this.isEditMode && this.issueId) {
-        this.issueService.updateIssue(this.issueId, issue).subscribe(() => {
-          this.toastService.success('Issue updated successfully');
-          this.router.navigate(['/issues']);
+        this.issueService.updateIssue(this.issueId, issue).subscribe({
+          next: (updatedIssue) => {
+            this.toastService.success('Issue updated successfully');
+            this.router.navigate(['/issues', updatedIssue.id]);
+          },
+          error: (error) => {
+            this.toastService.error('Failed to update issue: ' + error.message);
+          }
         });
       } else {
         this.issueService.addIssue(issue).subscribe({
-          next: () => {
+          next: (createdIssue) => {
             this.toastService.success('Issue created successfully');
             this.router.navigate(['/issues']);
           },
