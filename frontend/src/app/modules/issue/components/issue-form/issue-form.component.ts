@@ -158,9 +158,9 @@ export class IssueFormComponent implements OnInit {
 
       if (this.isEditMode && this.issueId) {
         this.issueService.updateIssue(this.issueId, issue).subscribe({
-          next: (updatedIssue) => {
+          next: () => {
             this.toastService.success('Issue updated successfully');
-            this.router.navigate(['/issues', updatedIssue.id]);
+            this.router.navigate(['/issues']);
           },
           error: (error) => {
             this.toastService.error('Failed to update issue: ' + error.message);
@@ -168,7 +168,7 @@ export class IssueFormComponent implements OnInit {
         });
       } else {
         this.issueService.addIssue(issue).subscribe({
-          next: (createdIssue) => {
+          next: () => {
             this.toastService.success('Issue created successfully');
             this.router.navigate(['/issues']);
           },

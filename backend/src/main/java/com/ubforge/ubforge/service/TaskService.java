@@ -1,6 +1,7 @@
 package com.ubforge.ubforge.service;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,15 +26,16 @@ public class TaskService {
     }
 
     public Task getTaskById(int id) {
-        return taskRepository.findById(id).get();
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
     }
 
     public Task updateTask(int id, Task task) {
         if (taskRepository.existsById(id)) {
             task.setId(id);
-            taskRepository.save(task);
+            return taskRepository.save(task);
         }
-        return taskRepository.save(task);
+        throw new RuntimeException("Task not found");
     }
 
     public void deleteTask(int id) {
@@ -44,15 +46,6 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Iterable<Task> getTaskByUserId(int id) {
-        return taskRepository.findByAssignToId(id);
-    }
-
-    public Iterable<Task> getTasksByIssueId(int issueId) {
-        return taskRepository.findTasksByIssueId(issueId);
-
-    }
-
     public Task assignTaskToUser(int taskId, int userId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
@@ -60,7 +53,13 @@ public class TaskService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        task.setAssignTo(user);
+        List<User> assignedUsers = task.getAssignedTo();
+        if (assignedUsers == null) {
+            assignedUsers = new ArrayList<>();
+        }
+        assignedUsers.add(user);
+        task.setAssignedTo(assignedUsers);
+
         return taskRepository.save(task);
     }
 
@@ -69,14 +68,6 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
         task.setStatus(status);
-        return taskRepository.save(task);
-    }
-
-    public Task addToRelease(int taskId, int releaseId) {
-        Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
-
-        task.setReleaseId(releaseId);
         return taskRepository.save(task);
     }
 }

@@ -1,6 +1,7 @@
 package com.ubforge.ubforge.model;
 
-import java.sql.Date;
+import java.util.List;
+import java.util.Date;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,36 +12,43 @@ public class Task {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priority")
+    private TaskPriority priority;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "task_assigned_users", 
+               joinColumns = @JoinColumn(name = "task_id"), 
+               inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> assignedTo;
+
+    @Column(name = "estimated_hours")
+    private double estimatedHours;
+
+    @Column(name = "completed")
+    private boolean completed;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private TaskStatus status;
+
+    @Column(name = "due_date")
+    private Date dueDate;
+
+    @Column(name = "project_id")
+    private int projectId;
+
+    @ManyToOne
     @JoinColumn(name = "issue_id")
     private Issue issue;
 
-    @Column(name = "author_id")
-    private int authorId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assign_to", referencedColumnName = "user_id")
-    private User assignTo;
-
-    @Column(name = "created_date")
-    private Date createdDate;
-
-    @Column(name = "priority")
-    private String priority;
-
-    @Column(name = "release_id")
-    private Integer releaseId;
-
-    // Standard getters and setters
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -49,12 +57,12 @@ public class Task {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -65,12 +73,60 @@ public class Task {
         this.description = description;
     }
 
-    public String getStatus() {
+    public TaskPriority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(TaskPriority priority) {
+        this.priority = priority;
+    }
+
+    public List<User> getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(List<User> assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
+    public double getEstimatedHours() {
+        return estimatedHours;
+    }
+
+    public void setEstimatedHours(double estimatedHours) {
+        this.estimatedHours = estimatedHours;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public TaskStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 
     public Issue getIssue() {
@@ -79,45 +135,5 @@ public class Task {
 
     public void setIssue(Issue issue) {
         this.issue = issue;
-    }
-
-    public int getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
-    }
-
-    public User getAssignTo() {
-        return assignTo;
-    }
-
-    public void setAssignTo(User assignTo) {
-        this.assignTo = assignTo;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getPriority() {
-        return priority;
-    }
-
-    public void setPriority(String priority) {
-        this.priority = priority;
-    }
-
-    public Integer getReleaseId() {
-        return releaseId;
-    }
-
-    public void setReleaseId(Integer releaseId) {
-        this.releaseId = releaseId;
     }
 }

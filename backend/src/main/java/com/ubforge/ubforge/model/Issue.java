@@ -110,4 +110,15 @@ public class Issue {
     public void setPriority(IssuePriority priority) {
         this.priority = priority;
     }
+
+    // Helper methods to manage bidirectional relationship
+    public void addTask(Task task) {
+        tasks.add(task);
+        task.setIssue(this);
+    }
+
+    public void removeTask(Task task) {
+        tasks.remove(task);
+        task.setIssue(null);
+    }
 }
