@@ -13,6 +13,7 @@ export interface Task {
     status: TaskStatus;
     dueDate: Date;
     projectId: number;
+    issueId?: number;
 }
 
 
@@ -26,6 +27,7 @@ export interface TaskForm {
     status: TaskStatus;
     dueDate: Date;
     projectId: number;
+    issueId?: number;
 }
 
 export { TaskPriority, TaskStatus };

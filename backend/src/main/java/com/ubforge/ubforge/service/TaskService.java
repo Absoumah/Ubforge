@@ -22,6 +22,10 @@ public class TaskService {
     private UserRepository userRepository;
 
     public Task createTask(Task task) {
+        if (task.getIssue() != null) {
+            // Ensure bidirectional relationship
+            task.getIssue().getTasks().add(task);
+        }
         return taskRepository.save(task);
     }
 
@@ -33,9 +37,12 @@ public class TaskService {
     public Task updateTask(int id, Task task) {
         if (taskRepository.existsById(id)) {
             task.setId(id);
+            if (task.getIssue() != null) {
+                task.getIssue().getTasks().add(task);
+            }
             return taskRepository.save(task);
         }
-        throw new RuntimeException("Task not found");
+        return null;
     }
 
     public void deleteTask(int id) {

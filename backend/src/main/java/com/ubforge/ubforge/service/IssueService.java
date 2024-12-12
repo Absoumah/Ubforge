@@ -19,6 +19,10 @@ public class IssueService {
     private UserRepository userRepository;
 
     public Issue createIssue(Issue issue) {
+        // Set bidirectional relationships
+        if (issue.getTasks() != null) {
+            issue.getTasks().forEach(task -> task.setIssue(issue));
+        }
         return issueRepository.save(issue);
     }
 
@@ -29,6 +33,9 @@ public class IssueService {
     public Issue updateIssue(int id, Issue issue) {
         if (issueRepository.existsById(id)) {
             issue.setId(id);
+            if (issue.getTasks() != null) {
+                issue.getTasks().forEach(task -> task.setIssue(issue));
+            }
             return issueRepository.save(issue);
         }
         return null;

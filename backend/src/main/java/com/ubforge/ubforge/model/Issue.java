@@ -3,6 +3,9 @@ package com.ubforge.ubforge.model;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -29,6 +32,7 @@ public class Issue {
     private Date dueDate;
 
     @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Task> tasks = new ArrayList<>();
 
     @Column(name = "project_id")
@@ -111,7 +115,6 @@ public class Issue {
         this.priority = priority;
     }
 
-    // Helper methods to manage bidirectional relationship
     public void addTask(Task task) {
         tasks.add(task);
         task.setIssue(this);

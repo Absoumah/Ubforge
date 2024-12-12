@@ -1,6 +1,9 @@
 package com.ubforge.ubforge.model;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Date;
 import jakarta.persistence.*;
 
@@ -23,9 +26,7 @@ public class Task {
     private TaskPriority priority;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "task_assigned_users", 
-               joinColumns = @JoinColumn(name = "task_id"), 
-               inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "task_assigned_users", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> assignedTo;
 
     @Column(name = "estimated_hours")
@@ -44,8 +45,9 @@ public class Task {
     @Column(name = "project_id")
     private int projectId;
 
-    @ManyToOne
-    @JoinColumn(name = "issue_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "issue_id", nullable = false)
+    @JsonBackReference
     private Issue issue;
 
     // Getters and Setters
