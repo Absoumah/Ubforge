@@ -37,9 +37,14 @@ public class TaskService {
     public Task updateTask(int id, Task task) {
         if (taskRepository.existsById(id)) {
             task.setId(id);
-            if (task.getIssue() != null) {
-                task.getIssue().getTasks().add(task);
+
+            Task existingTask = taskRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Task not found"));
+
+            if (task.getIssue() == null) {
+                task.setIssue(existingTask.getIssue());
             }
+
             return taskRepository.save(task);
         }
         return null;
