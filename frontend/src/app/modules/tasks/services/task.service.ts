@@ -18,11 +18,6 @@ export class TaskService {
     private tasksSubject = new BehaviorSubject<Task[]>([]);
     private currentUserId = 1; // TODO: Get from auth service
 
-    private mockUsers: AssignedUser[] = [
-        { id: 1, firstName: 'John', lastName: 'Doe' },
-        { id: 2, firstName: 'Jane', lastName: 'Smith' }
-    ];
-
     constructor(
         private http: HttpClient,
         private fb: FormBuilder
@@ -112,16 +107,17 @@ export class TaskService {
         return {
             ...formValue,
             completed: formValue.status === TaskStatus.COMPLETED,
-            dueDate: formValue.dueDate ? new Date(formValue.dueDate) : new Date(),
-            assignedTo: formValue.assignedTo.map(userId =>
-                this.mockUsers.find(user => user.id === userId) ||
-                { id: userId, firstName: 'Unknown', lastName: 'User' }
-            )
+            dueDate: formValue.dueDate ? new Date(formValue.dueDate) : null,
+            assignedTo: formValue.assignedTo.map(userId => ({ id: userId } as AssignedUser))
         };
     }
 
+    //TODO : put it in a separate service
     getAvailableUsers(): Observable<AssignedUser[]> {
-        return of(this.mockUsers);
+        return this.http.get<AssignedUser[]>('http://localhost:8081/user/getAll')
+            .pipe(
+                catchError(this.handleError)
+            );
     }
 
     private handleError(error: any) {
