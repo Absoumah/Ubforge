@@ -34,6 +34,10 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found"));
     }
 
+    public List<Task> getTasksByProject(int projectId) {
+        return taskRepository.findByProjectId(projectId);
+    }
+
     public Task updateTask(int id, Task task) {
         if (taskRepository.existsById(id)) {
             task.setId(id);

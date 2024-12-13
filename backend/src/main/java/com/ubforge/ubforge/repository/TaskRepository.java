@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import com.ubforge.ubforge.model.Task;
+import java.util.List;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer> {
@@ -13,4 +14,5 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     Iterable<Task> findTasksByIssueId(int issueId);
 
+    List<Task> findByProjectId(int projectId);
 }
