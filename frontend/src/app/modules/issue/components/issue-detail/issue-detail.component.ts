@@ -38,18 +38,19 @@ export class IssueDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.issue = this.issueService.getIssueById(id);
-
-    if (this.issue) {
-      this.commentService.getComments(this.issue.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(comments => {
-          this.comments$.next(comments);
-        });
-    } else {
-      this.toastService.error('Issue not found');
-      this.router.navigate(['/issues']);
-    }
+    this.issueService.getIssueById(id).subscribe(issue => {
+      this.issue = issue;
+      if (this.issue) {
+        this.commentService.getComments(this.issue.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(comments => {
+            this.comments$.next(comments);
+          });
+      } else {
+        this.toastService.error('Issue not found');
+        this.router.navigate(['/issues']);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -88,9 +89,17 @@ export class IssueDetailComponent implements OnInit, OnDestroy {
     });
 
     if (confirmed && this.issue) {
-      this.issueService.deleteIssue(this.issue.id);
-      this.toastService.success('Issue deleted successfully');
-      this.router.navigate(['/issues']);
+      // Add subscription and error handling
+      this.issueService.deleteIssue(this.issue.id).subscribe({
+        next: () => {
+          this.toastService.success('Issue deleted successfully');
+          this.router.navigate(['/issues']);
+        },
+        error: (error) => {
+          console.error('Error deleting issue:', error);
+          this.toastService.error('Failed to delete issue');
+        }
+      });
     } else {
       this.toastService.info('Issue deletion cancelled');
     }

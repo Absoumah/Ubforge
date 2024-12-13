@@ -11,8 +11,9 @@ export interface Task {
     estimatedHours: number;
     completed: boolean;
     status: TaskStatus;
-    dueDate: Date;
+    dueDate: Date | null;
     projectId: number;
+    issueId?: number;
 }
 
 
@@ -26,6 +27,7 @@ export interface TaskForm {
     status: TaskStatus;
     dueDate: Date;
     projectId: number;
+    issueId?: number;
 }
 
 export { TaskPriority, TaskStatus };

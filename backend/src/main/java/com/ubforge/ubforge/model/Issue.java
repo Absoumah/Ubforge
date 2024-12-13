@@ -1,117 +1,127 @@
 package com.ubforge.ubforge.model;
 
 import java.sql.Date;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "issues")
 public class Issue {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int issue_id;
+    @Column(name = "id")
+    private int id;
 
-    @Column(name = "issue_title")
-    private String issue_title;
+    @Column(name = "title", nullable = false)
+    private String title;
 
-    @Column(name = "issue_description")
-    private String issue_description;
+    @Column(name = "category")
+    private String category;
 
-    @Column(name = "issue_status")
-    private String issue_status;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "issue_priority")
-    private String issue_priority;
+    @Column(name = "reported_date")
+    private Date reportedDate;
 
-    @ManyToOne
-    @JoinColumn(name = "issue_author", referencedColumnName = "user_id")    
-    private User issue_author;
+    @Column(name = "due_date")
+    private Date dueDate;
 
-    @Column(name = "project_id")    
-    private int project_id;
+    @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Task> tasks = new ArrayList<>();
 
-    @Column(name = "issue_date_created")
-    private Date issue_date_created;
+    @Column(name = "project_id")
+    private int projectId;
 
-    @Column(name = "release_id")
-    private Integer releaseId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priority")
+    private IssuePriority priority;
 
-    public Integer getReleaseId() {
-        return releaseId;
+    // Standard getters and setters
+    public int getId() {
+        return id;
     }
 
-    public void setReleaseId(Integer releaseId) {
-        this.releaseId = releaseId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public User getIssue_author() {
-        return issue_author;
+    public String getTitle() {
+        return title;
     }
 
-    public String getIssue_description() {
-        return issue_description;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public int getIssue_id() {
-        return issue_id;
-    }
-    
-    public String getIssue_priority() {
-        return issue_priority;
+    public String getCategory() {
+        return category;
     }
 
-    public String getIssue_status() {
-        return issue_status;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getIssue_title() {
-        return issue_title;
+    public String getDescription() {
+        return description;
     }
 
-    public void setIssue_author(User issue_author) {
-        this.issue_author = issue_author;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setIssue_description(String issue_description) {
-        this.issue_description = issue_description;
+    public Date getReportedDate() {
+        return reportedDate;
     }
 
-    public void setIssue_id(int issue_id) {
-        this.issue_id = issue_id;
+    public void setReportedDate(Date reportedDate) {
+        this.reportedDate = reportedDate;
     }
 
-    public void setIssue_priority(String issue_priority) {
-        this.issue_priority = issue_priority;
+    public Date getDueDate() {
+        return dueDate;
     }
 
-    public void setIssue_status(String issue_status) {
-        this.issue_status = issue_status;
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
     }
 
-    public void setIssue_title(String issue_title) {
-        this.issue_title = issue_title;
+    public List<Task> getTasks() {
+        return tasks;
     }
 
-    public Date getIssue_date_created() {
-        return issue_date_created;
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
-    public void setIssue_date_created(Date issue_date_created) {
-        this.issue_date_created = issue_date_created;
+    public int getProjectId() {
+        return projectId;
     }
 
-    public int getProject_id() {
-        return project_id;
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 
-    public void setProject_id(int project_id) {
-        this.project_id = project_id;
-    }   
+    public IssuePriority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(IssuePriority priority) {
+        this.priority = priority;
+    }
+
+    public void addTask(Task task) {
+        tasks.add(task);
+        task.setIssue(this);
+    }
+
+    public void removeTask(Task task) {
+        tasks.remove(task);
+        task.setIssue(null);
+    }
 }

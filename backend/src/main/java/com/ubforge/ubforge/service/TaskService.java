@@ -1,6 +1,7 @@
 package com.ubforge.ubforge.service;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,10 +10,11 @@ import com.ubforge.ubforge.model.Task;
 import com.ubforge.ubforge.model.User;
 import com.ubforge.ubforge.repository.TaskRepository;
 import com.ubforge.ubforge.repository.UserRepository;
+import com.ubforge.ubforge.model.TaskStatus;
 
 @Service
 public class TaskService {
-    
+
     @Autowired
     private TaskRepository taskRepository;
 
@@ -20,19 +22,36 @@ public class TaskService {
     private UserRepository userRepository;
 
     public Task createTask(Task task) {
+        if (task.getIssue() != null) {
+            // Ensure bidirectional relationship
+            task.getIssue().getTasks().add(task);
+        }
         return taskRepository.save(task);
     }
 
     public Task getTaskById(int id) {
-        return taskRepository.findById(id).get();
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
     }
 
-    public Task updateTask(int id,Task task) {
+    public List<Task> getTasksByProject(int projectId) {
+        return taskRepository.findByProjectId(projectId);
+    }
+
+    public Task updateTask(int id, Task task) {
         if (taskRepository.existsById(id)) {
             task.setId(id);
-            taskRepository.save(task);
+
+            Task existingTask = taskRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Task not found"));
+
+            if (task.getIssue() == null) {
+                task.setIssue(existingTask.getIssue());
+            }
+
+            return taskRepository.save(task);
         }
-        return taskRepository.save(task);
+        return null;
     }
 
     public void deleteTask(int id) {
@@ -43,15 +62,6 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Iterable<Task> getTaskByUserId(int id) {
-        return taskRepository.findByAssignToId(id);
-    }
-
-    public Iterable<Task> getTasksByIssueId(int issueId) {
-        return taskRepository.findTasksByIssueId(issueId);
-        
-    } 
-
     public Task assignTaskToUser(int taskId, int userId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
@@ -59,24 +69,21 @@ public class TaskService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        task.setAssignTo(user);
+        List<User> assignedUsers = task.getAssignedTo();
+        if (assignedUsers == null) {
+            assignedUsers = new ArrayList<>();
+        }
+        assignedUsers.add(user);
+        task.setAssignedTo(assignedUsers);
+
         return taskRepository.save(task);
     }
 
-    public Task updateTaskStatus(int taskId, String status) {
+    public Task updateTaskStatus(int taskId, TaskStatus status) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
-        task.setTaskStatus(status);
-        return taskRepository.save(task);
-    }
-        
-
-    public Task addToRelease(int taskId, int releaseId) {
-        Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
-
-        task.setReleaseId(releaseId);
+        task.setStatus(status);
         return taskRepository.save(task);
     }
 }
