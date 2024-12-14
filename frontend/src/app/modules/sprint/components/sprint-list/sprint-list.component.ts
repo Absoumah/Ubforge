@@ -56,20 +56,17 @@ export class SprintListComponent implements OnInit, OnDestroy {
   async onDelete(id: number): Promise<void> {
     const confirmed = await this.dialogService.confirm({
       title: 'Delete Sprint',
-      message: 'Are you sure you want to delete this sprint? This action cannot be undone.',
-      confirmText: 'Delete',
-      cancelText: 'Cancel'
+      message: 'Are you sure you want to delete this sprint?'
     });
 
     if (confirmed) {
-      const deleted = this.sprintService.deleteSprint(id);
-      if (deleted) {
-        this.toastService.success('Sprint deleted successfully');
-      } else {
-        this.toastService.error('Failed to delete sprint');
-      }
-    } else {
-      this.toastService.info('Sprint deletion cancelled');
+      this.sprintService.deleteSprint(id).subscribe({
+        next: () => {
+          this.toastService.success('Sprint deleted successfully');
+          this.loadSprints();
+        },
+        error: () => this.toastService.error('Failed to delete sprint')
+      });
     }
   }
 

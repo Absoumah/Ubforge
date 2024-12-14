@@ -35,7 +35,7 @@ export class SprintFormComponent implements OnInit {
     this.sprintForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],
-      startDate: ['', Validators.required],
+      startDate: [' ', Validators.required],
       endDate: ['', Validators.required],
       status: [SprintStatus.PLANNED, Validators.required],
       projectId: ['', Validators.required]
@@ -60,8 +60,8 @@ export class SprintFormComponent implements OnInit {
         if (sprint) {
           this.sprintForm.patchValue({
             ...sprint,
-            startDate: sprint.startDate.toISOString().split('T')[0],
-            endDate: sprint.endDate.toISOString().split('T')[0]
+            startDate: sprint.startDate,
+            endDate: sprint.endDate,
           });
           this.selectedIssueIds = sprint.issues.map(id => +id);
         }
@@ -85,26 +85,32 @@ export class SprintFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.sprintForm.valid) {
-      try {
-        const sprintData = {
-          ...this.sprintForm.value,
-          startDate: new Date(this.sprintForm.value.startDate),
-          endDate: new Date(this.sprintForm.value.endDate),
-          tasks: [],
-          issues: this.selectedIssueIds.map(id => id.toString())
-        };
+      const sprintData = {
+        ...this.sprintForm.value,
+        startDate: new Date(this.sprintForm.value.startDate),
+        endDate: new Date(this.sprintForm.value.endDate),
+        tasks: [],
+        issues: this.selectedIssueIds
+      };
 
-        if (this.isEditMode && this.sprintId) {
-          this.sprintService.updateSprint({ ...sprintData, id: this.sprintId });
-          this.toastService.success('Sprint updated successfully');
-        } else {
-          this.sprintService.createSprint(sprintData);
-          this.toastService.success('Sprint created successfully');
-        }
-
-        this.router.navigate(['/sprints']);
-      } catch (error) {
-        this.toastService.error('Error saving sprint');
+      if (this.isEditMode && this.sprintId) {
+        this.sprintService.updateSprint({ ...sprintData, id: Number(this.sprintId) })
+          .subscribe({
+            next: () => {
+              this.toastService.success('Sprint updated successfully');
+              this.router.navigate(['/sprints']);
+            },
+            error: () => this.toastService.error('Error updating sprint')
+          });
+      } else {
+        this.sprintService.createSprint(sprintData)
+          .subscribe({
+            next: () => {
+              this.toastService.success('Sprint created successfully');
+              this.router.navigate(['/sprints']);
+            },
+            error: () => this.toastService.error('Error creating sprint')
+          });
       }
     }
   }

@@ -81,28 +81,21 @@ export class SprintDetailComponent implements OnInit {
   }
 
   async onDelete(): Promise<void> {
-    if (!this.sprint) {
-      this.toastService.error('Sprint not found');
-      return;
-    }
+    if (!this.sprint) return;
 
     const confirmed = await this.dialogService.confirm({
       title: 'Delete Sprint',
-      message: 'Are you sure you want to delete this sprint? This action cannot be undone.',
-      confirmText: 'Delete',
-      cancelText: 'Cancel'
+      message: 'Are you sure you want to delete this sprint?'
     });
 
     if (confirmed) {
-      const deleted = this.sprintService.deleteSprint(this.sprint.id);
-      if (deleted) {
-        this.toastService.success('Sprint deleted successfully');
-        this.router.navigate(['/sprints']);
-      } else {
-        this.toastService.error('Failed to delete sprint');
-      }
-    } else {
-      this.toastService.info('Sprint deletion cancelled');
+      this.sprintService.deleteSprint(this.sprint.id).subscribe({
+        next: () => {
+          this.toastService.success('Sprint deleted successfully');
+          this.router.navigate(['/sprints']);
+        },
+        error: () => this.toastService.error('Failed to delete sprint')
+      });
     }
   }
 }
