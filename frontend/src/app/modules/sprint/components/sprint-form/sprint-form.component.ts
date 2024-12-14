@@ -56,7 +56,7 @@ export class SprintFormComponent implements OnInit {
     if (id) {
       this.isEditMode = true;
       this.sprintId = id;
-      this.sprintService.getSprint(id).pipe(take(1)).subscribe(sprint => {
+      this.sprintService.getSprint(Number(id)).pipe(take(1)).subscribe(sprint => {
         if (sprint) {
           this.sprintForm.patchValue({
             ...sprint,

@@ -41,7 +41,7 @@ export class SprintListComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(projectId => {
           if (!projectId) return [];
-          return this.sprintService.getSprintsByProject(projectId.toString());
+          return this.sprintService.getSprintsByProject(projectId);
         })
       )
       .subscribe(sprints => {
@@ -49,11 +49,11 @@ export class SprintListComponent implements OnInit, OnDestroy {
       });
   }
 
-  onEdit(id: string): void {
+  onEdit(id: number): void {
     this.router.navigate(['/sprints/edit', id]);
   }
 
-  async onDelete(id: string): Promise<void> {
+  async onDelete(id: number): Promise<void> {
     const confirmed = await this.dialogService.confirm({
       title: 'Delete Sprint',
       message: 'Are you sure you want to delete this sprint? This action cannot be undone.',

@@ -14,8 +14,8 @@ import { ProgressBarComponent } from '../../../shared/components/progress-bar/pr
 })
 export class SprintItemComponent {
   @Input() sprint!: Sprint;
-  @Output() edit = new EventEmitter<string>();
-  @Output() delete = new EventEmitter<string>();
+  @Output() edit = new EventEmitter<number>();
+  @Output() delete = new EventEmitter<number>();
 
   constructor(private router: Router) { }
 

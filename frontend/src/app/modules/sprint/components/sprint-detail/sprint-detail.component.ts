@@ -50,7 +50,7 @@ export class SprintDetailComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.sprintService.getSprint(id).subscribe(sprint => {
+      this.sprintService.getSprint(Number(id)).subscribe(sprint => {
         if (sprint) {
           this.sprint = sprint;
           this.loadRelatedIssues();
@@ -66,7 +66,7 @@ export class SprintDetailComponent implements OnInit {
     if (this.sprint?.issues?.length) {
       this.issueService.getIssues().subscribe(issues => {
         this.relatedIssues = issues.filter(issue =>
-          this.sprint?.issues?.includes(issue.id.toString())
+          this.sprint?.issues?.includes(issue.id)
         );
       });
     }
