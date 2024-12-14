@@ -28,12 +28,7 @@ export class DocumentationListComponent implements OnInit {
     private router: Router,
     private projectStateService: ProjectStateService
   ) {
-    this.docs$ = this.projectStateService.getActiveProjectId().pipe(
-      switchMap(projectId => {
-        if (!projectId) return of([]);
-        return this.docService.getDocs(projectId);
-      })
-    );
+    this.docs$ = this.docService.docs$;
   }
 
   ngOnInit(): void {}

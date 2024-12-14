@@ -51,7 +51,11 @@ export class DocumentationService {
 
   deleteDoc(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
-      tap(() => this.loadDocs())
+      tap(() => {
+        const currentDocs = this.docsSubject.value;
+        const updatedDocs = currentDocs.filter(doc => doc.id !== id);
+        this.docsSubject.next(updatedDocs);
+      })
     );
   }
 }
