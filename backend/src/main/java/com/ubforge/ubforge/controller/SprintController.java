@@ -67,4 +67,10 @@ public class SprintController {
         sprintService.removeIssueFromSprint(sprintId, issueId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/progress/{id}")
+    public ResponseEntity<Double> getSprintProgress(@PathVariable int id) {
+        double progress = sprintService.calculateSprintProgress(id);
+        return ResponseEntity.ok(progress);
+    }
 }

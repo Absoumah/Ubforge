@@ -86,4 +86,8 @@ export class SprintService {
   removeIssueFromSprint(sprintId: number, issueId: number): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${sprintId}/removeIssue/${issueId}`, {});
   }
+
+  getSprintProgress(id: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/progress/${id}`);
+  }
 }
