@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -15,7 +15,7 @@ import { DialogService } from '../../../../shared/services/dialog.service';
   templateUrl: './release-list.component.html',
   styleUrls: ['./release-list.component.scss']
 })
-export class ReleaseListComponent {
+export class ReleaseListComponent implements OnInit {
   releases$: Observable<Release[]>;
 
   constructor(
@@ -25,6 +25,9 @@ export class ReleaseListComponent {
     private dialogService: DialogService
   ) {
     this.releases$ = this.releaseService.getReleases();
+  }
+
+  ngOnInit(): void {
   }
 
   onEdit(id: number): void {

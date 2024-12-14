@@ -19,7 +19,13 @@ export class ReleaseService {
     private projectStateService: ProjectStateService,
     private readonly sprintService: SprintService
   ) {
-    this.loadReleases();
+    this.projectStateService.getActiveProjectId().subscribe(projectId => {
+      if (projectId) {
+        this.getReleasesByProject(projectId);
+      } else {
+        this.loadReleases();
+      }
+    });
   }
 
   private loadReleases(): void {
@@ -31,6 +37,13 @@ export class ReleaseService {
 
   getReleases(): Observable<Release[]> {
     return this.releases$;
+  }
+
+  getReleasesByProject(projectId: number): void {
+    this.http.get<Release[]>(`${this.apiUrl}/project/${projectId}`).subscribe({
+      next: (releases) => this.releasesSubject.next(releases),
+      error: (err) => console.error('Failed to load releases for project', err)
+    });
   }
 
   getReleaseById(id: number): Observable<Release> {

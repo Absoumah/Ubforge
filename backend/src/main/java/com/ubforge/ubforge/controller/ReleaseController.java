@@ -3,6 +3,7 @@ package com.ubforge.ubforge.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.ubforge.ubforge.model.Release;
@@ -22,6 +23,12 @@ public class ReleaseController {
     @GetMapping("/get/{id}")
     public Release getReleaseById(@PathVariable int id) {
         return releaseService.getReleaseById(id);
+    }
+
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<List<Release>> getReleasesByProject(@PathVariable int projectId) {
+        List<Release> releases = releaseService.getReleasesByProject(projectId);
+        return ResponseEntity.ok(releases);
     }
 
     @PostMapping("/create")

@@ -20,6 +20,10 @@ public class ReleaseService {
         return releaseRepository.findById(id).orElse(null);
     }
 
+    public List<Release> getReleasesByProject(int projectId) {
+        return releaseRepository.findByProjectId(projectId);
+    }
+
     public Release createRelease(Release release) {
         return releaseRepository.save(release);
     }
