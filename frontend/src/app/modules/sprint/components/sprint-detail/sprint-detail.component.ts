@@ -20,7 +20,6 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     trigger('expandCollapse', [
       state('collapsed', style({
         height: '0',
-        overflow: 'hidden',
         opacity: '0'
       })),
       state('expanded', style({
