@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, catchError, EMPTY } from 'rxjs';
 import { MarkdownModule } from 'ngx-markdown';
 import { Documentation } from '../../models/documentation';
 import { DocumentationService } from '../../services/documentation.service';
 import { ToastService } from '../../../../shared/services/toast.service';
-import { ConfirmationDialogComponent } from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { DialogService } from '../../../../shared/services/dialog.service';
 
 @Component({
@@ -16,7 +16,7 @@ import { DialogService } from '../../../../shared/services/dialog.service';
   styleUrl: './documentation-view.component.scss'
 })
 export class DocumentationViewComponent implements OnInit {
-  doc: Documentation | undefined;
+  doc$!: Observable<Documentation>;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,32 +28,40 @@ export class DocumentationViewComponent implements OnInit {
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.doc = this.docService.getDocById(id);
-
-    if (!this.doc) {
-      this.toastService.error('Documentation not found');
-      this.router.navigate(['/documentation']);
-    }
+    this.doc$ = this.docService.getDocById(id).pipe(
+      catchError(error => {
+        this.toastService.error('Documentation not found');
+        this.router.navigate(['/documentation']);
+        return EMPTY;
+      })
+    );
   }
 
   onEdit(): void {
-    this.router.navigate(['/documentation/edit', this.doc?.id]);
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.router.navigate(['/documentation/edit', id]);
   }
 
   async onDelete(): Promise<void> {
     const confirmed = await this.dialogService.confirm({
       title: 'Delete Documentation',
-      message: 'Are you sure you want to delete this documentation? This action cannot be undone.',
+      message: 'Are you sure you want to delete this documentation?',
       confirmText: 'Delete',
       cancelText: 'Cancel'
     });
 
-    if (confirmed && this.doc) {
-      this.docService.deleteDoc(this.doc.id);
-      this.toastService.success('Documentation deleted successfully');
-      this.router.navigate(['/documentation']);
-    } else {
-      this.toastService.info('Documentation deletion cancelled');
+    if (confirmed) {
+      const id = Number(this.route.snapshot.paramMap.get('id'));
+      this.docService.deleteDoc(id).subscribe({
+        next: () => {
+          this.toastService.success('Documentation deleted successfully');
+          this.router.navigate(['/documentation']);
+        },
+        error: (error) => {
+          this.toastService.error('Failed to delete documentation');
+          console.error('Error deleting documentation:', error);
+        }
+      });
     }
   }
 }

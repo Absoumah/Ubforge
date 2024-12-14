@@ -1,4 +1,3 @@
-// documentation-form.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -15,7 +14,7 @@ import { take } from 'rxjs';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MarkdownModule],
   templateUrl: './documentation-form.component.html',
-  styleUrl: './documentation-form.component.scss'
+  styleUrls: ['./documentation-form.component.scss'],
 })
 export class DocumentationFormComponent implements OnInit {
   docForm!: FormGroup;
@@ -28,15 +27,24 @@ export class DocumentationFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private docService: DocumentationService,
-    private projectStateService: ProjectStateService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private projectStateService: ProjectStateService
   ) { }
 
   ngOnInit(): void {
     this.initializeForm();
-    this.checkEditMode();
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      this.docId = Number(idParam);
+      this.isEditMode = true;
+      this.loadDoc();
+    }
+  }
+
+  togglePreview(): void {
+    this.previewMode = !this.previewMode;
   }
 
   private initializeForm(): void {
@@ -46,44 +54,35 @@ export class DocumentationFormComponent implements OnInit {
       category: [DocumentCategory.GENERAL, [Validators.required]],
       status: [DocumentStatus.DRAFT, [Validators.required]],
       tags: [''],
-      version: [''],
-      projectId: [this.projectStateService.getActiveProjectId()]
+      version: ['']
     });
-  }
-
-  private checkEditMode(): void {
-    const idParam = this.route.snapshot.paramMap.get('id');
-    if (idParam) {
-      this.docId = Number(idParam);
-      this.isEditMode = true;
-      this.loadDoc();
-    }
   }
 
   private loadDoc(): void {
     if (this.docId) {
-      const doc = this.docService.getDocById(this.docId);
-      if (doc) {
-        this.docForm.patchValue({
-          ...doc,
-          tags: doc.tags?.join(', ')
-        });
-      } else {
-        this.toastService.error('Documentation not found');
-        this.router.navigate(['/documentation']);
-      }
+      this.docService.getDocById(this.docId).subscribe({
+        next: (doc: Documentation) => {
+          this.docForm.patchValue({
+            ...doc,
+            tags: doc.tags?.join(', ')
+          });
+        },
+        error: () => {
+          this.toastService.error('Documentation not found');
+          this.router.navigate(['/documentation']);
+        }
+      });
     }
-  }
-
-  togglePreview(): void {
-    this.previewMode = !this.previewMode;
   }
 
   onSubmit(): void {
-    if (this.docForm.invalid) {
-      this.toastService.error('Please fill all required fields correctly');
-      return;
-    }
+    if (this.docForm.invalid) return;
+
+    const formValue = this.docForm.value;
+    const doc = {
+      ...formValue,
+      tags: formValue.tags ? formValue.tags.split(',').map((t: string) => t.trim()) : []
+    };
 
     this.projectStateService.getActiveProjectId().pipe(take(1)).subscribe(projectId => {
       if (!projectId) {
@@ -91,25 +90,24 @@ export class DocumentationFormComponent implements OnInit {
         return;
       }
 
-      try {
-        const formValue = this.docForm.value;
-        const doc: Partial<Documentation> = {
-          ...formValue,
-          projectId, // Use the current active project ID
-          tags: formValue.tags ? formValue.tags.split(',').map((tag: string) => tag.trim()) : [],
-          author: 'Current User'
-        };
+      const docWithProject = { ...doc, projectId };
 
-        if (this.isEditMode && this.docId) {
-          this.docService.updateDoc({ ...doc, id: this.docId } as Documentation);
-          this.toastService.success('Documentation updated successfully');
-        } else {
-          this.docService.addDoc(doc as Omit<Documentation, 'id' | 'createdAt' | 'updatedAt'>);
-          this.toastService.success('Documentation created successfully');
-        }
-        this.router.navigate(['/documentation']);
-      } catch (error) {
-        this.toastService.error('An error occurred while saving');
+      if (this.isEditMode && this.docId) {
+        this.docService.updateDoc(this.docId, docWithProject).subscribe({
+          next: () => {
+            this.toastService.success('Documentation updated successfully');
+            this.router.navigate(['/documentation']);
+          },
+          error: () => this.toastService.error('Failed to update documentation')
+        });
+      } else {
+        this.docService.addDoc(docWithProject).subscribe({
+          next: () => {
+            this.toastService.success('Documentation created successfully');
+            this.router.navigate(['/documentation']);
+          },
+          error: () => this.toastService.error('Failed to create documentation')
+        });
       }
     });
   }
