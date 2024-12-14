@@ -1,4 +1,3 @@
-// src/app/modules/release/components/release-form/release-form.component.ts
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -8,13 +7,13 @@ import { ReleaseService } from '../../services/release.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { ProjectStateService } from '../../../project/services/project-state.service';
 import { take } from 'rxjs/operators';
-import { IssueSelectorComponent } from '../issue-selector/issue-selector.component';
-import { I } from '@angular/cdk/keycodes';
+import { SprintSelectorComponent } from '../../../sprint/components/sprint-selector/sprint-selector.component';
 
 @Component({
   selector: 'app-release-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IssueSelectorComponent],
+  imports: [CommonModule, ReactiveFormsModule, SprintSelectorComponent],
+
   templateUrl: './release-form.component.html',
   styleUrl: './release-form.component.scss'
 })
@@ -23,7 +22,7 @@ export class ReleaseFormComponent implements OnInit {
   releaseStatuses = Object.values(ReleaseStatus);
   isEditMode = false;
   releaseId?: number;
-  selectedIssueIds: number[] = [];
+  selectedSprintIds: number[] = [];
 
 
   constructor(
@@ -41,7 +40,7 @@ export class ReleaseFormComponent implements OnInit {
       releaseDate: ['', [Validators.required]],
       status: [ReleaseStatus.PLANNED, [Validators.required]],
       projectId: ['', [Validators.required]],
-      issueIds: [[]]
+      sprintIds: [[]]
     });
   }
 
@@ -50,22 +49,29 @@ export class ReleaseFormComponent implements OnInit {
     this.setProjectId();
   }
 
-  onIssueSelectionChange(issueIds: number[]): void {
-    this.selectedIssueIds = issueIds;
-    this.releaseForm.patchValue({ issueIds });
-  }
+
 
   private checkEditMode(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode = true;
       this.releaseId = +id;
-      const release = this.releaseService.getReleaseById(this.releaseId);
-      if (release) {
-        this.releaseForm.patchValue(release);
-        this.selectedIssueIds = release.issueIds || [];
-      }
+      this.releaseService.getReleaseById(this.releaseId).subscribe({
+        next: (release) => {
+          this.releaseForm.patchValue(release);
+          this.selectedSprintIds = release.sprintIds || [];
+        },
+        error: () => {
+          this.toastService.error('Failed to load release');
+          this.router.navigate(['/releases']);
+        }
+      });
     }
+  }
+
+  onSprintSelectionChange(sprintIds: number[]): void {
+    this.selectedSprintIds = sprintIds;
+    this.releaseForm.patchValue({ sprintIds });
   }
 
   private setProjectId(): void {
@@ -83,24 +89,24 @@ export class ReleaseFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.releaseForm.valid) {
-      try {
-        const release = {
-          ...this.releaseForm.value,
-          id: this.isEditMode ? this.releaseId! : Date.now()
-        };
+      const release = {
+        ...this.releaseForm.value,
+        id: this.isEditMode ? this.releaseId! : undefined
+      };
 
-        if (this.isEditMode) {
-          this.releaseService.updateRelease(release);
-          this.toastService.success('Release updated successfully');
-        } else {
-          this.releaseService.addRelease(release);
-          this.toastService.success('Release created successfully');
+      const operation = this.isEditMode ?
+        this.releaseService.updateRelease(release) :
+        this.releaseService.addRelease(release);
+
+      operation.subscribe({
+        next: () => {
+          this.toastService.success(`Release ${this.isEditMode ? 'updated' : 'created'} successfully`);
+          this.router.navigate(['/releases']);
+        },
+        error: () => {
+          this.toastService.error(`Failed to ${this.isEditMode ? 'update' : 'create'} release`);
         }
-
-        this.router.navigate(['/releases']);
-      } catch (error) {
-        this.toastService.error('An error occurred while saving the release');
-      }
+      });
     } else {
       this.toastService.error('Please fill all required fields correctly');
     }

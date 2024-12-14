@@ -1,124 +1,133 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, forkJoin, of } from 'rxjs';
+import { map, tap, switchMap } from 'rxjs/operators';
 import { Release, ReleaseStatus } from '../models/release';
 import { ProjectStateService } from '../../project/services/project-state.service';
-import { IssueService } from '../../issue/services/issue.service';
+import { SprintService } from '../../sprint/services/sprint.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReleaseService {
-  private releases: Release[] = [];
-  private releasesSubject = new BehaviorSubject<Release[]>([]);
+  private readonly apiUrl = 'http://localhost:8081/release';
+  private readonly releasesSubject = new BehaviorSubject<Release[]>([]);
+  releases$ = this.releasesSubject.asObservable();
 
-  constructor(private projectStateService: ProjectStateService,
-    private issueService: IssueService) {
-    this.initializeMockReleases();
+  constructor(
+    private readonly http: HttpClient,
+    private projectStateService: ProjectStateService,
+    private readonly sprintService: SprintService
+  ) {
+    this.loadReleases();
   }
 
-  private initializeMockReleases(): void {
-    const mockReleases: Release[] = [
-      {
-        id: 1,
-        version: '1.0.0',
-        name: 'Initial Release',
-        description: 'First stable release with core features',
-        releaseDate: '2024-04-01',
-        status: ReleaseStatus.IN_PROGRESS,
-        projectId: 1
-      },
-      {
-        id: 2,
-        version: '1.1.0',
-        name: 'Feature Update',
-        description: 'New features and improvements',
-        releaseDate: '2024-05-15',
-        status: ReleaseStatus.PLANNED,
-        projectId: 1
-      },
-      {
-        id: 3,
-        version: '2.0.0',
-        name: 'Major Update',
-        description: 'Complete redesign and new architecture',
-        releaseDate: '2024-06-30',
-        status: ReleaseStatus.PLANNED,
-        projectId: 2
-      },
-      {
-        id: 4,
-        version: '1.0.1',
-        name: 'Bugfix Release',
-        description: 'Critical bug fixes and performance improvements',
-        releaseDate: '2024-03-15',
-        status: ReleaseStatus.RELEASED,
-        projectId: 2
-      }
-    ];
-
-    this.releases = mockReleases;
-    this.releasesSubject.next([...this.releases]);
+  private loadReleases(): void {
+    this.http.get<Release[]>(`${this.apiUrl}/getAll`).subscribe({
+      next: (releases) => this.releasesSubject.next(releases),
+      error: (err) => console.error('Failed to load releases', err)
+    });
   }
 
   getReleases(): Observable<Release[]> {
-    return this.releasesSubject.pipe(
-      map(releases => {
-        let activeProjectId: number | null = null;
-        this.projectStateService.getActiveProjectId().subscribe(id => activeProjectId = id);
-        if (!activeProjectId) return [];
-        return releases.filter(release => release.projectId === activeProjectId);
+    return this.releases$;
+  }
+
+  getReleaseById(id: number): Observable<Release> {
+    return this.http.get<Release>(`${this.apiUrl}/get/${id}`);
+  }
+
+  addRelease(release: Omit<Release, 'id'>): Observable<Release> {
+    return this.http.post<Release>(`${this.apiUrl}/create`, release).pipe(
+      tap(newRelease => {
+        const releases = this.releasesSubject.getValue();
+        this.releasesSubject.next([...releases, newRelease]);
       })
     );
   }
 
-  getReleaseById(id: number): Release | undefined {
-    return this.releases.find(release => release.id === id);
+  updateRelease(release: Release): Observable<Release> {
+    return this.http.put<Release>(`${this.apiUrl}/update/${release.id}`, release).pipe(
+      tap(updatedRelease => {
+        const releases = this.releasesSubject.getValue().map(r => 
+          r.id === updatedRelease.id ? updatedRelease : r
+        );
+        this.releasesSubject.next(releases);
+      })
+    );
   }
 
-  addRelease(release: Release): void {
-    const newRelease = {
-      ...release,
-      id: Date.now()
-    };
-    this.releases.push(newRelease);
-    this.releasesSubject.next([...this.releases]);
+  deleteRelease(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`).pipe(
+      tap(() => {
+        const releases = this.releasesSubject.getValue().filter(r => r.id !== id);
+        this.releasesSubject.next(releases);
+      })
+    );
   }
 
-  updateRelease(updatedRelease: Release): void {
-    const index = this.releases.findIndex(release => release.id === updatedRelease.id);
-    if (index !== -1) {
-      this.releases[index] = updatedRelease;
-      this.releasesSubject.next([...this.releases]);
-    }
+  addSprintToRelease(releaseId: number, sprintId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${releaseId}/addSprint/${sprintId}`, {}).pipe(
+      tap(() => this.updateReleaseProgress(releaseId))
+    );
   }
 
-  deleteRelease(id: number): void {
-    this.releases = this.releases.filter(release => release.id !== id);
-    this.releasesSubject.next([...this.releases]);
+  removeSprintFromRelease(releaseId: number, sprintId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${releaseId}/removeSprint/${sprintId}`, {}).pipe(
+      tap(() => this.updateReleaseProgress(releaseId))
+    );
   }
+  calculateReleaseProgress(releaseId: number): Observable<{
+    totalSprints: number;
+    completedSprints: number;
+    percentage: number;
+  }> {
+    return this.getReleaseById(releaseId).pipe(
+      switchMap(release => {
+        if (!release.sprintIds?.length) {
+          return of({ totalSprints: 0, completedSprints: 0, percentage: 0 });
+        }
 
-  calculateProgress(releaseId: number): Observable<number> {
-    return this.issueService.getIssues().pipe(
-      map(issues => {
-        const release = this.getReleaseById(releaseId);
-        if (!release?.issueIds?.length) return 0;
-
-        const releaseIssues = issues.filter(issue =>
-          release.issueIds?.includes(issue.id)
+        const sprintProgresses = release.sprintIds.map(sprintId => 
+          this.sprintService.getSprintProgress(sprintId)
         );
 
-        if (!releaseIssues.length) return 0;
+        return forkJoin(sprintProgresses).pipe(
+          map(progresses => {
+            const totalSprints = release.sprintIds.length;
+            const completedSprints = progresses.filter(p => p === 100).length;
+            const percentage = progresses.reduce((sum, curr) => sum + curr, 0) / totalSprints;
 
-        const totalTasks = releaseIssues.reduce((sum, issue) =>
-          sum + issue.tasks.length, 0);
-
-        const completedTasks = releaseIssues.reduce((sum, issue) =>
-          sum + issue.tasks.filter(task => task.completed).length, 0);
-
-        return totalTasks ? Math.round((completedTasks / totalTasks) * 100) : 0;
+            return {
+              totalSprints,
+              completedSprints,
+              percentage
+            };
+          })
+        );
       })
     );
   }
 
+  private updateReleaseProgress(releaseId: number): void {
+    this.calculateReleaseProgress(releaseId).subscribe(progress => {
+      this.getReleaseById(releaseId).subscribe(release => {
+        if (release) {
+          const updatedRelease = {
+            ...release,
+            progress,
+            status: this.determineReleaseStatus(progress)
+          };
+          this.updateRelease(updatedRelease).subscribe();
+        }
+      });
+    });
+  }
+
+  private determineReleaseStatus(progress: { percentage: number }): ReleaseStatus {
+    if (progress.percentage === 0) return ReleaseStatus.PLANNED;
+    if (progress.percentage === 100) return ReleaseStatus.RELEASED;
+    if (progress.percentage > 0) return ReleaseStatus.IN_PROGRESS;
+    return ReleaseStatus.DELAYED;
+  }
 }

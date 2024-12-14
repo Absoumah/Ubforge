@@ -68,6 +68,22 @@
         font-size: $font-size-small;
     }
 
+    .release-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: $spacing-base 0;
+        color: $text-muted;
+        font-size: $font-size-small;
+    
+        .sprint-count {
+            background: rgba($primary-color, 0.1);
+            padding: $spacing-xs $spacing-small;
+            border-radius: $border-radius;
+            color: $primary-color;
+        }
+    }
+
     .actions {
         display: flex;
         gap: $spacing-small;
@@ -103,5 +119,13 @@
 
     .progress-section {
         margin: $spacing-base 0;
+    
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: $spacing-small;
+            color: $text-muted;
+            font-size: $font-size-small;
+        }
     }
 }

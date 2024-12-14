@@ -1,0 +1,76 @@
+@import '../../../../../styles/theme.scss';
+
+.sprint-selector {
+    margin-top: $spacing-base;
+
+    h3 {
+        font-size: $font-size-base;
+        margin-bottom: $spacing-base;
+        font-weight: $font-weight-bold;
+    }
+
+    .sprint-list {
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        padding: $spacing-small;
+    }
+
+    .sprint-item {
+        padding: $spacing-small;
+        border-bottom: 1px solid $border-color;
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        input {
+            margin-right: $spacing-small;
+        }
+
+        .sprint-info {
+            display: flex;
+            align-items: center;
+            gap: $spacing-small;
+
+            .sprint-name {
+                font-size: $font-size-base;
+                color: $text-color;
+            }
+
+            .sprint-status {
+                padding: 2px $spacing-small;
+                border-radius: $border-radius;
+                font-size: $font-size-small;
+
+                &.not_started {
+                    background: rgba($secondary-color, 0.1);
+                    color: $secondary-color;
+                }
+
+                &.in_progress {
+                    background: rgba($primary-color, 0.1);
+                    color: $primary-color;
+                }
+
+                &.completed {
+                    background: rgba($success-color, 0.1);
+                    color: $success-color;
+                }
+            }
+        }
+    }
+
+    .no-sprints {
+        text-align: center;
+        padding: $spacing-base;
+        color: $text-muted;
+    }
+}

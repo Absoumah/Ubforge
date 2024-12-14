@@ -39,10 +39,12 @@
         </div>
 
         <div class="form-group">
-            <app-issue-selector *ngIf="releaseForm.get('projectId')?.value"
-                [projectId]="releaseForm.get('projectId')?.value" [selectedIssueIds]="selectedIssueIds"
-                (issueSelectionChange)="onIssueSelectionChange($event)">
-            </app-issue-selector>
+            <app-sprint-selector 
+                *ngIf="releaseForm.get('projectId')?.value"
+                [projectId]="releaseForm.get('projectId')?.value"
+                [selectedSprintIds]="selectedSprintIds"
+                (sprintSelectionChange)="onSprintSelectionChange($event)">
+            </app-sprint-selector>
         </div>
 
         <button type="submit" [disabled]="releaseForm.invalid">
