@@ -13,7 +13,6 @@ import { SprintSelectorComponent } from '../../../sprint/components/sprint-selec
   selector: 'app-release-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, SprintSelectorComponent],
-
   templateUrl: './release-form.component.html',
   styleUrl: './release-form.component.scss'
 })
@@ -23,6 +22,8 @@ export class ReleaseFormComponent implements OnInit {
   isEditMode = false;
   releaseId?: number;
   selectedSprintIds: number[] = [];
+  minReleaseDate = new Date().toISOString().split('T')[0];
+  maxReleaseDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
 
   constructor(
@@ -50,7 +51,6 @@ export class ReleaseFormComponent implements OnInit {
   }
 
 
-
   private checkEditMode(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -58,7 +58,11 @@ export class ReleaseFormComponent implements OnInit {
       this.releaseId = +id;
       this.releaseService.getReleaseById(this.releaseId).subscribe({
         next: (release) => {
-          this.releaseForm.patchValue(release);
+          const formattedRelease = {
+            ...release,
+            releaseDate: release.releaseDate ? new Date(release.releaseDate).toISOString().split('T')[0] : ''
+          };
+          this.releaseForm.patchValue(formattedRelease);
           this.selectedSprintIds = release.sprintIds || [];
         },
         error: () => {
@@ -89,9 +93,11 @@ export class ReleaseFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.releaseForm.valid) {
+      const formValue = this.releaseForm.value;
       const release = {
-        ...this.releaseForm.value,
-        id: this.isEditMode ? this.releaseId! : undefined
+        ...formValue,
+        id: this.isEditMode ? this.releaseId! : undefined,
+        releaseDate: formValue.releaseDate ? new Date(formValue.releaseDate).toISOString().split('T')[0] : ''
       };
 
       const operation = this.isEditMode ?
