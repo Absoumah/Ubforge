@@ -23,6 +23,8 @@ export class SprintFormComponent implements OnInit {
   sprintId?: string;
   projectId?: number;
   selectedIssueIds: number[] = [];
+  minStartDate = new Date().toISOString().split('T')[0];
+  maxEndDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
   constructor(
     private fb: FormBuilder,
@@ -32,10 +34,12 @@ export class SprintFormComponent implements OnInit {
     private toastService: ToastService,
     private projectStateService: ProjectStateService
   ) {
+    const today = new Date().toISOString().split('T')[0];
+
     this.sprintForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],
-      startDate: [' ', Validators.required],
+      startDate: [today, Validators.required],
       endDate: ['', Validators.required],
       status: [SprintStatus.PLANNED, Validators.required],
       projectId: ['', Validators.required]
@@ -58,11 +62,12 @@ export class SprintFormComponent implements OnInit {
       this.sprintId = id;
       this.sprintService.getSprint(Number(id)).pipe(take(1)).subscribe(sprint => {
         if (sprint) {
-          this.sprintForm.patchValue({
+          const formattedSprint = {
             ...sprint,
-            startDate: sprint.startDate,
-            endDate: sprint.endDate,
-          });
+            startDate: sprint.startDate ? new Date(sprint.startDate).toISOString().split('T')[0] : '',
+            endDate: sprint.endDate ? new Date(sprint.endDate).toISOString().split('T')[0] : '',
+          };
+          this.sprintForm.patchValue(formattedSprint);
           this.selectedIssueIds = sprint.issues.map(id => +id);
         }
       });
@@ -85,10 +90,11 @@ export class SprintFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.sprintForm.valid) {
+      const formValue = this.sprintForm.value;
       const sprintData = {
-        ...this.sprintForm.value,
-        startDate: new Date(this.sprintForm.value.startDate),
-        endDate: new Date(this.sprintForm.value.endDate),
+        ...formValue,
+        startDate: new Date(formValue.startDate).toISOString().split('T')[0],
+        endDate: new Date(formValue.endDate).toISOString().split('T')[0],
         tasks: [],
         issues: this.selectedIssueIds
       };
