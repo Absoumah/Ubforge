@@ -20,7 +20,6 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     trigger('expandCollapse', [
       state('collapsed', style({
         height: '0',
-        overflow: 'hidden',
         opacity: '0'
       })),
       state('expanded', style({
@@ -50,7 +49,7 @@ export class SprintDetailComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.sprintService.getSprint(id).subscribe(sprint => {
+      this.sprintService.getSprint(Number(id)).subscribe(sprint => {
         if (sprint) {
           this.sprint = sprint;
           this.loadRelatedIssues();
@@ -66,7 +65,7 @@ export class SprintDetailComponent implements OnInit {
     if (this.sprint?.issues?.length) {
       this.issueService.getIssues().subscribe(issues => {
         this.relatedIssues = issues.filter(issue =>
-          this.sprint?.issues?.includes(issue.id.toString())
+          this.sprint?.issues?.includes(issue.id)
         );
       });
     }
@@ -81,28 +80,21 @@ export class SprintDetailComponent implements OnInit {
   }
 
   async onDelete(): Promise<void> {
-    if (!this.sprint) {
-      this.toastService.error('Sprint not found');
-      return;
-    }
+    if (!this.sprint) return;
 
     const confirmed = await this.dialogService.confirm({
       title: 'Delete Sprint',
-      message: 'Are you sure you want to delete this sprint? This action cannot be undone.',
-      confirmText: 'Delete',
-      cancelText: 'Cancel'
+      message: 'Are you sure you want to delete this sprint?'
     });
 
     if (confirmed) {
-      const deleted = this.sprintService.deleteSprint(this.sprint.id);
-      if (deleted) {
-        this.toastService.success('Sprint deleted successfully');
-        this.router.navigate(['/sprints']);
-      } else {
-        this.toastService.error('Failed to delete sprint');
-      }
-    } else {
-      this.toastService.info('Sprint deletion cancelled');
+      this.sprintService.deleteSprint(this.sprint.id).subscribe({
+        next: () => {
+          this.toastService.success('Sprint deleted successfully');
+          this.router.navigate(['/sprints']);
+        },
+        error: () => this.toastService.error('Failed to delete sprint')
+      });
     }
   }
 }

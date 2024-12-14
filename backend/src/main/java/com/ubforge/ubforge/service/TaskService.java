@@ -4,8 +4,12 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import com.ubforge.ubforge.events.TaskStatusChangedEvent;
+import com.ubforge.ubforge.model.Issue;
+import com.ubforge.ubforge.model.Sprint;
 import com.ubforge.ubforge.model.Task;
 import com.ubforge.ubforge.model.User;
 import com.ubforge.ubforge.repository.TaskRepository;
@@ -20,6 +24,9 @@ public class TaskService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     public Task createTask(Task task) {
         if (task.getIssue() != null) {
@@ -84,6 +91,11 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
         task.setStatus(status);
-        return taskRepository.save(task);
+        Task updatedTask = taskRepository.save(task);
+
+        // Publish an event after updating the task status
+        eventPublisher.publishEvent(new TaskStatusChangedEvent(this, updatedTask));
+
+        return updatedTask;
     }
 }
