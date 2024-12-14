@@ -25,8 +25,7 @@ export class SprintItemComponent implements OnInit {
 
   
   ngOnInit(): void {
-    this.loadProgress();
-    this.loadTotalTasks();
+    this.loadSprintData();
   }
 
   get statusClass(): string {
@@ -43,6 +42,14 @@ export class SprintItemComponent implements OnInit {
   private loadTotalTasks(): void {
     this.sprintService.getTotalTasksForSprint(this.sprint.id).subscribe(total => {
       this.totalTasks = total;
+    });
+  }
+
+  private loadSprintData(): void {
+    this.sprintService.getSprint(this.sprint.id).subscribe(sprint => {
+      this.sprint = sprint;
+      this.loadProgress();
+      this.loadTotalTasks();
     });
   }
 
