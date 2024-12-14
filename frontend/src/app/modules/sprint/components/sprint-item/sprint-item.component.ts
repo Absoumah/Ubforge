@@ -16,6 +16,11 @@ import { SprintService } from '../../services/sprint.service';
 })
 export class SprintItemComponent implements OnInit {
   @Input() sprint!: Sprint;
+  @Input() set sprintId(id: number) {
+    if (id) {
+      this.loadSprintById(id);
+    }
+  }
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
   progress: number = 0;
@@ -23,9 +28,18 @@ export class SprintItemComponent implements OnInit {
 
   constructor(private router: Router, private sprintService: SprintService) { }
 
-  
+
   ngOnInit(): void {
-    this.loadSprintData();
+    if (this.sprint) {
+      this.loadSprintData();
+    }
+  }
+
+  private loadSprintById(id: number): void {
+    this.sprintService.getSprint(id).subscribe(sprint => {
+      this.sprint = sprint;
+      this.loadSprintData();
+    });
   }
 
   get statusClass(): string {

@@ -120,7 +120,7 @@
             }
         }
 
-        .issues-section {
+        .sprints-section {
             margin-top: $spacing-large;
             border-top: 1px solid $border-color;
             padding-top: $spacing-base;
@@ -162,29 +162,18 @@
                 }
             }
 
-            margin-top: $spacing-large;
-            border-top: 1px solid $border-color;
-            padding-top: $spacing-base;
-
-            h3 {
-                font-size: $font-size-base;
-                font-weight: $font-weight-bold;
-                margin-bottom: $spacing-base;
-                color: $text-color;
-            }
-
-            .issues-list {
+            .sprints-list {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
                 gap: $spacing-base;
 
-                app-issue-item {
+                app-sprint-item {
                     display: block;
                     height: 100%;
                 }
             }
 
-            .no-issues {
+            .no-sprints {
                 text-align: center;
                 padding: $spacing-large;
                 color: $text-muted;
@@ -198,8 +187,8 @@
 @media screen and (max-width: 1024px) {
     .release-detail {
         .release-content {
-            .issues-section {
-                .issues-list {
+            .sprints-section {
+                .sprints-list {
                     grid-template-columns: 1fr;
                 }
             }

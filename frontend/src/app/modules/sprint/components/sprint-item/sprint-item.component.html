@@ -1,4 +1,4 @@
-<div class="sprint-item" (click)="viewSprint()">
+<div class="sprint-item" *ngIf="sprint" (click)="viewSprint()">
     <div class="sprint-header">
         <div class="sprint-info">
             <h3>{{sprint.name}}</h3>

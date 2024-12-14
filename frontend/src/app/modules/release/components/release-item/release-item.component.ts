@@ -17,13 +17,24 @@ export class ReleaseItemComponent implements OnInit {
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
 
-  progress: number = 0;
-
   constructor(private router: Router, private releaseService: ReleaseService) { }
 
   ngOnInit() {
-    this.releaseService.calculateProgress(this.release.id)
-      .subscribe(progress => this.progress = progress);
+    if (!this.release.progress) {
+      this.releaseService.calculateReleaseProgress(this.release.id)
+        .subscribe(progress => {
+          this.release.progress = progress;
+        });
+    }
+  }
+
+  getProgressColor(): string {
+    if (!this.release.progress) return 'primary';
+    const percentage = this.release.progress.percentage;
+    if (percentage === 100) return 'success';
+    if (percentage >= 70) return 'info';
+    if (percentage >= 30) return 'warning';
+    return 'danger';
   }
 
   onEdit(event: Event): void {
