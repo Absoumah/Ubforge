@@ -104,4 +104,21 @@ public class SprintService {
 
         return ((double) completedTasks / allTasks.size()) * 100;
     }
+
+    public int getTotalTasksForSprint(int sprintId) {
+        Sprint sprint = getSprintById(sprintId);
+        List<Integer> issueIds = sprint.getIssues();
+
+        if (issueIds == null || issueIds.isEmpty()) {
+            return 0;
+        }
+
+        int totalTasks = 0;
+        for (int issueId : issueIds) {
+            Issue issue = issueService.getIssueById(issueId);
+            totalTasks += issue.getTasks().size();
+        }
+
+        return totalTasks;
+    }
 }

@@ -90,4 +90,8 @@ export class SprintService {
   getSprintProgress(id: number): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/progress/${id}`);
   }
+
+  getTotalTasksForSprint(id: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/tasks/count/${id}`);
+  }
 }

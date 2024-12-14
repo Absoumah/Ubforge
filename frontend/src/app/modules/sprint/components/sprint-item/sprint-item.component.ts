@@ -19,12 +19,14 @@ export class SprintItemComponent implements OnInit {
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
   progress: number = 0;
+  totalTasks: number = 0;
 
   constructor(private router: Router, private sprintService: SprintService) { }
 
   
   ngOnInit(): void {
     this.loadProgress();
+    this.loadTotalTasks();
   }
 
   get statusClass(): string {
@@ -34,6 +36,13 @@ export class SprintItemComponent implements OnInit {
   private loadProgress(): void {
     this.sprintService.getSprintProgress(this.sprint.id).subscribe(progress => {
       this.progress = progress;
+    });
+  }
+
+  
+  private loadTotalTasks(): void {
+    this.sprintService.getTotalTasksForSprint(this.sprint.id).subscribe(total => {
+      this.totalTasks = total;
     });
   }
 

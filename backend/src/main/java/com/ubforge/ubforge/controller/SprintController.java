@@ -73,4 +73,10 @@ public class SprintController {
         double progress = sprintService.calculateSprintProgress(id);
         return ResponseEntity.ok(progress);
     }
+
+    @GetMapping("/tasks/count/{id}")
+    public ResponseEntity<Integer> getTotalTasksForSprint(@PathVariable int id) {
+        int totalTasks = sprintService.getTotalTasksForSprint(id);
+        return ResponseEntity.ok(totalTasks);
+    }
 }
