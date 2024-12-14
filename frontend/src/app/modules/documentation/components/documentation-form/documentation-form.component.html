@@ -55,8 +55,10 @@
                         placeholder="Write your documentation in Markdown..."></textarea>
                 </div>
                 <div class="preview" *ngIf="previewMode">
-                    <markdown [data]="docForm.get('content')?.value || ''"></markdown>
-                </div>
+                    <markdown [data]="docForm.get('content')?.value || ''" ngPreserveWhitespaces>
+                    </markdown>
+
+                    </div>
             </div>
         </div>
 
