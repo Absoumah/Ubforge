@@ -35,4 +35,34 @@ describe('ToastComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render toast message', () => {
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('.toast-message').textContent).toContain('Test message');
+  });
+
+  it('should have correct CSS class based on toast type', () => {
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('.toast').classList).toContain('success');
+  });
+
+  it('should emit closed event with toast id when close button is clicked', () => {
+    spyOn(component.closed, 'emit');
+    const compiled = fixture.nativeElement;
+    const closeButton = compiled.querySelector('.toast-close');
+    
+    closeButton.click();
+    
+    expect(component.closed.emit).toHaveBeenCalledWith(mockToast.id);
+  });
+
+  it('should emit closed event with toast id when toast is clicked', () => {
+    spyOn(component.closed, 'emit');
+    const compiled = fixture.nativeElement;
+    const toast = compiled.querySelector('.toast');
+    
+    toast.click();
+    
+    expect(component.closed.emit).toHaveBeenCalledWith(mockToast.id);
+  });
 });
