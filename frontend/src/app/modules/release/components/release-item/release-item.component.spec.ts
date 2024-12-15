@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 import { ReleaseItemComponent } from './release-item.component';
 import { ReleaseService } from '../../services/release.service';
 import { Release, ReleaseStatus } from '../../models/release';
@@ -21,18 +21,19 @@ describe('ReleaseItemComponent', () => {
   };
 
   const mockReleaseService = {
-    calculateProgress: jasmine.createSpy('calculateProgress').and.returnValue(of(50))
+    calculateReleaseProgress: jasmine.createSpy('calculateReleaseProgress').and.returnValue(of(50))
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        ReleaseItemComponent,
-        RouterTestingModule
+        ReleaseItemComponent
       ],
       providers: [
+        provideRouter([]),
         { provide: ReleaseService, useValue: mockReleaseService }
-      ]
+      ],
+
     }).compileComponents();
 
     fixture = TestBed.createComponent(ReleaseItemComponent);

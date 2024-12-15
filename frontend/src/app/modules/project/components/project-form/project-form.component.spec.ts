@@ -4,24 +4,25 @@ import { ProjectFormComponent } from './project-form.component';
 import { ProjectService } from '../../services/project.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { of } from 'rxjs';
 
 describe('ProjectFormComponent', () => {
   let component: ProjectFormComponent;
   let fixture: ComponentFixture<ProjectFormComponent>;
-
   const mockProjectService = {
     getCategories: jasmine.createSpy('getCategories').and.returnValue(['Development', 'Design']),
-    getProjectById: jasmine.createSpy('getProjectById').and.returnValue({
+    getProjectById: jasmine.createSpy('getProjectById').and.returnValue(of({
       id: 1,
       name: 'Test Project',
       url: 'http://example.com',
       category: 'Development',
       description: 'Test Description',
       assignedUsers: []
-    }),
+    })),
     addProject: jasmine.createSpy('addProject'),
     updateProject: jasmine.createSpy('updateProject')
   };
+
 
   const mockToastService = {
     success: jasmine.createSpy('success'),

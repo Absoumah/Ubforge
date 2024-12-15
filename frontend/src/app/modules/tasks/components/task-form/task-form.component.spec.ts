@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TaskFormComponent } from './task-form.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('TaskFormComponent', () => {
   let component: TaskFormComponent;
@@ -13,11 +14,11 @@ describe('TaskFormComponent', () => {
       imports: [
         TaskFormComponent,
         ReactiveFormsModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        HttpClientTestingModule
       ],
       providers: [FormBuilder]
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TaskFormComponent);
     component = fixture.componentInstance;

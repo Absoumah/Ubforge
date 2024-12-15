@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SprintFormComponent } from './sprint-form.component';
 import { SprintService } from '../../services/sprint.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { ProjectStateService } from '../../../project/services/project-state.service';
-import { SprintStatus } from '../../models/sprint.interface';
 import { of } from 'rxjs';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('SprintFormComponent', () => {
   let component: SprintFormComponent;
@@ -31,10 +31,11 @@ describe('SprintFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         SprintFormComponent,
-        RouterTestingModule,
         ReactiveFormsModule
       ],
       providers: [
+        provideRouter([]),
+        provideHttpClient(),
         { provide: SprintService, useValue: mockSprintService },
         { provide: ToastService, useValue: mockToastService },
         { provide: ProjectStateService, useValue: mockProjectStateService }

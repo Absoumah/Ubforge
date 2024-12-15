@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { KanbanBoardComponent } from './kanban-board.component';
+import { TaskService } from '../../services/task.service';
+import { ProjectStateService } from '../../../project/services/project-state.service';
 
 describe('KanbanBoardComponent', () => {
   let component: KanbanBoardComponent;
@@ -8,7 +10,8 @@ describe('KanbanBoardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [KanbanBoardComponent]
+      imports: [KanbanBoardComponent, HttpClientTestingModule],
+      providers: [TaskService, ProjectStateService]
     })
     .compileComponents();
 

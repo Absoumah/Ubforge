@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { IssueSelectorComponent } from './issue-selector.component';
 
@@ -8,7 +9,7 @@ describe('IssueSelectorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IssueSelectorComponent]
+      imports: [IssueSelectorComponent, HttpClientTestingModule]
     })
     .compileComponents();
 

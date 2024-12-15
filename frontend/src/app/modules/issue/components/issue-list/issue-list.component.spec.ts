@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientModule } from '@angular/common/http';
+import { RouterTestingModule } from '@angular/router/testing';
 import { IssueListComponent } from './issue-list.component';
 
 describe('IssueListComponent', () => {
@@ -8,7 +9,7 @@ describe('IssueListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IssueListComponent]
+      imports: [IssueListComponent, HttpClientModule, RouterTestingModule]
     })
       .compileComponents();
 

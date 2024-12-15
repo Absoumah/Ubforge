@@ -1,11 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, ActivatedRoute, convertToParamMap } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { IssueDetailComponent } from './issue-detail.component';
 import { IssueService } from '../../services/issue.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { DialogService } from '../../../../shared/services/dialog.service';
 import { Issue } from '../../models/issue';
 import { IssuePriority } from '../../models/issue-priority.enum';
+import { of } from 'rxjs';
 
 describe('IssueDetailComponent', () => {
   let component: IssueDetailComponent;
@@ -24,23 +27,25 @@ describe('IssueDetailComponent', () => {
   };
 
   const mockIssueService = {
-    getIssueById: jasmine.createSpy('getIssueById').and.returnValue(mockIssue)
+    getIssueById: jasmine.createSpy('getIssueById').and.returnValue(of(mockIssue))
   };
-
+  
   const mockToastService = {
     success: jasmine.createSpy('success'),
     error: jasmine.createSpy('error')
   };
-
+  
   const mockDialogService = {
     confirm: jasmine.createSpy('confirm').and.returnValue(Promise.resolve(true))
   };
-
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [IssueDetailComponent],
+    TestBed.configureTestingModule({
+
       providers: [
         provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideHttpClientTesting(),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -53,6 +58,7 @@ describe('IssueDetailComponent', () => {
         { provide: ToastService, useValue: mockToastService },
         { provide: DialogService, useValue: mockDialogService }
       ]
+      
     }).compileComponents();
 
     fixture = TestBed.createComponent(IssueDetailComponent);

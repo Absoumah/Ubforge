@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { IssueItemComponent } from './issue-item.component';
 import { Issue, IssueCategory } from '../../models/issue';
 import { IssuePriority } from '../../models/issue-priority.enum';
@@ -18,12 +19,10 @@ describe('IssueItemComponent', () => {
     priority: IssuePriority.HIGH,
     projectId: 123
   };
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IssueItemComponent]
-    })
-      .compileComponents();
+      imports: [IssueItemComponent, HttpClientTestingModule]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(IssueItemComponent);
     component = fixture.componentInstance;
