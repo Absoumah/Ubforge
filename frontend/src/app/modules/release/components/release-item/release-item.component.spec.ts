@@ -17,7 +17,7 @@ describe('ReleaseItemComponent', () => {
     releaseDate: '2024-03-20',
     status: ReleaseStatus.PLANNED,
     projectId: 1,
-    issueIds: []
+    sprintIds: []
   };
 
   const mockReleaseService = {

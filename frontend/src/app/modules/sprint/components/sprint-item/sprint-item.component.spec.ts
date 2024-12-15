@@ -28,13 +28,13 @@ describe('SprintItemComponent', () => {
 
     // Provide mock sprint data
     component.sprint = {
-      id: '1',
+      id: 1,
       name: 'Test Sprint',
       description: 'Test Description',
       startDate: new Date(),
       endDate: new Date(),
       status: SprintStatus.PLANNED,
-      projectId: '1',
+      projectId: 1,
       tasks: [],
       issues: []
     };
@@ -54,19 +54,19 @@ describe('SprintItemComponent', () => {
     const spy = spyOn(component.edit, 'emit');
     const event = new Event('click');
     component.editSprint(event);
-    expect(spy).toHaveBeenCalledWith('1');
+    expect(spy).toHaveBeenCalledWith(1);
   });
 
   it('should emit delete event', () => {
     const spy = spyOn(component.delete, 'emit');
     const event = new Event('click');
     component.deleteSprint(event);
-    expect(spy).toHaveBeenCalledWith('1');
+    expect(spy).toHaveBeenCalledWith(1);
   });
 
   it('should navigate to sprint detail', () => {
     const spy = spyOn(router, 'navigate');
     component.viewSprint();
-    expect(spy).toHaveBeenCalledWith(['/sprints', '1']);
+    expect(spy).toHaveBeenCalledWith(['/sprints', 1]);
   });
 });

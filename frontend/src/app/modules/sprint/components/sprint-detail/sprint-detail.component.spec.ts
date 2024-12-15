@@ -21,13 +21,13 @@ describe('SprintItemComponent', () => {
 
     // Provide mock sprint data
     component.sprint = {
-      id: '1',
+      id: 1,
       name: 'Test Sprint',
       description: 'Test Description',
       startDate: new Date(),
       endDate: new Date(),
       status: SprintStatus.PLANNED,
-      projectId: '1',
+      projectId: 1,
       tasks: [],
       issues: []
     };
