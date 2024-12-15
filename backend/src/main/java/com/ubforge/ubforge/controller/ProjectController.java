@@ -1,5 +1,6 @@
 package com.ubforge.ubforge.controller;
 
+import java.net.URI;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ public class ProjectController {
 
     @PostMapping("/create")
     public ResponseEntity<Void> createProject(@RequestBody Project project) {
-        projectService.createProject(project);
-        return ResponseEntity.ok().build();
+        Project createdProject = projectService.createProject(project);
+        return ResponseEntity.created(URI.create("/project/" + createdProject.getId())).build();
     }
 
     @GetMapping("/get/{id}")
