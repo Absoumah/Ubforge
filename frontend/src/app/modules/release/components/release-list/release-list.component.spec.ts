@@ -6,11 +6,13 @@ import { ReleaseService } from '../../services/release.service';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { DialogService } from '../../../../shared/services/dialog.service';
 import { ProjectStateService } from '../../../project/services/project-state.service';
+import { Router } from '@angular/router';
 import { of } from 'rxjs';
 
 describe('ReleaseListComponent', () => {
   let component: ReleaseListComponent;
   let fixture: ComponentFixture<ReleaseListComponent>;
+  let router: Router;
 
   const mockReleaseService = {
     getReleases: jasmine.createSpy('getReleases').and.returnValue(of([])),
@@ -19,7 +21,7 @@ describe('ReleaseListComponent', () => {
 
   const mockToastService = {
     success: jasmine.createSpy('success'),
-    error: jasmine.createSpy('error'),
+    error: jasmine.createSpy('error'), 
     info: jasmine.createSpy('info')
   };
 
@@ -48,6 +50,7 @@ describe('ReleaseListComponent', () => {
 
     fixture = TestBed.createComponent(ReleaseListComponent);
     component = fixture.componentInstance;
+    router = TestBed.inject(Router);
     fixture.detectChanges();
   });
 
@@ -55,5 +58,26 @@ describe('ReleaseListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // Add more test cases as needed
+  it('should navigate to edit page when onEdit is called', () => {
+    const spy = spyOn(router, 'navigate');
+    component.onEdit(1);
+    expect(spy).toHaveBeenCalledWith(['/releases/edit', 1]);
+  });
+
+  it('should navigate to create page when createRelease is called', () => {
+    const spy = spyOn(router, 'navigate');
+    component.createRelease();
+    expect(spy).toHaveBeenCalledWith(['/releases/new']);
+  });
+
+  it('should delete release when confirmed', async () => {
+    await component.onDelete(1);
+    expect(mockDialogService.confirm).toHaveBeenCalled();
+    expect(mockReleaseService.deleteRelease).toHaveBeenCalledWith(1);
+    expect(mockToastService.success).toHaveBeenCalledWith('Release deleted successfully');
+  });
+
+  it('should get releases on init', () => {
+    expect(mockReleaseService.getReleases).toHaveBeenCalled();
+  });
 });

@@ -98,4 +98,6 @@ describe('ReleaseDetailComponent', () => {
     await component.onDelete();
     expect(mockToastService.error).toHaveBeenCalledWith('Failed to delete release');
   });
+
+  
 });
