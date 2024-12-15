@@ -1,38 +1,31 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Comment } from '../../models/comment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
-  private comments = new Map<number, Comment[]>();
-  private commentsSubject = new BehaviorSubject<Map<number, Comment[]>>(new Map());
+  private apiUrl = 'http://localhost:8081/comment'; // Update if different
+  private commentsSubject = new BehaviorSubject<Comment[]>([]);
 
-  getComments(entityId: number): Observable<Comment[]> {
-    return this.commentsSubject.pipe(
-      map(comments => comments.get(entityId) || [])
-    );
+  constructor(private http: HttpClient) {}
+
+  getCommentsByTaskId(taskId: number): Observable<Comment[]> {
+    return this.http.get<Comment[]>(`${this.apiUrl}/getByTaskId/${taskId}`);
   }
 
-  addComment(entityId: number, comment: Omit<Comment, 'id' | 'createdAt'>): void {
-    const newComment: Comment = {
-      ...comment,
-      id: Date.now(),
-      createdAt: new Date()
-    };
-
-    const entityComments = this.comments.get(entityId) || [];
-    this.comments.set(entityId, [...entityComments, newComment]);
-    this.commentsSubject.next(new Map(this.comments));
+  getCommentsByIssueId(issueId: number): Observable<Comment[]> {
+    return this.http.get<Comment[]>(`${this.apiUrl}/getByIssueId/${issueId}`);
   }
 
-  deleteComment(entityId: number, commentId: number): void {
-    const entityComments = this.comments.get(entityId) || [];
-    this.comments.set(
-      entityId,
-      entityComments.filter(c => c.id !== commentId)
-    );
-    this.commentsSubject.next(new Map(this.comments));
+  addComment(entityType: string, entityId: number, comment: Omit<Comment, 'id' | 'createdAt'>): Observable<Comment> {
+    const payload = { ...comment, entityType, entityId };
+    return this.http.post<Comment>(`${this.apiUrl}/add`, payload);
+  }
+
+  deleteComment(commentId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/delete/${commentId}`);
   }
 }
