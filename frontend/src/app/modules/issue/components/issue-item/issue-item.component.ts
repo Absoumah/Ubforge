@@ -31,7 +31,7 @@ export class IssueItemComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.commentService.getComments(this.issue.id)
+    this.commentService.getCommentsByIssueId(this.issue.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe(comments => {
         this.commentCount = comments.length;
