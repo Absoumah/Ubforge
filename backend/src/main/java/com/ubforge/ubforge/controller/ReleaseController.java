@@ -3,17 +3,11 @@ package com.ubforge.ubforge.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.ubforge.ubforge.model.Release;
 import com.ubforge.ubforge.service.ReleaseService;
-
 
 @RestController
 @RequestMapping("/release")
@@ -26,21 +20,15 @@ public class ReleaseController {
         return releaseService.getAllReleases();
     }
 
-    @GetMapping("/getById/{id}")
+    @GetMapping("/get/{id}")
     public Release getReleaseById(@PathVariable int id) {
         return releaseService.getReleaseById(id);
     }
 
-    //get status of release
-    @GetMapping("/getReleaseStatus/{id}")
-    public String getReleaseStatus(@PathVariable int id) {
-        return releaseService.getReleaseStatus(id);
-    }
-
-    //put status of release
-    @PostMapping("/setReleaseStatus/{id}/{status}")
-    public String setReleaseStatus(@PathVariable int id, @PathVariable String status) {
-        return releaseService.setReleaseStatus(id, status);
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<List<Release>> getReleasesByProject(@PathVariable int projectId) {
+        List<Release> releases = releaseService.getReleasesByProject(projectId);
+        return ResponseEntity.ok(releases);
     }
 
     @PostMapping("/create")
@@ -48,8 +36,24 @@ public class ReleaseController {
         return releaseService.createRelease(release);
     }
 
-    @DeleteMapping("/releases/{id}")
+    @PutMapping("/update/{id}")
+    public Release updateRelease(@PathVariable int id, @RequestBody Release release) {
+        release.setId(id);
+        return releaseService.updateRelease(release);
+    }
+
+    @DeleteMapping("/delete/{id}")
     public void deleteRelease(@PathVariable int id) {
         releaseService.deleteRelease(id);
+    }
+
+    @PutMapping("/{releaseId}/addSprint/{sprintId}")
+    public void addSprintToRelease(@PathVariable int releaseId, @PathVariable int sprintId) {
+        releaseService.addSprintToRelease(releaseId, sprintId);
+    }
+
+    @PutMapping("/{releaseId}/removeSprint/{sprintId}")
+    public void removeSprintFromRelease(@PathVariable int releaseId, @PathVariable int sprintId) {
+        releaseService.removeSprintFromRelease(releaseId, sprintId);
     }
 }

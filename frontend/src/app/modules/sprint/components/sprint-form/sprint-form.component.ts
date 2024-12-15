@@ -23,6 +23,8 @@ export class SprintFormComponent implements OnInit {
   sprintId?: string;
   projectId?: number;
   selectedIssueIds: number[] = [];
+  minStartDate = new Date().toISOString().split('T')[0];
+  maxEndDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
   constructor(
     private fb: FormBuilder,
@@ -32,10 +34,12 @@ export class SprintFormComponent implements OnInit {
     private toastService: ToastService,
     private projectStateService: ProjectStateService
   ) {
+    const today = new Date().toISOString().split('T')[0];
+
     this.sprintForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],
-      startDate: ['', Validators.required],
+      startDate: [today, Validators.required],
       endDate: ['', Validators.required],
       status: [SprintStatus.PLANNED, Validators.required],
       projectId: ['', Validators.required]
@@ -56,13 +60,14 @@ export class SprintFormComponent implements OnInit {
     if (id) {
       this.isEditMode = true;
       this.sprintId = id;
-      this.sprintService.getSprint(id).pipe(take(1)).subscribe(sprint => {
+      this.sprintService.getSprint(Number(id)).pipe(take(1)).subscribe(sprint => {
         if (sprint) {
-          this.sprintForm.patchValue({
+          const formattedSprint = {
             ...sprint,
-            startDate: sprint.startDate.toISOString().split('T')[0],
-            endDate: sprint.endDate.toISOString().split('T')[0]
-          });
+            startDate: sprint.startDate ? new Date(sprint.startDate).toISOString().split('T')[0] : '',
+            endDate: sprint.endDate ? new Date(sprint.endDate).toISOString().split('T')[0] : '',
+          };
+          this.sprintForm.patchValue(formattedSprint);
           this.selectedIssueIds = sprint.issues.map(id => +id);
         }
       });
@@ -85,26 +90,33 @@ export class SprintFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.sprintForm.valid) {
-      try {
-        const sprintData = {
-          ...this.sprintForm.value,
-          startDate: new Date(this.sprintForm.value.startDate),
-          endDate: new Date(this.sprintForm.value.endDate),
-          tasks: [],
-          issues: this.selectedIssueIds.map(id => id.toString())
-        };
+      const formValue = this.sprintForm.value;
+      const sprintData = {
+        ...formValue,
+        startDate: new Date(formValue.startDate).toISOString().split('T')[0],
+        endDate: new Date(formValue.endDate).toISOString().split('T')[0],
+        tasks: [],
+        issues: this.selectedIssueIds
+      };
 
-        if (this.isEditMode && this.sprintId) {
-          this.sprintService.updateSprint({ ...sprintData, id: this.sprintId });
-          this.toastService.success('Sprint updated successfully');
-        } else {
-          this.sprintService.createSprint(sprintData);
-          this.toastService.success('Sprint created successfully');
-        }
-
-        this.router.navigate(['/sprints']);
-      } catch (error) {
-        this.toastService.error('Error saving sprint');
+      if (this.isEditMode && this.sprintId) {
+        this.sprintService.updateSprint({ ...sprintData, id: Number(this.sprintId) })
+          .subscribe({
+            next: () => {
+              this.toastService.success('Sprint updated successfully');
+              this.router.navigate(['/sprints']);
+            },
+            error: () => this.toastService.error('Error updating sprint')
+          });
+      } else {
+        this.sprintService.createSprint(sprintData)
+          .subscribe({
+            next: () => {
+              this.toastService.success('Sprint created successfully');
+              this.router.navigate(['/sprints']);
+            },
+            error: () => this.toastService.error('Error creating sprint')
+          });
       }
     }
   }

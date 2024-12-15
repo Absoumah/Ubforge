@@ -22,7 +22,7 @@ export class ProjectListComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private toastService: ToastService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.projectService.getProjects().subscribe((projects) => {
@@ -47,10 +47,32 @@ export class ProjectListComponent implements OnInit {
     });
 
     if (confirmed) {
-      this.projectService.deleteProject(id);
-      this.toastService.success('Project deleted successfully');
+      // Add subscription and error handling
+      this.projectService.deleteProject(id).subscribe({
+        next: () => {
+          this.toastService.success('Project deleted successfully');
+          // Refresh project list
+          this.loadProjects(); // Add this method to fetch updated list
+        },
+        error: (error) => {
+          console.error('Error deleting project:', error);
+          this.toastService.error('Failed to delete project');
+        }
+      });
     } else {
       this.toastService.info('Project deletion cancelled');
     }
+  }
+
+  private loadProjects(): void {
+    this.projectService.getProjects().subscribe({
+      next: (projects) => {
+        this.projects = projects;
+      },
+      error: (error) => {
+        console.error('Error loading projects:', error);
+        this.toastService.error('Failed to load projects');
+      }
+    });
   }
 }

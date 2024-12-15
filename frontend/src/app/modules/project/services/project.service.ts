@@ -1,76 +1,49 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { Project } from '../models/project.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
-  private projectsSubject = new BehaviorSubject<Project[]>([]);
-  private initializeMockProjects(): void {
-    const mockProjects: Project[] = [
-      {
-        id: 1,
-        name: 'Project Alpha',
-        url: 'http://example.com/alpha',
-        category: 'Web',
-        description: 'Description for Project Alpha',
-        assignedUsers: [
-          { id: 1, firstName: 'John', lastName: 'Doe' },
-          { id: 2, firstName: 'Jane', lastName: 'Smith' }
-        ],
-        taskIds: [1, 3, 5, 7, 8],
-        issueIds: [1, 3, 5]
-      },
-      {
-        id: 2,
-        name: 'Project Beta',
-        url: 'http://example.com/beta',
-        category: 'Mobile',
-        description: 'Description for Project Beta',
-        assignedUsers: [
-          { id: 3, firstName: 'Alice', lastName: 'Johnson' }
-        ],
-        taskIds: [2, 4, 6],
-        issueIds: [2, 4, 6]
-      }
-    ];
+  private apiUrl = 'http://localhost:8081/project';
 
-    this.projectsSubject.next(mockProjects);
-  }
-
-  constructor() {
-    this.initializeMockProjects();
-  }
-
-  projects$ = this.projectsSubject.asObservable();
+  constructor(private http: HttpClient) { }
 
   getProjects(): Observable<Project[]> {
-    return this.projects$.pipe(
+    return this.http.get<Project[]>(`${this.apiUrl}/getAll`).pipe(
+      tap(response => console.log('Projects:', response)),
       catchError(this.handleError)
     );
   }
 
-  getProjectById(id: number): Project | undefined {
-    return this.projectsSubject.getValue().find(project => project.id === id);
-  }
-
-  addProject(project: Project): void {
-    const projects = this.projectsSubject.getValue();
-    this.projectsSubject.next([...projects, project]);
-  }
-
-  updateProject(updateProject: Project): void {
-    const projects = this.projectsSubject.getValue().map((project) =>
-      project.id === updateProject.id ? updateProject : project
+  getProjectById(id: number): Observable<Project> {
+    return this.http.get<Project>(`${this.apiUrl}/get/${id}`).pipe(
+      catchError(this.handleError)
     );
-    this.projectsSubject.next(projects);
   }
 
-  deleteProject(id: number): void {
-    const projects = this.projectsSubject.getValue().filter((project) => project.id !== id);
-    this.projectsSubject.next(projects);
+  addProject(project: Project): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/create`, project).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  updateProject(project: Project): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/update/${project.id}`, project).pipe(
+      tap(response => console.log('Update Project Response:', response)),
+      catchError(this.handleError)
+    );
+  }
+
+  deleteProject(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`, {
+      headers: { 'Content-Type': 'application/json' }
+    }).pipe(
+      catchError(this.handleError)
+    );
   }
 
   getCategories(): string[] {

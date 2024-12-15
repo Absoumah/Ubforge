@@ -26,11 +26,11 @@
         </div>
 
         <div class="issues-section">
-            <div class="section-header" (click)="toggleIssues()">
+            <div class="section-header" (click)="toggleIssues()" (keydown)="toggleIssues()">
                 <h3>Issues ({{sprint.issues.length}})</h3>
                 <span class="toggle-icon" [class.expanded]="isIssuesExpanded">▼</span>
             </div>
-            <div [@expandCollapse]="isIssuesExpanded ? 'expanded' : 'collapsed'">
+            <div class="issues-list-container" [@expandCollapse]="isIssuesExpanded ? 'expanded' : 'collapsed'">
                 <div class="issues-list" *ngIf="relatedIssues.length > 0">
                     <app-issue-item *ngFor="let issue of relatedIssues" [issue]="issue">
                     </app-issue-item>

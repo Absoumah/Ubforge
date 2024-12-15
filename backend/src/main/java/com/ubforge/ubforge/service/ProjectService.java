@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.ubforge.ubforge.model.Project;
 import com.ubforge.ubforge.repository.ProjectRepository;
 
-
 @Service
 public class ProjectService {
 
@@ -19,17 +18,17 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-    //read project by id
+    // read project by id
     public Optional<Project> getProjectById(int id) {
         return projectRepository.findById(id);
     }
 
-    //read all projects
+    // read all projects
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
 
-    //update project
+    // update project
     public void updateProject(int id, Project project) {
         if (projectRepository.existsById(id)) {
             project.setId(id);
@@ -37,10 +36,9 @@ public class ProjectService {
         }
     }
 
-    //delete project
+    // delete project
     public void deleteProject(int id) {
         projectRepository.deleteById(id);
     }
-
 
 }

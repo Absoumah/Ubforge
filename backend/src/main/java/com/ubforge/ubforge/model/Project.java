@@ -1,13 +1,7 @@
 package com.ubforge.ubforge.model;
 
-
-import java.sql.Date;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "projects")
@@ -15,61 +9,94 @@ public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int project_id;
+    private int id;
 
-    @Column(name = "project_title")
-    private String project_title;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "project_description")
-    private String project_description;
+    @Column(name = "url")
+    private String url;
 
-    @Column(name = "project_status")
-    private String project_status;
+    @Column(name = "category")
+    private String category;
 
-    @Column(name = "project_date_created")
-    private Date project_date_created;
+    @Column(name = "description")
+    private String description;
 
-    public String getDescription() {
-        return project_description;
-    }
+    @ElementCollection
+    @Column(name = "assigned_users")
+    private List<User> assignedUsers;
 
-    public void setDescription(String description) {
-        this.project_description = description;
-    }
+    @ElementCollection
+    @Column(name = "task_ids")
+    private List<Integer> taskIds;
 
+    @ElementCollection
+    @Column(name = "issue_ids")
+    private List<Integer> issueIds;
+
+    // Getters and Setters
     public int getId() {
-        return project_id;
-    }
-
-    public String getTitle() {
-        return project_title;
-    }
-
-    public void setTitle(String title) {
-        this.project_title = title;
+        return id;
     }
 
     public void setId(int id) {
-        this.project_id = id;
+        this.id = id;
     }
 
-    public String getStatus() {
-        return project_status;
+    public String getName() {
+        return name;
     }
 
-    public void setStatus(String status) {
-        this.project_status = status;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Date getDateCreated() {
-        return project_date_created;
+    public String getUrl() {
+        return url;
     }
 
-    public void setDateCreated(Date dateCreated) {
-        this.project_date_created = dateCreated;
+    public void setUrl(String url) {
+        this.url = url;
     }
-    
 
+    public String getCategory() {
+        return category;
+    }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<User> getAssignedUsers() {
+        return assignedUsers;
+    }
+
+    public void setAssignedUsers(List<User> assignedUsers) {
+        this.assignedUsers = assignedUsers;
+    }
+
+    public List<Integer> getTaskIds() {
+        return taskIds;
+    }
+
+    public void setTaskIds(List<Integer> taskIds) {
+        this.taskIds = taskIds;
+    }
+
+    public List<Integer> getIssueIds() {
+        return issueIds;
+    }
+
+    public void setIssueIds(List<Integer> issueIds) {
+        this.issueIds = issueIds;
+    }
 }

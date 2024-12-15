@@ -26,11 +26,10 @@ public class IssueController {
     @Autowired
     private IssueService issueService;
 
-
     @PostMapping("/create")
-    public ResponseEntity<Void> createIssue(@RequestBody Issue issue) {
-        Issue issueCreated = issueService.createIssue(issue);
-        return ResponseEntity.created(URI.create("/issue/" + issueCreated.getIssue_id())).build();
+    public ResponseEntity<Issue> createIssue(@RequestBody Issue issue) {
+        Issue createdIssue = issueService.createIssue(issue);
+        return ResponseEntity.ok(createdIssue);
     }
 
     @GetMapping("/getAll")
@@ -38,7 +37,7 @@ public class IssueController {
         return ResponseEntity.ok(issueService.getAllIssues());
     }
 
-    //getById
+    // getById
     @GetMapping("/get/{id}")
     public ResponseEntity<Issue> getIssueById(@PathVariable int id) {
         return ResponseEntity.ok(issueService.getIssueById(id));
@@ -50,27 +49,28 @@ public class IssueController {
 
     }
 
-    //delete issue
+    // delete issue
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteIssue(@PathVariable int id) {
         issueService.deleteIssue(id);
         return ResponseEntity.ok().build();
     }
 
-    //assign issue to user
+    // assign issue to user
     @PutMapping("/assignToUser/{issueId}/{userId}")
     public ResponseEntity<Void> assignToUser(@PathVariable int issueId, @PathVariable int userId) {
         issueService.assignToUser(issueId, userId);
         return ResponseEntity.ok().build();
     }
 
-    //add task to release
-    @PutMapping("/addToRelease/{issueId}/{releaseId}")
-    public ResponseEntity<Issue> addToRelease(@PathVariable int issueId, @PathVariable int releaseId) {
-        return ResponseEntity.ok(issueService.addToRelease(issueId, releaseId));
-    }
+    // add task to release
+    // @PutMapping("/addToRelease/{issueId}/{releaseId}")
+    // public ResponseEntity<Issue> addToRelease(@PathVariable int issueId,
+    // @PathVariable int releaseId) {
+    // return ResponseEntity.ok(issueService.addToRelease(issueId, releaseId));
+    // }
 
-    //get all issues assigned to user
+    // get all issues assigned to user
     @GetMapping("/getAssignedToUser/{userId}")
     public ResponseEntity<Set<Integer>> findIssueIdsByUserId(@PathVariable int userId) {
         return ResponseEntity.ok(issueService.findIssueIdsByUserId(userId));

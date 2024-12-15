@@ -26,7 +26,7 @@ export class ProjectFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private toastService: ToastService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -82,20 +82,34 @@ export class ProjectFormComponent implements OnInit {
   }
 
   private loadProject(): void {
-    try {
-      if (this.projectId !== undefined) {
-        const project = this.projectService.getProjectById(this.projectId!);
+    if (!this.projectId) return;
+
+    this.projectService.getProjectById(this.projectId).subscribe({
+      next: (project) => {
+        console.log('Loaded project:', project);
         if (project) {
-          this.projectForm.patchValue(project);
+          // Initialize form with project data
+          this.projectForm.patchValue({
+            name: project.name,
+            url: project.url,
+            category: project.category,
+            description: project.description,
+            assignedUsers: project.assignedUsers || []
+          });
         } else {
-          console.error('Project with Id: ', this.projectId, ' not found');
+          this.toastService.error('Project not found');
           this.router.navigate(['/projects']);
         }
+      },
+      error: (error) => {
+        console.error('Error loading project:', error);
+        this.handleError(error);
+        this.toastService.error('Failed to load project');
+        this.router.navigate(['/projects']);
       }
-    } catch (error) {
-      this.handleError(error);
-    }
+    });
   }
+
 
   onSubmit(): void {
     if (this.projectForm.invalid) {
@@ -103,23 +117,30 @@ export class ProjectFormComponent implements OnInit {
       return;
     }
 
-    const project: Project = {
-      id: this.projectId || Date.now(),
+    const projectData: Partial<Project> = {
       ...this.projectForm.value
     };
 
-    try {
-      if (this.isEditMode) {
-        this.projectService.updateProject(project);
-        this.toastService.success('Project updated successfully');
-      } else {
-        this.projectService.addProject(project);
-        this.toastService.success('Project created successfully');
+    // Handle both edit and create cases
+    const action$ = this.isEditMode ?
+      this.projectService.updateProject({ ...projectData, id: this.projectId! } as Project) :
+      this.projectService.addProject(projectData as Project);
+
+    action$.subscribe({
+      next: () => {
+        this.toastService.success(
+          this.isEditMode ? 'Project updated successfully' : 'Project created successfully'
+        );
+        this.router.navigate(['/projects']);
+      },
+      error: (error) => {
+        console.error('Error saving project:', error);
+        this.handleError(error);
+        this.toastService.error(
+          this.isEditMode ? 'Failed to update project' : 'Failed to create project'
+        );
       }
-      this.router.navigate(['/projects']);
-    } catch (error) {
-      this.toastService.error('An error occurred while saving the project');
-    }
+    });
   }
 
   private handleError(error: any): void {

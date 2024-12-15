@@ -15,9 +15,14 @@
 }
 
 .documentation-form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-base;
+
     label {
-        display: block;
-        margin-bottom: $spacing-base;
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-small;
         font-weight: $font-weight-bold;
         color: $text-color;
 
@@ -26,7 +31,6 @@
         textarea {
             width: 100%;
             padding: $spacing-small;
-            margin-top: $spacing-small;
             border: 1px solid $border-color;
             border-radius: $border-radius;
             font-size: $font-size-base;
@@ -37,6 +41,16 @@
                 border-color: $primary-color;
                 outline: none;
             }
+
+            &.ng-invalid.ng-touched {
+                border-color: $danger-color;
+            }
+        }
+
+        small {
+            color: $danger-color;
+            font-size: $font-size-small;
+            margin-top: $spacing-xs;
         }
     }
 
@@ -45,12 +59,16 @@
         grid-template-columns: repeat(3, 1fr);
         gap: $spacing-base;
         margin-bottom: $spacing-base;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
     }
 
     .markdown-section {
-        margin-bottom: $spacing-large;
         border: 1px solid $border-color;
         border-radius: $border-radius;
+        overflow: hidden;
 
         .toolbar {
             padding: $spacing-small;
@@ -58,17 +76,23 @@
             background: $light-color;
 
             button {
-                padding: $spacing-xs $spacing-small;
+                padding: $spacing-xs $spacing-base;
                 background: none;
                 border: 1px solid $border-color;
                 border-radius: $border-radius;
                 cursor: pointer;
+                font-weight: $font-weight-medium;
+                transition: all 0.2s ease;
 
                 &:hover {
                     background: $hover-color;
                     color: $light-color;
                 }
             }
+        }
+
+        .editor, .preview {
+            min-height: 400px;
         }
 
         textarea {
@@ -78,18 +102,27 @@
             border: none;
             resize: vertical;
             font-family: monospace;
+            line-height: 1.6;
+
+            &:focus {
+                outline: none;
+            }
         }
 
         .preview {
-            padding: $spacing-base;
-            min-height: 400px;
+            padding: $spacing-large;
             background: $light-color;
+            overflow-y: auto;
+        }
+
+        .preview-active {
+            display: block;
         }
     }
 
     button[type="submit"] {
         width: 100%;
-        padding: $spacing-small;
+        padding: $spacing-base;
         background-color: $primary-color;
         color: $light-color;
         border: none;
@@ -97,14 +130,22 @@
         font-size: $font-size-base;
         font-weight: $font-weight-bold;
         cursor: pointer;
+        transition: background-color 0.2s ease;
 
-        &:hover {
+        &:hover:not(:disabled) {
             background-color: $hover-color;
         }
 
         &:disabled {
             background-color: $secondary-color;
             cursor: not-allowed;
+            opacity: 0.7;
         }
+    }
+}
+
+@media (max-width: 1024px) {
+    .documentation-form-container {
+        padding-left: $spacing-base;
     }
 }

@@ -1,128 +1,141 @@
 package com.ubforge.ubforge.model;
 
-import java.sql.Date;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import java.util.Date;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tasks")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int task_id;
+    @Column(name = "id")
+    private int id;
 
-    @Column(name = "task_title")
-    private String task_title;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name = "task_description")
-    private String task_description;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "task_status")
-    private String taskStatus;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priority")
+    private TaskPriority priority;
 
-    @Column(name = "issue_id")
-    private int issueId;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "task_assigned_users", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> assignedTo;
 
-    @Column(name = "task_author")
-    private int task_author;
+    @Column(name = "estimated_hours")
+    private double estimatedHours;
 
-    @ManyToOne
-    @JoinColumn(name = "assign_to", referencedColumnName = "user_id")
-    private User assignTo;
+    @Column(name = "completed")
+    private boolean completed;
 
-    @Column(name = "task_date_created")
-    private Date task_date_created;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private TaskStatus status;
 
-    @Column(name = "task_priority")
-    private String task_priority;
+    @Column(name = "due_date")
+    private Date dueDate;
 
-    @Column(name = "release_id")
-    private Integer releaseId;
+    @Column(name = "project_id")
+    private int projectId;
 
-    public Integer getReleaseId() {
-        return releaseId;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "issue_id", nullable = false)
+    @JsonBackReference
+    private Issue issue;
 
-    public void setReleaseId(Integer releaseId) {
-        this.releaseId = releaseId;
-    }
-
-    public String getTask_priority() {
-        return task_priority;
-    }
-
-    public void setTask_priority(String task_priority) {
-        this.task_priority = task_priority;
-    }
-
-    public Date getTask_date_created() {
-        return task_date_created;
-    }
-
-    public void setTask_date_created(Date task_date_created) {
-        this.task_date_created = task_date_created;
-    }
-
-    public int getIssue_id() {
-        return issueId;
-    }
-
-    public void setIssue_id(int issueId) {
-        this.issueId = issueId;
-    }
-
-    public int getTask_id() {
-        return task_id;
-    }
-
-    public void setTask_id(int task_id) {
-        this.task_id = task_id;
-    }
-
-    public String getTask_title() {
-        return task_title;
-    }
-
-    public void setTask_title(String task_title) {
-        this.task_title = task_title;
-    }
-
-    public String getTask_description() {
-        return task_description;
-    }
-
-    public void setTask_description(String task_description) {
-        this.task_description = task_description;
-    }
-
-    public String getTaskStatus() {
-        return taskStatus;
-    }
-
-    public void setTaskStatus(String taskStatus) {
-        this.taskStatus = taskStatus;
+    // Getters and Setters
+    public int getId() {
+        return id;
     }
 
     public void setId(int id) {
-        this.task_id = id;
+        this.id = id;
     }
 
-    public User getAssignTo() {
-        return assignTo;
+    public String getName() {
+        return name;
     }
 
-    public void setAssignTo(User assignTo) {
-        this.assignTo = assignTo;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getTask_author() {
-        return task_author;
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public TaskPriority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(TaskPriority priority) {
+        this.priority = priority;
+    }
+
+    public List<User> getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(List<User> assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
+    public double getEstimatedHours() {
+        return estimatedHours;
+    }
+
+    public void setEstimatedHours(double estimatedHours) {
+        this.estimatedHours = estimatedHours;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TaskStatus status) {
+        this.status = status;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+    public Issue getIssue() {
+        return issue;
+    }
+
+    public void setIssue(Issue issue) {
+        this.issue = issue;
     }
 }

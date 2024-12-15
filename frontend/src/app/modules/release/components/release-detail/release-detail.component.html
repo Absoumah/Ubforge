@@ -26,18 +26,20 @@
         </div>
 
 
-        <div class="issues-section">
-            <div class="section-header" (click)="toggleIssues()">
-                <h3>Related Issues</h3>
-                <span class="toggle-icon" [class.expanded]="isIssuesExpanded">▼</span>
+        <div class="sprints-section">
+            <div class="section-header" (click)="toggleSprints()" (keydown.enter)="toggleSprints()" tabindex="0">
+                <h3>Related Sprints</h3>
+                <span class="toggle-icon" [class.expanded]="isSprintsExpanded">▼</span>
             </div>
-            <div [@expandCollapse]="isIssuesExpanded ? 'expanded' : 'collapsed'">
-                <div class="issues-list" *ngIf="relatedIssues.length > 0">
-                    <app-issue-item *ngFor="let issue of relatedIssues" [issue]="issue">
-                    </app-issue-item>
+            <div [@expandCollapse]="isSprintsExpanded ? 'expanded' : 'collapsed'">
+                <div class="sprints-list" *ngIf="release.sprintIds?.length">
+                    <app-sprint-item 
+                        *ngFor="let sprintId of release.sprintIds" 
+                        [sprintId]="sprintId">
+                    </app-sprint-item>
                 </div>
-                <p *ngIf="relatedIssues.length === 0" class="no-issues">
-                    No issues assigned to this release
+                <p *ngIf="!release.sprintIds?.length" class="no-sprints">
+                    No sprints assigned to this release
                 </p>
             </div>
         </div>

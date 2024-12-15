@@ -1,5 +1,4 @@
-<!-- documentation-view.component.html -->
-<div class="documentation-view" *ngIf="doc">
+<div class="documentation-view" *ngIf="doc$ | async as doc">
     <div class="view-header">
         <div class="title-section">
             <h2>{{doc.title}}</h2>

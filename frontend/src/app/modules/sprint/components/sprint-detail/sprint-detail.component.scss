@@ -177,6 +177,10 @@
                 }
             }
 
+            .issues-list-container {
+                overflow: hidden;
+            }
+
             .empty-message {
                 text-align: center;
                 padding: $spacing-large;
