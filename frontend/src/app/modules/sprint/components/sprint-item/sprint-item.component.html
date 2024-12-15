@@ -1,4 +1,4 @@
-<div class="sprint-item" (click)="viewSprint()">
+<div class="sprint-item" *ngIf="sprint" (click)="viewSprint()">
     <div class="sprint-header">
         <div class="sprint-info">
             <h3>{{sprint.name}}</h3>
@@ -25,7 +25,7 @@
     <div class="sprint-stats">
         <div class="stat">
             <span class="label">Tasks:</span>
-            <span class="value">{{sprint.tasks.length}}</span>
+            <span class="value">{{ totalTasks }}</span>
         </div>
         <div class="stat">
             <span class="label">Issues:</span>

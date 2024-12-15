@@ -8,7 +8,6 @@ import { ReleaseItemComponent } from '../release-item/release-item.component';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { DialogService } from '../../../../shared/services/dialog.service';
 
-
 @Component({
   selector: 'app-release-list',
   standalone: true,
@@ -16,7 +15,7 @@ import { DialogService } from '../../../../shared/services/dialog.service';
   templateUrl: './release-list.component.html',
   styleUrls: ['./release-list.component.scss']
 })
-export class ReleaseListComponent {
+export class ReleaseListComponent implements OnInit {
   releases$: Observable<Release[]>;
 
   constructor(
@@ -28,6 +27,8 @@ export class ReleaseListComponent {
     this.releases$ = this.releaseService.getReleases();
   }
 
+  ngOnInit(): void {
+  }
 
   onEdit(id: number): void {
     this.router.navigate(['/releases/edit', id]);
@@ -42,8 +43,15 @@ export class ReleaseListComponent {
     });
 
     if (confirmed) {
-      this.releaseService.deleteRelease(id);
-      this.toastService.success('Release deleted successfully');
+      this.releaseService.deleteRelease(id).subscribe({
+        next: () => {
+          this.toastService.success('Release deleted successfully');
+        },
+        error: (error) => {
+          console.error('Error deleting release:', error);
+          this.toastService.error('Failed to delete release');
+        }
+      });
     } else {
       this.toastService.info('Release deletion cancelled');
     }

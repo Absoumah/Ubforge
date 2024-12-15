@@ -6,10 +6,10 @@ export interface Release {
     releaseDate: string;
     status: string;
     projectId: number;
-    issueIds?: number[];
+    sprintIds: number[];
     progress?: {
-        totalIssues: number;
-        completedIssues: number;
+        totalSprints: number;
+        completedSprints: number;
         percentage: number;
     };
 }
@@ -20,4 +20,3 @@ export enum ReleaseStatus {
     RELEASED = 'COMPLETED',
     DELAYED = 'DELAYED'
 }
-

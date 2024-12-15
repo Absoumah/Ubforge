@@ -148,6 +148,11 @@ export class IssueFormComponent implements OnInit {
         return;
       }
 
+      // Map assignedTo IDs to User objects
+      formValue.tasks.forEach((task: any) => {
+        task.assignedTo = task.assignedTo.map((userId: number) => ({ id: userId }));
+      });
+
       const issue: Issue = {
         ...formValue,
         id: this.isEditMode ? this.issueId! : undefined,

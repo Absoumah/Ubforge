@@ -1,0 +1,22 @@
+<div class="sprint-selector">
+    <h3>Assign Sprints</h3>
+    <div class="sprint-list">
+        <div *ngFor="let sprint of projectSprints$ | async" class="sprint-item">
+            <label class="checkbox-container">
+                <input type="checkbox" 
+                       [checked]="isSelected(sprint.id)" 
+                       (change)="toggleSprint(sprint.id)">
+                <span class="checkmark"></span>
+                <div class="sprint-info">
+                    <span class="sprint-name">{{sprint.name}}</span>
+                    <span class="sprint-status" [ngClass]="sprint.status.toLowerCase()">
+                        {{sprint.status}}
+                    </span>
+                </div>
+            </label>
+        </div>
+        <div *ngIf="(projectSprints$ | async)?.length === 0" class="no-sprints">
+            No sprints available for this project
+        </div>
+    </div>
+</div>

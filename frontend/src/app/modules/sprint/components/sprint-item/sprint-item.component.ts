@@ -1,9 +1,11 @@
 // sprint-item.component.ts
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Sprint } from '../../models/sprint.interface';
 import { ProgressBarComponent } from '../../../shared/components/progress-bar/progress-bar.component';
+import { SprintService } from '../../services/sprint.service';
+
 
 @Component({
   selector: 'app-sprint-item',
@@ -12,20 +14,57 @@ import { ProgressBarComponent } from '../../../shared/components/progress-bar/pr
   templateUrl: './sprint-item.component.html',
   styleUrls: ['./sprint-item.component.scss']
 })
-export class SprintItemComponent {
+export class SprintItemComponent implements OnInit {
   @Input() sprint!: Sprint;
-  @Output() edit = new EventEmitter<string>();
-  @Output() delete = new EventEmitter<string>();
+  @Input() set sprintId(id: number) {
+    if (id) {
+      this.loadSprintById(id);
+    }
+  }
+  @Output() edit = new EventEmitter<number>();
+  @Output() delete = new EventEmitter<number>();
+  progress: number = 0;
+  totalTasks: number = 0;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private sprintService: SprintService) { }
+
+
+  ngOnInit(): void {
+    if (this.sprint) {
+      this.loadSprintData();
+    }
+  }
+
+  private loadSprintById(id: number): void {
+    this.sprintService.getSprint(id).subscribe(sprint => {
+      this.sprint = sprint;
+      this.loadSprintData();
+    });
+  }
 
   get statusClass(): string {
     return this.sprint.status.toLowerCase();
   }
 
-  get progress(): number {
-    // This should come from the service, and the backend
-    return Math.floor(0.5 * 100);
+  private loadProgress(): void {
+    this.sprintService.getSprintProgress(this.sprint.id).subscribe(progress => {
+      this.progress = progress;
+    });
+  }
+
+  
+  private loadTotalTasks(): void {
+    this.sprintService.getTotalTasksForSprint(this.sprint.id).subscribe(total => {
+      this.totalTasks = total;
+    });
+  }
+
+  private loadSprintData(): void {
+    this.sprintService.getSprint(this.sprint.id).subscribe(sprint => {
+      this.sprint = sprint;
+      this.loadProgress();
+      this.loadTotalTasks();
+    });
   }
 
   editSprint(event: Event): void {
