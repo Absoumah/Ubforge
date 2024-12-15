@@ -58,7 +58,7 @@ export class DocumentationFormComponent implements OnInit {
     });
   }
 
-  private loadDoc(): void {
+  public loadDoc(): void {
     if (this.docId) {
       this.docService.getDocById(this.docId).subscribe({
         next: (doc: Documentation) => {
