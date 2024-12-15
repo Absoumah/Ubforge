@@ -44,7 +44,7 @@ export class IssueItemComponent implements OnInit, OnDestroy {
   }
 
   getCompletedTasksCount(): number {
-    return this.issue.tasks.filter(task => task.completed).length;
+    return this.issue.tasks.filter(task => task.status === TaskStatus.COMPLETED).length;
   }
 
   onIssueClick(): void {
