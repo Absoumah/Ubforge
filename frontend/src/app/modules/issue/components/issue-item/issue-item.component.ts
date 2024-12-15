@@ -8,6 +8,9 @@ import { CommentService } from '../../../../shared/services/comment/comment.serv
 import { Subject } from 'rxjs/internal/Subject';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { PriorityBadgeComponent } from '../../../../shared/components/priority-badge/priority-badge.component';
+import { Task } from '../../../tasks/models/task.interface';
+import { TaskService } from '../../../tasks/services/task.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-issue-item',
@@ -21,13 +24,15 @@ export class IssueItemComponent implements OnInit, OnDestroy {
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
   @Output() taskStatusChange = new EventEmitter<{ issueId: number, taskId: number, status: TaskStatus }>();
-
+  
+  tasks: Task[] = [];
   commentCount = 0;
   private destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,
-    private commentService: CommentService
+    private commentService: CommentService, 
+    private taskService: TaskService,
   ) { }
 
   ngOnInit(): void {
@@ -35,6 +40,19 @@ export class IssueItemComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(comments => {
         this.commentCount = comments.length;
+      });
+  
+    this.taskService.getTasks()
+      .pipe(
+      takeUntil(this.destroy$),
+      map(tasks => {
+        console.log('All tasks:', tasks);
+        return tasks.filter(task => this.issue.tasks.some(issueTask => issueTask.id === task.id));
+      })
+      )
+      .subscribe(tasks => {
+      console.log('Filtered tasks:', tasks);
+      this.tasks = tasks;
       });
   }
 
@@ -44,7 +62,7 @@ export class IssueItemComponent implements OnInit, OnDestroy {
   }
 
   getCompletedTasksCount(): number {
-    return this.issue.tasks.filter(task => task.status === TaskStatus.COMPLETED).length;
+    return this.tasks.filter(task => task.status === TaskStatus.COMPLETED).length;
   }
 
   onIssueClick(): void {

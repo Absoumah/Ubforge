@@ -69,6 +69,7 @@ export class IssueDetailComponent implements OnInit, OnDestroy {
             this.router.navigate(['/issues']);
           }
         },
+        //code
         error: (err) => {
           console.error('Error fetching issue:', err);
           this.toastService.error('Failed to load issue');
