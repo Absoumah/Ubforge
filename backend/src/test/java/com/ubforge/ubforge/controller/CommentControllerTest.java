@@ -101,3 +101,4 @@ class CommentControllerTest {
         verify(commentService, times(1)).getAllComments(); // Vérifie que la méthode du service a été appelée
     }
 }
+
