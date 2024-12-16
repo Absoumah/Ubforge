@@ -8,8 +8,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.ubforge.ubforge.events.TaskStatusChangedEvent;
-import com.ubforge.ubforge.model.Issue;
-import com.ubforge.ubforge.model.Sprint;
 import com.ubforge.ubforge.model.Task;
 import com.ubforge.ubforge.model.User;
 import com.ubforge.ubforge.repository.TaskRepository;
