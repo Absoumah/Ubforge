@@ -48,5 +48,5 @@ Bienvenue dans la documentation du projet **CdP**. Ce projet vise à fournir une
 3. **Accéder à l'application**
 
    - **Frontend** : [http://localhost:4200](http://localhost:4200)  
-   - **Backend** : [http://localhost:8080/api](http://localhost:8081/api)  
+   - **Backend** : [http://localhost:8081](http://localhost:8081/)  
 
