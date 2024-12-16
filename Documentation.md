@@ -1,31 +1,52 @@
 # 📚 Documentation
 
 ## 📝 **Sommaire**
-- **Introduction** : À venir...  
-- **Configuration** : À venir...  
-- **Guide de l'utilisateur** : À venir...  
-- **API Documentation** : À venir...  
-- **Tests et QA** : À venir...  
+- **Introduction** : Présentation du projet et objectifs.
+- **Configuration** : Instructions pour configurer l'environnement de développement.
+- **Guide de l'utilisateur** : Instructions pour utiliser l'application.
+- **API Documentation** : Description des endpoints disponibles.
+- **Tests et QA** : Stratégies de test et procédures de QA.
 
 ---
+    
+## 🖥️ **Introduction**
+Bienvenue dans la documentation du projet **CdP**. Ce projet vise à fournir une solution complète pour la gestion des **projets**, **issues**, **tâches**, **releases**, et **documentation**, facilitant ainsi la collaboration et le suivi des développements au sein des équipes.
 
-## 🛠️ **Documentation Technique**
+### 🎯 **Objectifs**
+- **Gestion des Issues et Tâches** : Créer, visualiser, assigner et mettre à jour les issues et tâches.
+- **Gestion des Releases** : Planifier, assigner et suivre la progression des releases.
+- **Priorisation** : Ajouter et gérer les priorités pour organiser le travail efficacement.
+- **Documentation** : Maintenir une documentation à jour et facilement accessible.
+- **Dockerisation** : Faciliter le déploiement et la gestion des environnements grâce à Docker.
 
-### **Modèle de Données**
-- **Projets** : À venir...  
-- **Issues** : À venir...  
-- **Tâches** : À venir...  
+### 📦 **Installation**
 
-### **Architecture**
-- **Frontend (Angular)** : À venir...  
-- **Backend (Spring Boot)** : À venir...  
-- **Base de Données (PostgreSQL)** : À venir...  
+1. **Cloner le dépôt**
+   ```bash
+   git clone https://github.com/UBForge/ubforge_release.git
+   cd ubforge_release
 
----
 
-## 🚀 **Mises à jour à venir**
+### 📦 **Installation**
 
-La documentation sera enrichie au fur et à mesure des livraisons.  
-Pour toute question, consultez l'équipe projet ou ouvrez une issue.
+1. **Cloner le dépôt**
+   ```bash
+   git clone https://github.com/UBForge/ubforge_release.git
+   cd ubforge_release
+   ```
 
-✨ _Restez connectés pour les prochaines publications !_ ✨
+2. **Dockerisation**
+
+   Assurez-vous que Docker et Docker Compose sont installés.  
+   Démarrez les conteneurs :  
+   ```bash
+   docker-compose up --build
+   ```
+
+   Cela lancera les services backend, frontend et la base de données PostgreSQL.  
+
+3. **Accéder à l'application**
+
+   - **Frontend** : [http://localhost:4200](http://localhost:4200)  
+   - **Backend** : [http://localhost:8080/api](http://localhost:8081/api)  
+
