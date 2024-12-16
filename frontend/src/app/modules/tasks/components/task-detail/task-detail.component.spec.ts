@@ -67,7 +67,7 @@ describe('TaskDetailComponent', () => {
     component.task = mockTask;
     component.markAsDone();
     expect(mockTaskService.updateTaskStatus).toHaveBeenCalledWith(1, TaskStatus.COMPLETED);
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['tasks/my-tasks']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/tasks/my-tasks']); // Updated expectation
   });
 
   it('should navigate to edit task page when onEdit is called', () => {

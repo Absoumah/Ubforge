@@ -10,6 +10,8 @@ import { CommentService } from '../../../../shared/services/comment/comment.serv
 import { Issue } from '../../models/issue';
 import { IssuePriority } from '../../models/issue-priority.enum';
 import { of, throwError } from 'rxjs';
+import { TaskService } from '../../../tasks/services/task.service';
+
 
 describe('IssueDetailComponent', () => {
   let component: IssueDetailComponent;
@@ -54,6 +56,13 @@ describe('IssueDetailComponent', () => {
     deleteComment: jasmine.createSpy('deleteComment').and.returnValue(of(void 0))
   };
 
+  const mockTaskService = {
+    getTasks: () => of([]),
+    syncTasksWithIssue: () => {},
+    updateTask: () => of({}),
+    deleteTask: () => of(void 0)
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [
@@ -72,7 +81,9 @@ describe('IssueDetailComponent', () => {
         { provide: ToastService, useValue: mockToastService },
         { provide: DialogService, useValue: mockDialogService },
         { provide: CommentService, useValue: mockCommentService },
-        { provide: Router, useValue: { navigate: jasmine.createSpy('navigate') } }
+        { provide: Router, useValue: { navigate: jasmine.createSpy('navigate') } },
+        { provide: TaskService, useValue: mockTaskService }
+
       ]
     }).compileComponents();
 
@@ -99,7 +110,8 @@ describe('IssueDetailComponent', () => {
       mockIssueService as any,
       mockCommentService as any,
       mockToastService as any,
-      mockDialogService as any
+      mockDialogService as any, 
+      mockTaskService as any
     );
     invalidComponent.ngOnInit();
     expect(mockToastService.error).toHaveBeenCalledWith('Invalid issue ID');

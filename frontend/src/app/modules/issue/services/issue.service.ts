@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { Issue } from '../models/issue';
+import { TaskService } from '../../tasks/services/task.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,9 @@ export class IssueService {
   private apiUrl = 'http://localhost:8081/issue';
   private issuesSubject = new BehaviorSubject<Issue[]>([]);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, 
+    private taskService: TaskService,
+  ) {
     this.loadIssues();
   }
 
@@ -41,29 +44,33 @@ export class IssueService {
 
   addIssue(issue: Issue): Observable<Issue> {
     return this.http.post<Issue>(`${this.apiUrl}/create`, issue).pipe(
-      tap(createdIssue => {
-        if (createdIssue) {
-          const issues = this.issuesSubject.value;
-          this.issuesSubject.next([...issues, createdIssue]);
-        }
-      }),
-      catchError(this.handleError)
+        tap(createdIssue => {
+            if (createdIssue) {
+                const issues = this.issuesSubject.value;
+                this.issuesSubject.next([...issues, createdIssue]);
+                // Sync tasks
+                this.taskService.syncTasksWithIssue(createdIssue.tasks);
+            }
+        }),
+        catchError(this.handleError)
     );
   }
 
   updateIssue(id: number, issue: Issue): Observable<Issue> {
     return this.http.put<Issue>(`${this.apiUrl}/update/${id}`, issue).pipe(
-      tap(updatedIssue => {
-        if (updatedIssue) {
-          const issues = this.issuesSubject.value;
-          const index = issues.findIndex(i => i.id === id);
-          if (index !== -1) {
-            issues[index] = updatedIssue;
-            this.issuesSubject.next([...issues]);
-          }
-        }
-      }),
-      catchError(this.handleError)
+        tap(updatedIssue => {
+            if (updatedIssue) {
+                const issues = this.issuesSubject.value;
+                const index = issues.findIndex(i => i.id === id);
+                if (index !== -1) {
+                    issues[index] = updatedIssue;
+                    this.issuesSubject.next([...issues]);
+                    // Sync tasks
+                    this.taskService.syncTasksWithIssue(updatedIssue.tasks);
+                }
+            }
+        }),
+        catchError(this.handleError)
     );
   }
 

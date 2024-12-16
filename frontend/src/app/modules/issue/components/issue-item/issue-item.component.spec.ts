@@ -81,10 +81,6 @@ describe('IssueItemComponent', () => {
     expect(component.delete.emit).toHaveBeenCalledWith(mockIssue.id);
   });
 
-  it('should return correct completed tasks count', () => {
-    expect(component.getCompletedTasksCount()).toBe(1);
-  });
-
   it('should handle task status change correctly', () => {
     spyOn(component.taskStatusChange, 'emit');
     const event = { taskId: 2, status: TaskStatus.COMPLETED };

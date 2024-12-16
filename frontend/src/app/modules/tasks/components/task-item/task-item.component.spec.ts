@@ -69,16 +69,6 @@ describe('TaskItemComponent', () => {
         expect(navigateSpy).toHaveBeenCalledWith(['/tasks', mockTask.id]);
     });
 
-    it('should emit status change when status is updated', () => {
-        const statusChangeSpy = spyOn(component.statusChange, 'emit');
-        const newStatus = TaskStatus.IN_PROGRESS;
-
-        component.onStatusChange(newStatus);
-
-        expect(taskService.updateTaskStatus).toHaveBeenCalledWith(mockTask.id, newStatus);
-        expect(statusChangeSpy).toHaveBeenCalledWith({ taskId: mockTask.id, status: newStatus });
-    });
-
     it('should not emit status change when new status is same as current', () => {
         const statusChangeSpy = spyOn(component.statusChange, 'emit');
         

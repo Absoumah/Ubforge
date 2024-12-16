@@ -60,45 +60,51 @@ export class TaskService {
         );
     }
 
+    syncTasksWithIssue(issueTasks: Task[]): void {
+      const currentTasks = this.tasksSubject.value;
+      const updatedTasks = currentTasks.filter(task => !task.issueId || !issueTasks.some(it => it.id === task.id));
+      this.tasksSubject.next([...updatedTasks, ...issueTasks]);
+  }
+
     createTask(task: Task): Observable<Task> {
-        return this.http.post<Task>(`${this.apiUrl}/create`, task).pipe(
+      return this.http.post<Task>(`${this.apiUrl}/create`, task).pipe(
           tap(newTask => {
-            const tasks = this.tasksSubject.value;
-            this.tasksSubject.next([...tasks, newTask]);
+              const tasks = this.tasksSubject.value;
+              this.tasksSubject.next([...tasks, newTask]);
           }),
           catchError(this.handleError)
-        );
-      }
+      );
+    }
 
-      updateTask(taskId: number, updatedTask: Task): Observable<Task> {
-        return this.http.put<Task>(`${this.apiUrl}/update/${taskId}`, updatedTask).pipe(
-          tap(task => {
-            const tasks = this.tasksSubject.value.map(t => t.id === taskId ? task : t);
-            this.tasksSubject.next(tasks);
-          }),
-          catchError(this.handleError)
-        );
-      }
+    updateTask(taskId: number, updatedTask: Task): Observable<Task> {
+      return this.http.put<Task>(`${this.apiUrl}/update/${taskId}`, updatedTask).pipe(
+        tap(task => {
+          const tasks = this.tasksSubject.value.map(t => t.id === taskId ? task : t);
+          this.tasksSubject.next(tasks);
+        }),
+        catchError(this.handleError)
+      );
+    }
 
-      updateTaskStatus(taskId: number, newStatus: TaskStatus): Observable<Task> {
-        return this.http.put<Task>(`${this.apiUrl}/updateStatus/${taskId}/${newStatus}`, {}).pipe(
-          tap(updatedTask => {
-            const tasks = this.tasksSubject.value.map(t => t.id === taskId ? updatedTask : t);
-            this.tasksSubject.next(tasks);
-          }),
-          catchError(this.handleError)
-        );
-      }
+    updateTaskStatus(taskId: number, newStatus: TaskStatus): Observable<Task> {
+      return this.http.put<Task>(`${this.apiUrl}/updateStatus/${taskId}/${newStatus}`, {}).pipe(
+        tap(updatedTask => {
+          const tasks = this.tasksSubject.value.map(t => t.id === taskId ? updatedTask : t);
+          this.tasksSubject.next(tasks);
+        }),
+        catchError(this.handleError)
+      );
+    }
 
-      deleteTask(taskId: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/delete/${taskId}`).pipe(
-          tap(() => {
-            const tasks = this.tasksSubject.value.filter(t => t.id !== taskId);
-            this.tasksSubject.next(tasks);
-          }),
-          catchError(this.handleError)
-        );
-      }
+    deleteTask(taskId: number): Observable<void> {
+      return this.http.delete<void>(`${this.apiUrl}/delete/${taskId}`).pipe(
+        tap(() => {
+          const tasks = this.tasksSubject.value.filter(t => t.id !== taskId);
+          this.tasksSubject.next(tasks);
+        }),
+        catchError(this.handleError)
+      );
+    }
 
     // updateTaskStatus(taskId: number, newStatus: TaskStatus): Observable<Task> {
     //     return this.http.put<Task>(`${this.apiUrl}/updateStatus/${taskId}/${newStatus}`, {});
