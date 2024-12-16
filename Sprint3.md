@@ -1,6 +1,6 @@
 # 🏁 Sprint 3 - Résumé Final  
 
-## 📅 **Période** : Dates à préciser  
+## 📅 **Période** : Lundi 02 /12  
 
 ## 🎯 **Objectifs du Sprint 3**  
 Le Sprint 3 avait pour objectif d’introduire des fonctionnalités essentielles liées à la **qualité et documentation**, notamment la création et gestion des tests, la documentation des issues. Ces fonctionnalités visent à renforcer la robustesse et la transparence du projet. 
