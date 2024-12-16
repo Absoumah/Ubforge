@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.ubforge.ubforge.model.Task;
 import com.ubforge.ubforge.model.TaskStatus;
 import com.ubforge.ubforge.service.TaskService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
+
 
 class TaskControllerTest {
 
@@ -36,6 +38,7 @@ class TaskControllerTest {
         task.setName("Test Task");
         task.setDescription("Task description");
         task.setStatus(TaskStatus.COMPLETED);
+
     }
 
     @Test
@@ -50,6 +53,7 @@ class TaskControllerTest {
         assertNotNull(response); // Vérifie que la réponse n'est pas nulle
         assertEquals(task.getId(), response.getId()); // Vérifie l'ID de la tâche
         verify(taskService, times(1)).createTask(any(Task.class)); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -82,6 +86,7 @@ class TaskControllerTest {
         assertEquals(1, response.size()); // Vérifie qu'il y a une tâche dans la réponse
         assertEquals(task.getId(), response.get(0).getId()); // Vérifie l'ID de la tâche
         verify(taskService, times(1)).getTasksByProject(1); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -96,6 +101,7 @@ class TaskControllerTest {
         assertNotNull(response); // Vérifie que la réponse n'est pas nulle
         assertEquals(task.getId(), response.getId()); // Vérifie l'ID de la tâche
         verify(taskService, times(1)).updateTask(1, task); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -108,6 +114,7 @@ class TaskControllerTest {
 
         // Vérifications
         verify(taskService, times(1)).deleteTask(1); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -122,6 +129,7 @@ class TaskControllerTest {
         assertNotNull(response); // Vérifie que la réponse n'est pas nulle
         assertEquals(task.getId(), response.getId()); // Vérifie l'ID de la tâche
         verify(taskService, times(1)).getTaskById(1); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -136,6 +144,7 @@ class TaskControllerTest {
         assertNotNull(response); // Vérifie que la réponse n'est pas nulle
         assertEquals(task.getId(), response.getId()); // Vérifie l'ID de la tâche
         verify(taskService, times(1)).assignTaskToUser(1, 1); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -150,5 +159,6 @@ class TaskControllerTest {
         assertNotNull(response); // Vérifie que la réponse n'est pas nulle
         assertEquals(TaskStatus.COMPLETED, response.getStatus()); // Vérifie que le statut a bien été mis à jour
         verify(taskService, times(1)).updateTaskStatus(1, TaskStatus.COMPLETED); // Vérifie que la méthode du service a été appelée
+
     }
 }

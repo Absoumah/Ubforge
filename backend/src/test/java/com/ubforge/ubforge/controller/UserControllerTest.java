@@ -36,6 +36,7 @@ class UserControllerTest {
         user = new User();
         user.setId(1);
         user.setFirstName("Test User");
+
     }
 
     @Test
@@ -49,6 +50,7 @@ class UserControllerTest {
         // Vérifications
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
         verify(userService, times(1)).createUser(any(User.class)); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -63,6 +65,7 @@ class UserControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
         assertEquals(user.getId(), response.getBody().getId()); // Vérifie que l'ID de l'utilisateur est correct
         verify(userService, times(1)).getUserById(1); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -76,6 +79,7 @@ class UserControllerTest {
         // Vérifications
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
         verify(userService, times(1)).updateUser(eq(1), any(User.class)); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -89,6 +93,7 @@ class UserControllerTest {
         // Vérifications
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
         verify(userService, times(1)).deleteUser(1); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -103,6 +108,7 @@ class UserControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
         assertTrue(response.getBody().iterator().hasNext()); // Vérifie qu'il y a des utilisateurs dans la liste
         verify(userService, times(1)).getAllUsers(); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -120,3 +126,4 @@ class UserControllerTest {
         verify(userService, times(1)).findUserIdsByIssueId(1); // Vérifie que la méthode du service a été appelée
     }
 }
+

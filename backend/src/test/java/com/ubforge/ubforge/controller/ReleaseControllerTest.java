@@ -6,11 +6,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.ubforge.ubforge.model.Release;
 import com.ubforge.ubforge.service.ReleaseService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -108,6 +110,7 @@ class ReleaseControllerTest {
         assertNotNull(response); // Vérifie que la réponse n'est pas nulle
         assertEquals(release.getId(), response.getId()); // Vérifie l'ID de la version
         verify(releaseService, times(1)).updateRelease(any(Release.class)); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test

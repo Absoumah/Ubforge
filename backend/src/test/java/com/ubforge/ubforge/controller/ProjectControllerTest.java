@@ -1,11 +1,13 @@
 package com.ubforge.ubforge.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.ubforge.ubforge.model.Project;
 import com.ubforge.ubforge.service.ProjectService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -36,6 +38,7 @@ class ProjectControllerTest {
         project.setId(1);
         project.setName("Test Project");
         project.setDescription("This is a test project");
+
     }
 
     @Test
@@ -49,6 +52,7 @@ class ProjectControllerTest {
         // Vérifications
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
         verify(projectService, times(1)).createProject(any(Project.class)); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -64,6 +68,7 @@ class ProjectControllerTest {
         assertTrue(response.getBody().isPresent()); // Vérifie que le projet est présent dans la réponse
         assertEquals(project.getId(), response.getBody().get().getId()); // Vérifie que l'ID du projet est correct
         verify(projectService, times(1)).getProjectById(1); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
@@ -104,5 +109,6 @@ class ProjectControllerTest {
         // Vérifications
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
         verify(projectService, times(1)).deleteProject(1); // Vérifie que la méthode du service a été appelée
+
     }
 }
