@@ -15,7 +15,7 @@ export class SprintService {
     this.loadSprints();
   }
 
-  private loadSprints(): void {
+  public loadSprints(): void {
     this.http.get<Sprint[]>(`${this.apiUrl}/getAll`).subscribe({
       next: (sprints) => this.sprintsSubject.next(sprints),
       error: (err) => console.error('Failed to load sprints', err)

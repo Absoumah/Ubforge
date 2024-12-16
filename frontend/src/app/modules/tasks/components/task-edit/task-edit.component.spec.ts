@@ -1,107 +1,99 @@
-// import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-// import { RouterTestingModule } from '@angular/router/testing';
-// import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
-// import { ActivatedRoute } from '@angular/router';
-// import { TaskEditComponent } from './task-edit.component';
-// import { TaskService } from '../../services/task.service';
-// import { TaskStatus } from '../../models/task-status.enum';
-// import { TaskPriority } from '../../models/task-priority.enum';
-// import { of } from 'rxjs';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
+import { TaskEditComponent } from './task-edit.component';
+import { TaskService } from '../../services/task.service';
+import { TaskStatus } from '../../models/task-status.enum';
+import { TaskPriority } from '../../models/task-priority.enum';
+import { FormGroup } from '@angular/forms';
 
-// describe('TaskEditComponent', () => {
-//   let component: TaskEditComponent;
-//   let fixture: ComponentFixture<TaskEditComponent>;
+describe('TaskEditComponent', () => {
+    let component: TaskEditComponent;
+    let fixture: ComponentFixture<TaskEditComponent>;
+    let taskService: jasmine.SpyObj<TaskService>;
+    let router: jasmine.SpyObj<Router>;
+    
+    const mockTask = {
+        id: 1,
+        name: 'Test Task',
+        description: 'Test Description',
+        priority: TaskPriority.MEDIUM,
+        assignedTo: [{ id: 1, firstName: 'User', lastName: '1' }],
+        estimatedHours: 8,
+        completed: false,
+        status: TaskStatus.TODO,
+        dueDate: new Date(),
+        projectId: 1
+    };
 
-//   const mockAssignedUser = {
-//     id: 1,
-//     firstName: 'John',
-//     lastName: 'Doe'
-//   };
+    const mockFormGroup = new FormGroup({});
 
-//   const mockTask = {
-//     id: 1,
-//     name: 'Test Task',
-//     description: 'Test Description',
-//     status: TaskStatus.TODO,
-//     priority: TaskPriority.MEDIUM,
-//     assignedTo: [mockAssignedUser],
-//     estimatedHours: 8,
-//     completed: false,
-//     projectId: 1,
-//     dueDate: new Date()
-//   };
+    beforeEach(async () => {
+        const taskServiceSpy = jasmine.createSpyObj('TaskService', ['getTaskById', 'createTaskForm', 'updateTask', 'mapFormToTask']);
+        const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
-//   const createMockTaskForm = () => {
-//     const form = new FormGroup({
-//       name: new FormControl(mockTask.name),
-//       description: new FormControl(mockTask.description),
-//       status: new FormControl(mockTask.status),
-//       priority: new FormControl(mockTask.priority),
-//       assignedTo: new FormControl(mockTask.assignedTo.map(user => user.id)),
-//       estimatedHours: new FormControl(mockTask.estimatedHours),
-//       completed: new FormControl(mockTask.completed),
-//       dueDate: new FormControl(mockTask.dueDate),
-//       projectId: new FormControl(mockTask.projectId)
-//     });
-//     return form;
-//   };
+        await TestBed.configureTestingModule({
+            imports: [TaskEditComponent],
+            providers: [
+                { provide: TaskService, useValue: taskServiceSpy },
+                { provide: Router, useValue: routerSpy },
+                { provide: ActivatedRoute, useValue: { 
+                    snapshot: { paramMap: { get: () => '1' } }
+                }}
+            ]
+        }).compileComponents();
 
-//   const mockTaskService = {
-//     getTaskById: jasmine.createSpy('getTaskById').and.returnValue(of(mockTask)),
-//     createTaskForm: jasmine.createSpy('createTaskForm').and.returnValue(createMockTaskForm()),
-//     updateTask: jasmine.createSpy('updateTask').and.returnValue(of(mockTask)),
-//     mapFormToTask: jasmine.createSpy('mapFormToTask').and.returnValue(mockTask),
-//     getAvailableUsers: jasmine.createSpy('getAvailableUsers').and.returnValue(of([mockAssignedUser]))
-//   };
+        taskService = TestBed.inject(TaskService) as jasmine.SpyObj<TaskService>;
+        router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    });
 
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       imports: [
-//         TaskEditComponent,
-//         RouterTestingModule,
-//         ReactiveFormsModule,
-//         BrowserAnimationsModule
-//       ],
-//       providers: [
-//         {
-//           provide: ActivatedRoute,
-//           useValue: {
-//             snapshot: {
-//               paramMap: {
-//                 get: () => '1'
-//               }
-//             }
-//           }
-//         },
-//         { provide: TaskService, useValue: mockTaskService }
-//       ]
-//     }).compileComponents();
-//   });
+    beforeEach(() => {
+        taskService.getTaskById.and.returnValue(of(mockTask));
+        taskService.createTaskForm.and.returnValue(mockFormGroup);
+        fixture = TestBed.createComponent(TaskEditComponent);
+        component = fixture.componentInstance;
+    });
 
-//   beforeEach(fakeAsync(() => {
-//     fixture = TestBed.createComponent(TaskEditComponent);
-//     component = fixture.componentInstance;
-//     tick(); // Wait for task loading
-//     fixture.detectChanges();
-//     tick(); // Wait for form initialization
-//   }));
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 
-//   // it('should create', fakeAsync(() => {
-//   //   expect(component).toBeTruthy();
-//   // }));
+    it('should save task when form is valid', () => {
+        const updatedTask = { ...mockTask, name: 'Updated Task' };
+        taskService.mapFormToTask.and.returnValue(updatedTask);
+        taskService.updateTask.and.returnValue(of(updatedTask));
+        
+        component.task = mockTask;
+        component.taskForm = mockFormGroup;
+        component.taskForm.setErrors(null);
+        
+        component.onSave();
 
-//   it('should load task on init', fakeAsync(() => {
-//     expect(mockTaskService.getTaskById).toHaveBeenCalledWith(1);
-//     expect(mockTaskService.createTaskForm).toHaveBeenCalled();
-//     expect(component.task).toEqual(mockTask);
-//   }));
+        expect(taskService.updateTask).toHaveBeenCalledWith(mockTask.id, updatedTask);
+        expect(router.navigate).toHaveBeenCalledWith(['/tasks', mockTask.id]);
+    });
 
-//   it('should initialize form with task data', fakeAsync(() => {
-//     expect(component.taskForm).toBeDefined();
-//     expect(component.taskForm?.get('name')).toBeDefined();
-//     expect(component.taskForm?.get('name')?.value).toBe(mockTask.name);
-//     expect(component.taskForm?.get('description')?.value).toBe(mockTask.description);
-//     expect(component.taskForm?.get('status')?.value).toBe(mockTask.status);
-//   }));
-// });
+    it('should not save when form is invalid', () => {
+        component.task = mockTask;
+        component.taskForm = mockFormGroup;
+        component.taskForm.setErrors({ invalid: true });
+        
+        component.onSave();
+
+        expect(taskService.updateTask).not.toHaveBeenCalled();
+    });
+
+    it('should navigate to task details on cancel with task', () => {
+        component.task = mockTask;
+        component.onCancel();
+        
+        expect(router.navigate).toHaveBeenCalledWith(['/tasks', mockTask.id]);
+    });
+
+    it('should navigate to tasks list on cancel without task', () => {
+        component.task = undefined;
+        component.onCancel();
+        
+        expect(router.navigate).toHaveBeenCalledWith(['/tasks']);
+    });
+});

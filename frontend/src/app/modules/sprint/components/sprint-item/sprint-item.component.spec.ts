@@ -1,72 +1,96 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { SprintItemComponent } from './sprint-item.component';
-import { SprintStatus } from '../../models/sprint.interface';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
+import { SprintItemComponent } from './sprint-item.component';
+import { SprintService } from '../../services/sprint.service';
+import { Sprint, SprintStatus } from '../../models/sprint.interface';
+import { ProgressBarComponent } from '../../../shared/components/progress-bar/progress-bar.component';
 
 describe('SprintItemComponent', () => {
-  let component: SprintItemComponent;
-  let fixture: ComponentFixture<SprintItemComponent>;
-  let router: Router;
+    let component: SprintItemComponent;
+    let fixture: ComponentFixture<SprintItemComponent>;
+    let sprintService: jasmine.SpyObj<SprintService>;
+    let router: jasmine.SpyObj<Router>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        SprintItemComponent,
-        RouterTestingModule
-      ]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(SprintItemComponent);
-    component = fixture.componentInstance;
-    router = TestBed.inject(Router);
-
-    // Mock the progress getter
-    Object.defineProperty(component, 'progress', {
-      get: () => 50
-    });
-
-    // Provide mock sprint data
-    component.sprint = {
-      id: '1',
-      name: 'Test Sprint',
-      description: 'Test Description',
-      startDate: new Date(),
-      endDate: new Date(),
-      status: SprintStatus.PLANNED,
-      projectId: '1',
-      tasks: [],
-      issues: []
+    const mockSprint: Sprint = {
+        id: 1,
+        name: 'Test Sprint',
+        projectId: 1,
+        startDate: new Date(),
+        endDate: new Date(),
+        status: SprintStatus.ACTIVE,
+        description: 'Test Description',
+        tasks: [1, 2],
+        issues: [1]
     };
 
-    fixture.detectChanges();
-  });
+    beforeEach(async () => {
+        const sprintServiceSpy = jasmine.createSpyObj('SprintService', [
+            'getSprint',
+            'getSprintProgress',
+            'getTotalTasksForSprint'
+        ]);
+        const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+        await TestBed.configureTestingModule({
+            imports: [SprintItemComponent, ProgressBarComponent],
+            providers: [
+                { provide: SprintService, useValue: sprintServiceSpy },
+                { provide: Router, useValue: routerSpy }
+            ]
+        }).compileComponents();
 
-  it('should have correct status class', () => {
-    expect(component.statusClass).toBe('planned');
-  });
+        sprintService = TestBed.inject(SprintService) as jasmine.SpyObj<SprintService>;
+        router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    });
 
-  it('should emit edit event', () => {
-    const spy = spyOn(component.edit, 'emit');
-    const event = new Event('click');
-    component.editSprint(event);
-    expect(spy).toHaveBeenCalledWith('1');
-  });
+    beforeEach(() => {
+        sprintService.getSprint.and.returnValue(of(mockSprint));
+        sprintService.getSprintProgress.and.returnValue(of(50));
+        sprintService.getTotalTasksForSprint.and.returnValue(of(2));
+        
+        fixture = TestBed.createComponent(SprintItemComponent);
+        component = fixture.componentInstance;
+        component.sprint = mockSprint;
+        fixture.detectChanges();
+    });
 
-  it('should emit delete event', () => {
-    const spy = spyOn(component.delete, 'emit');
-    const event = new Event('click');
-    component.deleteSprint(event);
-    expect(spy).toHaveBeenCalledWith('1');
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 
-  it('should navigate to sprint detail', () => {
-    const spy = spyOn(router, 'navigate');
-    component.viewSprint();
-    expect(spy).toHaveBeenCalledWith(['/sprints', '1']);
-  });
+    it('should load sprint data on init', () => {
+        component.ngOnInit();
+        expect(sprintService.getSprint).toHaveBeenCalledWith(mockSprint.id);
+        expect(sprintService.getSprintProgress).toHaveBeenCalledWith(mockSprint.id);
+        expect(sprintService.getTotalTasksForSprint).toHaveBeenCalledWith(mockSprint.id);
+    });
+
+    it('should load sprint by id when sprintId is set', () => {
+        component.sprintId = 1;
+        expect(sprintService.getSprint).toHaveBeenCalledWith(1);
+    });
+
+    it('should return correct status class', () => {
+        expect(component.statusClass).toBe(mockSprint.status.toLowerCase());
+    });
+
+    it('should emit edit event', () => {
+        spyOn(component.edit, 'emit');
+        const event = new Event('click');
+        component.editSprint(event);
+        expect(component.edit.emit).toHaveBeenCalledWith(mockSprint.id);
+    });
+
+    it('should emit delete event', () => {
+        spyOn(component.delete, 'emit');
+        const event = new Event('click');
+        component.deleteSprint(event);
+        expect(component.delete.emit).toHaveBeenCalledWith(mockSprint.id);
+    });
+
+    it('should navigate to sprint details', () => {
+        component.viewSprint();
+        expect(router.navigate).toHaveBeenCalledWith(['/sprints', mockSprint.id]);
+    });
 });

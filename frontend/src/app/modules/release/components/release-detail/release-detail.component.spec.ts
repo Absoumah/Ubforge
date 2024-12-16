@@ -7,7 +7,7 @@ import { ToastService } from '../../../../shared/services/toast.service';
 import { DialogService } from '../../../../shared/services/dialog.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Release, ReleaseStatus } from '../../models/release';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 describe('ReleaseDetailComponent', () => {
   let component: ReleaseDetailComponent;
@@ -21,11 +21,12 @@ describe('ReleaseDetailComponent', () => {
     releaseDate: '2024-03-20',
     status: ReleaseStatus.PLANNED,
     projectId: 1,
-    issueIds: []
+    sprintIds: [],
   };
 
   const mockReleaseService = {
-    getReleaseById: jasmine.createSpy('getReleaseById').and.returnValue(mockRelease)
+    getReleaseById: jasmine.createSpy('getReleaseById').and.returnValue(of(mockRelease)),
+    deleteRelease: jasmine.createSpy('deleteRelease').and.returnValue(of({}))
   };
 
   const mockIssueService = {
@@ -72,4 +73,31 @@ describe('ReleaseDetailComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should load release on init', () => {
+    expect(mockReleaseService.getReleaseById).toHaveBeenCalledWith(1);
+    expect(component.release).toEqual(mockRelease);
+  });
+
+  it('should toggle sprints expansion', () => {
+    component.isSprintsExpanded = true;
+    component.toggleSprints();
+    expect(component.isSprintsExpanded).toBeFalse();
+    component.toggleSprints();
+    expect(component.isSprintsExpanded).toBeTrue();
+  });
+
+  it('should navigate to edit release', () => {
+    const routerSpy = spyOn(component['router'], 'navigate');
+    component.onEdit();
+    expect(routerSpy).toHaveBeenCalledWith(['/releases/edit', mockRelease.id]);
+  });
+
+  it('should handle delete release error', async () => {
+    mockReleaseService.deleteRelease.and.returnValue(throwError(() => new Error('Failed to delete')));
+    await component.onDelete();
+    expect(mockToastService.error).toHaveBeenCalledWith('Failed to delete release');
+  });
+
+  
 });

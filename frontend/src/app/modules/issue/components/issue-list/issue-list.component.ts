@@ -55,7 +55,7 @@ export class IssueListComponent implements OnInit {
     });
   }
 
-  private filterIssues(filter: IssueFilter): void {
+  public filterIssues(filter: IssueFilter): void {
     this.filteredIssues = this.issues.filter(issue => {
       const categoryMatch = !filter.category ||
         issue.category.toLowerCase() === filter.category.toLowerCase();

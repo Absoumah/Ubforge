@@ -161,27 +161,19 @@ export class IssueFormComponent implements OnInit {
         dueDate: new Date(formValue.dueDate)
       };
 
-      if (this.isEditMode && this.issueId) {
-        this.issueService.updateIssue(this.issueId, issue).subscribe({
-          next: () => {
-            this.toastService.success('Issue updated successfully');
-            this.router.navigate(['/issues']);
-          },
-          error: (error) => {
-            this.toastService.error('Failed to update issue: ' + error.message);
-          }
-        });
-      } else {
-        this.issueService.addIssue(issue).subscribe({
-          next: () => {
-            this.toastService.success('Issue created successfully');
-            this.router.navigate(['/issues']);
-          },
-          error: (error) => {
-            this.toastService.error('Failed to create issue: ' + error.message);
-          }
-        });
-      }
+      const request = this.isEditMode && this.issueId
+        ? this.issueService.updateIssue(this.issueId, issue)
+        : this.issueService.addIssue(issue);
+
+      request.subscribe({
+        next: () => {
+          this.toastService.success(`Issue ${this.isEditMode ? 'updated' : 'created'} successfully`);
+          this.router.navigate(['/issues']);
+        },
+        error: (error) => {
+          this.toastService.error(`Failed to ${this.isEditMode ? 'update' : 'create'} issue: ${error.message}`);
+        }
+      });
     } else {
       this.errorMessage = 'Please fill in all required fields correctly.';
       this.toastService.error(this.errorMessage);
