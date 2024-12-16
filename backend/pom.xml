@@ -59,7 +59,6 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-<<<<<<< HEAD
 		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
@@ -76,8 +75,6 @@
 			<version>2.1.0</version>
 		</dependency>
 
-=======
->>>>>>> 2342f36c8647eeefe62486490f6cecbf4a0afa63
 	</dependencies>
 
 	<build>
