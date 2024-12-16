@@ -6,7 +6,7 @@ import { Task } from '../../models/task.interface';
 import { TaskStatus } from '../../models/task-status.enum';
 import { KanbanColumnComponent } from '../kanban-column/kanban-column.component';
 import { ProjectStateService } from '../../../project/services/project-state.service';
-import { Subscription, switchMap, of } from 'rxjs';
+import { Subscription, switchMap, of, combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-kanban-board',
@@ -28,17 +28,21 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.subscription = this.projectStateService.getActiveProjectId()
+    this.subscription = combineLatest([
+      this.projectStateService.getActiveProjectId(),
+      this.taskService.getTasks()
+    ])
       .pipe(
-        switchMap(projectId => {
-          if (!projectId) return of([]);
-          return this.taskService.getTasksByProject(projectId);
+        map(([projectId, tasks]: [number | null, Task[]]) => {
+          if (!projectId) return [];
+
+          return tasks.filter((task: Task) => task.projectId === projectId);
         })
       )
-      .subscribe(tasks => {
-        this.todoTasks = tasks.filter(task => task.status === TaskStatus.TODO);
-        this.inProgressTasks = tasks.filter(task => task.status === TaskStatus.IN_PROGRESS);
-        this.completedTasks = tasks.filter(task => task.status === TaskStatus.COMPLETED);
+      .subscribe((tasks: Task[]) => {
+        this.todoTasks = tasks.filter((task: Task) => task.status === TaskStatus.TODO);
+        this.inProgressTasks = tasks.filter((task: Task) => task.status === TaskStatus.IN_PROGRESS);
+        this.completedTasks = tasks.filter((task: Task) => task.status === TaskStatus.COMPLETED);
       });
   }
 

@@ -149,3 +149,4 @@ class ReleaseControllerTest {
         verify(releaseService, times(1)).removeSprintFromRelease(1, 1); // Vérifie que la méthode du service a été appelée
     }
 }
+

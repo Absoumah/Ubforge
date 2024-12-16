@@ -35,10 +35,9 @@ export class TaskDetailComponent implements OnInit {
 
   markAsDone(): void {
     if (this.task) {
-      this.taskService.updateTaskStatus(this.task.id, TaskStatus.COMPLETED)
-        .subscribe(() => {
-          this.router.navigate(['tasks/my-tasks']);
-        });
+      this.taskService.updateTaskStatus(this.task.id, TaskStatus.COMPLETED).subscribe(() => {
+        this.router.navigate(['/tasks/my-tasks']);
+      });
     }
   }
 

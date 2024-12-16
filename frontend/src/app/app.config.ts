@@ -20,6 +20,10 @@ export const appConfig: ApplicationConfig = {
     // importProvidersFrom([MarkdownModule]),
     // comment
     importProvidersFrom([MarkdownModule.forRoot()]),
-    provideHttpClient()
+    provideHttpClient(), 
+    {
+      provide: 'BASE_API_URL',
+      useValue: 'http://localhost:8081'
+    }
   ]
 };

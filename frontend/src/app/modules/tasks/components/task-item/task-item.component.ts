@@ -27,10 +27,7 @@ export class TaskItemComponent {
 
   onStatusChange(newStatus: TaskStatus): void {
     if (newStatus !== this.task.status) {
-      this.taskService.updateTaskStatus(this.task.id, newStatus).subscribe(updatedTask => {
-        this.task = updatedTask;
-        this.statusChange.emit({ taskId: this.task.id, status: newStatus });
-      });
+      this.taskService.updateTaskStatus(this.task.id, newStatus).subscribe();
     }
   }
 

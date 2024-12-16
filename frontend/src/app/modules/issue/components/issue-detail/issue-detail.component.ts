@@ -14,6 +14,9 @@ import { CommentService } from '../../../../shared/services/comment/comment.serv
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { Subject } from 'rxjs/internal/Subject';
 import { PriorityBadgeComponent } from '../../../../shared/components/priority-badge/priority-badge.component';
+import { Task } from '../../../tasks/models/task.interface';
+import { TaskService } from '../../../tasks/services/task.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-issue-detail',
@@ -24,6 +27,7 @@ import { PriorityBadgeComponent } from '../../../../shared/components/priority-b
 })
 export class IssueDetailComponent implements OnInit, OnDestroy {
   issue: Issue | undefined;
+  tasks: Task[] = [];
   comments: Comment[] = [];
   newCommentContent: string = '';
   private destroy$ = new Subject<void>();
@@ -34,7 +38,8 @@ export class IssueDetailComponent implements OnInit, OnDestroy {
     private issueService: IssueService,
     private commentService: CommentService,
     private toastService: ToastService,
-    private dialogService: DialogService
+    private dialogService: DialogService, 
+    private taskService: TaskService
   ) { }
 
   ngOnInit(): void {
@@ -57,17 +62,30 @@ export class IssueDetailComponent implements OnInit, OnDestroy {
         next: (issue) => {
           if (issue) {
             this.issue = issue;
-            this.loadComments(this.issue.id);
+            this.loadTasksForIssue(issue.id); // Load tasks for the issue
+            this.loadComments(issue.id);
           } else {
             this.toastService.error('Issue not found');
             this.router.navigate(['/issues']);
           }
         },
+        //code
         error: (err) => {
           console.error('Error fetching issue:', err);
           this.toastService.error('Failed to load issue');
           this.router.navigate(['/issues']);
         }
+      });
+  }
+
+  private loadTasksForIssue(issueId: number): void {
+    this.taskService.getTasks()
+      .pipe(
+        takeUntil(this.destroy$),
+        map(tasks => tasks.filter(task => task.issueId === issueId))
+      )
+      .subscribe(tasks => {
+        this.tasks = tasks;
       });
   }
 
