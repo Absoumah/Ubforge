@@ -1,66 +1,44 @@
 # 📦 Release
 
-## 🚀 **Version Actuelle : 0.2.0**
+## 🚀 **Version Actuelle : 1.0.0**
 
 ### 📅 **Description**
-Cette version inclut les fonctionnalités développées durant les deux premiers sprints, posant une base solide pour la gestion des projets, issues, tâches, et releases. Elle marque une étape clé dans l'évolution du projet, avec une interface utilisateur fonctionnelle et des APIs backend prêtes à l'intégration complète.
-
----
-
-### 🎯 **Fonctionnalités incluses :**
-
-#### **Gestion des Issues**
-- Création d'issues avec validation (US-01).
-- Visualisation d'une liste paginée et triée des issues (US-02).
-- Mise à jour du statut des issues (US-03).
-- Assignation des issues aux membres de l'équipe (US-04).
-- Ajout de commentaires sur les issues (US-05).
-
-#### **Gestion des Tâches**
-- Création de tâches associées aux issues (US-06).
-- Visualisation des tâches assignées à un utilisateur (US-09).
-- Mise à jour du statut des tâches (US-07).
-- Assignation des tâches aux membres de l'équipe (US-08).
-
-#### **Gestion des Projets**
-- Création et gestion des projets (US-22).
-- Sélection d'un projet actif pour filtrer les données affichées (US-23).
-- Basculement entre projets tout en conservant le contexte (US-24).
-
-#### **Gestion des Releases**
-- Création de nouvelles releases (US-10).
-- Assignation d'issues et de tâches à des releases (US-11).
-- Visualisation de la progression des releases (US-12).
-
-#### **Priorités**
-- Ajout et gestion des priorités pour les tâches et les issues (US-21).
+Cette version marque le lancement officiel du projet avec une gestion complète des projets, issues, tâches, sprints et releases. Le projet est désormais dockerisé, facilitant ainsi son déploiement. Les composants backend sont entièrement testés et documentés, tandis que la documentation du frontend est en cours de finalisation. Cette version établit une base robuste pour les développements futurs et assure une intégration fluide entre les différentes fonctionnalités.
 
 ---
 
 ### 🛠️ **Progrès Techniques**
 
 1. **Backend**
-   - APIs pour la gestion des issues, tâches, projets, et releases.
-   - Modélisation et intégration des bases de données nécessaires.
-   - Gestion des permissions et validations.
+   - **APIs complètes** pour la gestion des issues, tâches, projets, sprints et releases.
+   - **Modélisation et intégration des bases de données** nécessaires.
+   - **Gestion des permissions et validations** renforcée.
+   - **Documentation complète** des APIs backend.
 
 2. **Frontend**
-   - Interfaces pour la gestion des issues, tâches, et projets.
-   - Visualisation et interaction des releases.
+   - **Interfaces utilisateur** pour la gestion des issues, tâches, projets, sprints et releases.
+   - **Visualisation et interaction des releases**.
+   - **Documentation du frontend** en cours.
 
-3. **Tests**
-   - Cas de test pour les fonctionnalités principales, en cours d'ajout.
-   - Tests manuels pour la cohérence des données entre les modules.
+3. **Docker**
+   - **Configuration Docker** optimisée pour le backend et le frontend.
+   - **Scripts de déploiement** simplifiés grâce à Docker.
+
+4. **Tests**
+   - **Tests unitaires et d'intégration** pour le backend et le frontend. 
 
 ---
 
 ### 🔄 **Prochaines étapes**
-1. Finaliser l'intégration complète entre le frontend et le backend.
-2. Dockeriser l'application pour simplifier le déploiement.
-3. Compléter les tests unitaires et d'intégration.
-4. Améliorer l'expérience utilisateur sur l'interface frontend.
+1. **Finaliser la documentation** du frontend.
+5. **Recueillir les retours utilisateurs** pour les prochaines itérations.
+6. **Planifier les fonctionnalités futures** basées sur les besoins identifiés.
 
 ---
 
 ### ✨ **Conclusion**
-Cette version représente une avancée significative, avec des fonctionnalités principales en place et prêtes pour des itérations futures. Malgré quelques retards sur l'intégration et les tests, l'équipe a posé une base solide pour la suite du projet.
+La **Version 1.0.0** représente une étape majeure avec la livraison de fonctionnalités clés pour la gestion de projets et le déploiement facilité grâce à Docker. Le backend est robuste, testé et documenté, assurant une base solide pour les futures améliorations. Bien que la documentation du frontend et certains tests soient en cours, cette version établit les fondations nécessaires pour une évolution continue et une meilleure expérience utilisateur.
+
+---
+
+Merci à toute l'équipe pour son engagement et sa contribution à ce lancement réussi !
