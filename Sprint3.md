@@ -1,9 +1,9 @@
 # 🏁 Sprint 3 - Résumé Final  
 
-## 📅 **Période** : Lundi 02 /12  
+## 📅 **Période** : Du Lundi 02 Décembre au Vendredi 13
 
 ## 🎯 **Objectifs du Sprint 3**  
-Le Sprint 3 avait pour objectif d’introduire des fonctionnalités essentielles liées à la **qualité et documentation**, notamment la création et gestion des tests, la documentation des issues. Ces fonctionnalités visent à renforcer la robustesse et la transparence du projet. 
+Le Sprint 3 avait pour objectif d’introduire des fonctionnalités essentielles liées à la **qualité et documentation**, notamment la création et gestion des tests, la documentation des issues et la gestion des rôles utilisateurs. Ces fonctionnalités visent à renforcer la robustesse et la transparence du projet. 
 ---
 
 ## ✅ **Résultats**  
@@ -26,14 +26,8 @@ Le Sprint 3 avait pour objectif d’introduire des fonctionnalités essentielles
 ---
 
 ### **Retards :**  
-1. **Recherche dans la documentation (US-18)** :  
-   👉 _Non réalisée_ : Problèmes techniques liés à l’indexation des données.  
-
-2. **Gestion des droits d’accès par projet (US-25)** :  
-   👉 _Partiellement réalisée_ : Les validations backend sont en place, mais l’intégration frontend reste à faire.
-
-3. **Tests automatisés des nouvelles fonctionnalités** :  
-   👉 _Non réalisés_ : Ressources limitées en QA.  
+1. **Gestion des droits d’accès par projet (US-25)** :  
+   👉A faire
 
 ---
 
