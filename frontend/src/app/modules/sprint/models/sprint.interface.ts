@@ -1,17 +1,17 @@
 export interface Sprint {
-    id: string;
+    id: number;
     name: string;
-    projectId: string;
+    projectId: number;
     startDate: Date;
     endDate: Date;
     status: SprintStatus;
     description?: string;
-    tasks: string[];
-    issues: string[];
+    tasks: number[];
+    issues: number[];
 }
 
 export enum SprintStatus {
-    PLANNED = 'planned',
-    ACTIVE = 'active',
-    COMPLETED = 'completed'
+    PLANNED = 'PLANNED',
+    ACTIVE = 'ACTIVE',
+    COMPLETED = 'COMPLETED',
 }

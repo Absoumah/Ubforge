@@ -1,0 +1,69 @@
+<div class="documentation-form-container">
+    <h2>{{isEditMode ? 'Edit' : 'Create'}} Documentation</h2>
+    <form [formGroup]="docForm" (ngSubmit)="onSubmit()" class="documentation-form">
+        <label>
+            Title
+            <input formControlName="title" type="text" />
+            <div *ngIf="docForm.get('title')?.invalid && docForm.get('title')?.touched">
+                <small *ngIf="docForm.get('title')?.errors?.['required']">Title is required.</small>
+                <small *ngIf="docForm.get('title')?.errors?.['maxlength']">
+                    Title cannot exceed 100 characters.
+                </small>
+            </div>
+        </label>
+
+        <div class="form-row">
+            <label>
+                Category
+                <select formControlName="category">
+                    <option *ngFor="let category of categories" [value]="category">
+                        {{category}}
+                    </option>
+                </select>
+            </label>
+
+            <label>
+                Status
+                <select formControlName="status">
+                    <option *ngFor="let status of statuses" [value]="status">
+                        {{status}}
+                    </option>
+                </select>
+            </label>
+
+            <label>
+                Version
+                <input formControlName="version" type="text" />
+            </label>
+        </div>
+
+        <label>
+            Tags (comma-separated)
+            <input formControlName="tags" type="text" placeholder="api, guide, frontend..." />
+        </label>
+
+        <div class="markdown-section">
+            <div class="toolbar">
+                <button type="button" (click)="togglePreview()">
+                    {{previewMode ? 'Edit' : 'Preview'}}
+                </button>
+            </div>
+
+            <div [ngClass]="{'preview-active': previewMode}">
+                <div class="editor" *ngIf="!previewMode">
+                    <textarea formControlName="content"
+                        placeholder="Write your documentation in Markdown..."></textarea>
+                </div>
+                <div class="preview" *ngIf="previewMode">
+                    <markdown [data]="docForm.get('content')?.value || ''" ngPreserveWhitespaces>
+                    </markdown>
+
+                    </div>
+            </div>
+        </div>
+
+        <button type="submit" [disabled]="docForm.invalid">
+            {{isEditMode ? 'Update' : 'Create'}} Documentation
+        </button>
+    </form>
+</div>

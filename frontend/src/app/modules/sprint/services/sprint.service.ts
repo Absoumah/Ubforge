@@ -1,134 +1,97 @@
-// sprint.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, catchError, map, tap } from 'rxjs';
 import { Sprint, SprintStatus } from '../models/sprint.interface';
-import { ProjectStateService } from '../../project/services/project-state.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SprintService {
+  private apiUrl = 'http://localhost:8081/sprint';
   private sprintsSubject = new BehaviorSubject<Sprint[]>([]);
   sprints$ = this.sprintsSubject.asObservable();
 
-  constructor(private projectStateService: ProjectStateService) {
-    this.initializeMockSprints();
+  constructor(private http: HttpClient) {
+    this.loadSprints();
   }
 
-  private initializeMockSprints(): void {
-    const mockSprints: Sprint[] = [
-      {
-        id: '1',
-        name: 'Sprint 1',
-        projectId: '1',
-        startDate: new Date('2024-03-01'),
-        endDate: new Date('2024-03-15'),
-        status: SprintStatus.COMPLETED,
-        description: 'Initial sprint focusing on core features',
-        tasks: ['1', '2', '3'],
-        issues: ['1']
-      },
-      {
-        id: '2',
-        name: 'Sprint 2',
-        projectId: '1',
-        startDate: new Date('2024-03-16'),
-        endDate: new Date('2024-03-31'),
-        status: SprintStatus.ACTIVE,
-        description: 'Performance improvements and bug fixes',
-        tasks: ['4', '5'],
-        issues: ['2', '3']
-      }
-    ];
-
-    this.sprintsSubject.next(mockSprints);
+  public loadSprints(): void {
+    this.http.get<Sprint[]>(`${this.apiUrl}/getAll`).subscribe({
+      next: (sprints) => this.sprintsSubject.next(sprints),
+      error: (err) => console.error('Failed to load sprints', err)
+    });
   }
 
-  getSprintsByProject(projectId: string): Observable<Sprint[]> {
-    return this.sprints$.pipe(
-      map(sprints => sprints.filter(sprint => sprint.projectId === projectId))
+  getSprintsByProject(projectId: number): Observable<Sprint[]> {
+    return this.http.get<Sprint[]>(`${this.apiUrl}/project/${projectId}`).pipe(
+      catchError(() => this.sprints$.pipe<Sprint[]>(
+        map(sprints => sprints.filter(sprint => sprint.projectId === projectId))
+      ))
     );
   }
 
-  getSprint(id: string): Observable<Sprint | undefined> {
-    return this.sprints$.pipe(
-      map(sprints => sprints.find(sprint => sprint.id === id))
+  getSprint(id: number): Observable<Sprint> {
+    return this.http.get<Sprint>(`${this.apiUrl}/get/${id}`).pipe(
+      catchError(() => this.sprints$.pipe(
+        map(sprints => sprints.find(sprint => sprint.id === id)),
+        map(sprint => {
+          if (!sprint) throw new Error('Sprint not found');
+          return sprint;
+        })
+      ))
     );
   }
 
-  createSprint(sprint: Omit<Sprint, 'id'>): void {
-    const sprints = this.sprintsSubject.getValue();
-    const newSprint = {
-      ...sprint,
-      id: (sprints.length + 1).toString()
-    };
-    this.sprintsSubject.next([...sprints, newSprint]);
-  }
-
-  updateSprint(updatedSprint: Sprint): void {
-    const sprints = this.sprintsSubject.getValue().map(sprint =>
-      sprint.id === updatedSprint.id ? updatedSprint : sprint
+  createSprint(sprint: Omit<Sprint, 'id'>): Observable<Sprint> {
+    return this.http.post<Sprint>(`${this.apiUrl}/create`, sprint).pipe(
+      tap(newSprint => {
+        const currentSprints = this.sprintsSubject.getValue();
+        this.sprintsSubject.next([...currentSprints, newSprint]);
+      })
     );
-    this.sprintsSubject.next(sprints);
   }
 
-  deleteSprint(id: string): void {
-    const sprints = this.sprintsSubject.getValue().filter(sprint =>
-      sprint.id !== id
+  updateSprint(updatedSprint: Sprint): Observable<Sprint> {
+    return this.http.put<Sprint>(`${this.apiUrl}/update/${updatedSprint.id}`, updatedSprint).pipe(
+      tap(sprint => {
+        const sprints = this.sprintsSubject.getValue().map(s => 
+          s.id === sprint.id ? sprint : s
+        );
+        this.sprintsSubject.next(sprints);
+      })
     );
-    this.sprintsSubject.next(sprints);
   }
 
-  addTaskToSprint(sprintId: string, taskId: string): void {
-    const sprints = this.sprintsSubject.getValue().map(sprint => {
-      if (sprint.id === sprintId) {
-        return {
-          ...sprint,
-          tasks: [...sprint.tasks, taskId]
-        };
-      }
-      return sprint;
-    });
-    this.sprintsSubject.next(sprints);
+  deleteSprint(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`).pipe(
+      tap(() => {
+        const sprints = this.sprintsSubject.getValue().filter(s => s.id !== id);
+        this.sprintsSubject.next(sprints);
+      })
+    );
   }
 
-  removeTaskFromSprint(sprintId: string, taskId: string): void {
-    const sprints = this.sprintsSubject.getValue().map(sprint => {
-      if (sprint.id === sprintId) {
-        return {
-          ...sprint,
-          tasks: sprint.tasks.filter(id => id !== taskId)
-        };
-      }
-      return sprint;
-    });
-    this.sprintsSubject.next(sprints);
+  addTaskToSprint(sprintId: number, taskId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${sprintId}/addTask/${taskId}`, {});
   }
 
-  addIssueToSprint(sprintId: string, issueId: string): void {
-    const sprints = this.sprintsSubject.getValue().map(sprint => {
-      if (sprint.id === sprintId) {
-        return {
-          ...sprint,
-          issues: [...sprint.issues, issueId]
-        };
-      }
-      return sprint;
-    });
-    this.sprintsSubject.next(sprints);
+  removeTaskFromSprint(sprintId: number, taskId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${sprintId}/removeTask/${taskId}`, {});
   }
 
-  removeIssueFromSprint(sprintId: string, issueId: string): void {
-    const sprints = this.sprintsSubject.getValue().map(sprint => {
-      if (sprint.id === sprintId) {
-        return {
-          ...sprint,
-          issues: sprint.issues.filter(id => id !== issueId)
-        };
-      }
-      return sprint;
-    });
-    this.sprintsSubject.next(sprints);
+  addIssueToSprint(sprintId: number, issueId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${sprintId}/addIssue/${issueId}`, {});
+  }
+
+  removeIssueFromSprint(sprintId: number, issueId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${sprintId}/removeIssue/${issueId}`, {});
+  }
+
+  getSprintProgress(id: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/progress/${id}`);
+  }
+
+  getTotalTasksForSprint(id: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/tasks/count/${id}`);
   }
 }

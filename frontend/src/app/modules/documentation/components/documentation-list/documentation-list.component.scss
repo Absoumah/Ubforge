@@ -1,0 +1,72 @@
+@import '../../../../../styles/theme.scss';
+
+.documentation-list {
+    padding: $spacing-base;
+    padding-left: calc(310px + $spacing-base);
+    background-color: $background-color;
+    min-height: calc(100vh - 2 * $spacing-base);
+
+    .documentation-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-large;
+
+        h2 {
+            font-size: $font-size-large;
+            font-weight: $font-weight-bold;
+        }
+
+        .filters {
+            select {
+                padding: $spacing-small;
+                border: 1px solid $border-color;
+                border-radius: $border-radius;
+                background: $light-color;
+                color: $text-color;
+            }
+        }
+
+        .create-button {
+            padding: $spacing-small $spacing-base;
+            background-color: $primary-color;
+            color: $light-color;
+            border: none;
+            border-radius: $border-radius;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $hover-color;
+            }
+        }
+    }
+
+    .documentation-list-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: $spacing-base;
+    }
+
+    .no-docs {
+        text-align: center;
+        padding: $spacing-large;
+
+        p {
+            margin-bottom: $spacing-base;
+            color: $text-muted;
+        }
+
+        button {
+            padding: $spacing-small $spacing-base;
+            background-color: $primary-color;
+            color: $light-color;
+            border: none;
+            border-radius: $border-radius;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $hover-color;
+            }
+        }
+    }
+}

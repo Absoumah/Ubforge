@@ -5,6 +5,7 @@ import { TaskStatus } from '../../models/task-status.enum';
 import { UserAvatarComponent } from '../../../../shared/components/user-avatar/user-avatar.component';
 import { StatusDropdownComponent } from '../../../../shared/components/status-dropdown/status-dropdown.component';
 import { Router } from '@angular/router';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-task-item',
@@ -18,7 +19,7 @@ export class TaskItemComponent {
   @Input() hideStatus: boolean = false;
   @Output() statusChange = new EventEmitter<{ taskId: number, status: TaskStatus }>();
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private taskService: TaskService) { }
 
   getPriorityClass(): string {
     return `priority-${this.task.priority.toLowerCase()}`;
@@ -26,9 +27,7 @@ export class TaskItemComponent {
 
   onStatusChange(newStatus: TaskStatus): void {
     if (newStatus !== this.task.status) {
-      this.task.status = newStatus; // Update local state
-      this.task.completed = newStatus === TaskStatus.COMPLETED;
-      this.statusChange.emit({ taskId: this.task.id, status: newStatus });
+      this.taskService.updateTaskStatus(this.task.id, newStatus).subscribe();
     }
   }
 

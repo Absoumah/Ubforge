@@ -1,0 +1,151 @@
+@import '../../../../../styles/theme.scss';
+
+.documentation-form-container {
+    padding: $spacing-base;
+    padding-left: calc(310px + $spacing-base);
+    background-color: $background-color;
+    color: $text-color;
+    max-width: 1200px;
+
+    h2 {
+        font-size: $font-size-large;
+        margin-bottom: $spacing-large;
+        font-weight: $font-weight-bold;
+    }
+}
+
+.documentation-form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-base;
+
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-small;
+        font-weight: $font-weight-bold;
+        color: $text-color;
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: $spacing-small;
+            border: 1px solid $border-color;
+            border-radius: $border-radius;
+            font-size: $font-size-base;
+            color: $text-color;
+            background-color: $light-color;
+
+            &:focus {
+                border-color: $primary-color;
+                outline: none;
+            }
+
+            &.ng-invalid.ng-touched {
+                border-color: $danger-color;
+            }
+        }
+
+        small {
+            color: $danger-color;
+            font-size: $font-size-small;
+            margin-top: $spacing-xs;
+        }
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: $spacing-base;
+        margin-bottom: $spacing-base;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .markdown-section {
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        overflow: hidden;
+
+        .toolbar {
+            padding: $spacing-small;
+            border-bottom: 1px solid $border-color;
+            background: $light-color;
+
+            button {
+                padding: $spacing-xs $spacing-base;
+                background: none;
+                border: 1px solid $border-color;
+                border-radius: $border-radius;
+                cursor: pointer;
+                font-weight: $font-weight-medium;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    background: $hover-color;
+                    color: $light-color;
+                }
+            }
+        }
+
+        .editor, .preview {
+            min-height: 400px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: $spacing-base;
+            border: none;
+            resize: vertical;
+            font-family: monospace;
+            line-height: 1.6;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .preview {
+            padding: $spacing-large;
+            background: $light-color;
+            overflow-y: auto;
+        }
+
+        .preview-active {
+            display: block;
+        }
+    }
+
+    button[type="submit"] {
+        width: 100%;
+        padding: $spacing-base;
+        background-color: $primary-color;
+        color: $light-color;
+        border: none;
+        border-radius: $border-radius;
+        font-size: $font-size-base;
+        font-weight: $font-weight-bold;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover:not(:disabled) {
+            background-color: $hover-color;
+        }
+
+        &:disabled {
+            background-color: $secondary-color;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .documentation-form-container {
+        padding-left: $spacing-base;
+    }
+}

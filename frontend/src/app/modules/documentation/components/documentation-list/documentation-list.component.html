@@ -1,0 +1,23 @@
+<!-- documentation-list.component.html -->
+<div class="documentation-list">
+    <div class="documentation-list-header">
+        <h2>Documentation</h2>
+        <button class="create-button" (click)="createDoc()">
+            Create Documentation
+        </button>
+    </div>
+
+    <div class="documentation-list-content">
+        <ng-container *ngIf="(docs$ | async)?.length; else noDocs">
+            <app-documentation-item *ngFor="let doc of docs$ | async" [doc]="doc" (edit)="onEdit($event)"
+                (delete)="onDelete($event)">
+            </app-documentation-item>
+        </ng-container>
+    </div>
+
+    <ng-template #noDocs>
+        <div class="no-docs">
+            <p>No documentation found.</p>
+        </div>
+    </ng-template>
+</div>

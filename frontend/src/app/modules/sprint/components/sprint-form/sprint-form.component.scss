@@ -84,3 +84,13 @@
         }
     }
 }
+
+.form-group {
+    app-issue-selector {
+        display: block;
+        margin-top: 1rem;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        padding: $spacing-base;
+    }
+}

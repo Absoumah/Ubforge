@@ -1,0 +1,121 @@
+@import '../../../../../styles/theme.scss';
+
+.documentation-view {
+    padding: $spacing-base;
+    padding-left: calc(310px + $spacing-base);
+    background-color: $background-color;
+    min-height: calc(100vh - 2 * $spacing-base);
+    color: $text-color;
+
+    .view-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-large;
+
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: $spacing-base;
+
+            h2 {
+                margin: 0;
+                font-size: $font-size-large;
+                font-weight: $font-weight-bold;
+            }
+
+            .status-badge {
+                padding: $spacing-xs $spacing-small;
+                border-radius: $border-radius;
+                font-size: $font-size-small;
+                font-weight: $font-weight-bold;
+
+                &.draft {
+                    background: rgba($secondary-color, 0.1);
+                    color: $secondary-color;
+                }
+
+                &.in_review {
+                    background: rgba($primary-color, 0.1);
+                    color: $primary-color;
+                }
+
+                &.published {
+                    background: rgba($success-color, 0.1);
+                    color: $success-color;
+                }
+
+                &.archived {
+                    background: rgba($text-muted, 0.1);
+                    color: $text-muted;
+                }
+            }
+        }
+
+        .actions {
+            display: flex;
+            gap: $spacing-small;
+
+            button {
+                padding: $spacing-small $spacing-base;
+                border: none;
+                border-radius: $border-radius;
+                cursor: pointer;
+                font-weight: $font-weight-bold;
+
+                &.edit-button {
+                    background: $primary-color;
+                    color: $light-color;
+
+                    &:hover {
+                        background: $hover-color;
+                    }
+                }
+
+                &.delete-button {
+                    background: $danger-color;
+                    color: $light-color;
+
+                    &:hover {
+                        background: darken($danger-color, 10%);
+                    }
+                }
+            }
+        }
+    }
+
+    .metadata {
+        display: flex;
+        gap: $spacing-large;
+        margin-bottom: $spacing-base;
+
+        .meta-item {
+            .label {
+                color: $text-muted;
+                margin-right: $spacing-small;
+            }
+
+            .value {
+                font-weight: $font-weight-bold;
+            }
+        }
+    }
+
+    .tags {
+        display: flex;
+        gap: $spacing-small;
+        margin-bottom: $spacing-large;
+
+        .tag {
+            background: rgba($primary-color, 0.1);
+            color: $primary-color;
+            padding: $spacing-xs $spacing-small;
+            border-radius: $border-radius;
+            font-size: $font-size-small;
+        }
+    }
+
+    .content {
+        padding: $spacing-large;
+    }
+}

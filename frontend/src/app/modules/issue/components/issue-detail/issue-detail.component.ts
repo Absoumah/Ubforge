@@ -14,6 +14,9 @@ import { CommentService } from '../../../../shared/services/comment/comment.serv
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { Subject } from 'rxjs/internal/Subject';
 import { PriorityBadgeComponent } from '../../../../shared/components/priority-badge/priority-badge.component';
+import { Task } from '../../../tasks/models/task.interface';
+import { TaskService } from '../../../tasks/services/task.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-issue-detail',
@@ -24,7 +27,9 @@ import { PriorityBadgeComponent } from '../../../../shared/components/priority-b
 })
 export class IssueDetailComponent implements OnInit, OnDestroy {
   issue: Issue | undefined;
-  comments$ = new BehaviorSubject<Comment[]>([]);
+  tasks: Task[] = [];
+  comments: Comment[] = [];
+  newCommentContent: string = '';
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -33,23 +38,69 @@ export class IssueDetailComponent implements OnInit, OnDestroy {
     private issueService: IssueService,
     private commentService: CommentService,
     private toastService: ToastService,
-    private dialogService: DialogService
+    private dialogService: DialogService, 
+    private taskService: TaskService
   ) { }
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.issue = this.issueService.getIssueById(id);
+    const idParam = this.route.snapshot.paramMap.get('id');
+    const id = idParam ? Number(idParam) : null;
 
-    if (this.issue) {
-      this.commentService.getComments(this.issue.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(comments => {
-          this.comments$.next(comments);
-        });
-    } else {
-      this.toastService.error('Issue not found');
+    if (id === null || isNaN(id)) {
+      this.toastService.error('Invalid issue ID');
       this.router.navigate(['/issues']);
+      return;
     }
+
+    this.loadIssue(id);
+  }
+
+  private loadIssue(id: number): void {
+    this.issueService.getIssueById(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (issue) => {
+          if (issue) {
+            this.issue = issue;
+            this.loadTasksForIssue(issue.id); // Load tasks for the issue
+            this.loadComments(issue.id);
+          } else {
+            this.toastService.error('Issue not found');
+            this.router.navigate(['/issues']);
+          }
+        },
+        //code
+        error: (err) => {
+          console.error('Error fetching issue:', err);
+          this.toastService.error('Failed to load issue');
+          this.router.navigate(['/issues']);
+        }
+      });
+  }
+
+  private loadTasksForIssue(issueId: number): void {
+    this.taskService.getTasks()
+      .pipe(
+        takeUntil(this.destroy$),
+        map(tasks => tasks.filter(task => task.issueId === issueId))
+      )
+      .subscribe(tasks => {
+        this.tasks = tasks;
+      });
+  }
+
+  private loadComments(issueId: number): void {
+    this.commentService.getCommentsByIssueId(issueId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (comments) => {
+          this.comments = comments;
+        },
+        error: (err) => {
+          console.error('Error fetching comments:', err);
+          this.toastService.error('Failed to load comments');
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -59,20 +110,38 @@ export class IssueDetailComponent implements OnInit, OnDestroy {
 
   onCommentSubmit(content: string): void {
     if (this.issue) {
-      this.commentService.addComment(this.issue.id, {
-        entityId: this.issue.id,
+      this.commentService.addComment('issue', this.issue.id, {
         content,
-        author: 'Current User' // Replace with actual user
-      });
-      this.toastService.success('Comment added successfully');
+        author: 'Kejsi Stafa', // Replace with actual user
+        entityId: this.issue.id,
+        entityType: 'issue'
+      }).pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (newComment) => {
+            this.comments.push(newComment);
+            this.toastService.success('Comment added successfully');
+          },
+          error: (error) => {
+            console.error('Error adding comment:', error);
+            this.toastService.error('Failed to add comment');
+          }
+        });
     }
   }
 
   onCommentDelete(commentId: number): void {
-    if (this.issue) {
-      this.commentService.deleteComment(this.issue.id, commentId);
-      this.toastService.success('Comment deleted successfully');
-    }
+    this.commentService.deleteComment(commentId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.comments = this.comments.filter(comment => comment.id !== commentId);
+          this.toastService.success('Comment deleted successfully');
+        },
+        error: (error) => {
+          console.error('Error deleting comment:', error);
+          this.toastService.error('Failed to delete comment');
+        }
+      });
   }
 
   onEdit(): void {
@@ -88,9 +157,18 @@ export class IssueDetailComponent implements OnInit, OnDestroy {
     });
 
     if (confirmed && this.issue) {
-      this.issueService.deleteIssue(this.issue.id);
-      this.toastService.success('Issue deleted successfully');
-      this.router.navigate(['/issues']);
+      this.issueService.deleteIssue(this.issue.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => {
+            this.toastService.success('Issue deleted successfully');
+            this.router.navigate(['/issues']);
+          },
+          error: (error) => {
+            console.error('Error deleting issue:', error);
+            this.toastService.error('Failed to delete issue');
+          }
+        });
     } else {
       this.toastService.info('Issue deletion cancelled');
     }

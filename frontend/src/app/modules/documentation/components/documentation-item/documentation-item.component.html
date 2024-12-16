@@ -1,0 +1,28 @@
+<div class="documentation-item" (click)="onView()">
+    <div class="doc-header">
+        <div class="title-section">
+            <h3>{{doc.title}}</h3>
+            <span class="status-badge" [ngClass]="doc.status.toLowerCase()">
+                {{doc.status}}
+            </span>
+        </div>
+        <div class="doc-meta">
+            <span class="version" *ngIf="doc.version">v{{doc.version}}</span>
+            <span class="category">{{doc.category}}</span>
+        </div>
+    </div>
+
+    <div class="doc-footer">
+        <div class="tags" *ngIf="doc.tags?.length">
+            <span class="tag" *ngFor="let tag of doc.tags">{{tag}}</span>
+        </div>
+        <div class="metadata">
+            <span class="author">{{doc.author}}</span>
+            <span class="date">Updated {{doc.updatedAt | date}}</span>
+        </div>
+        <div class="actions">
+            <button class="edit-button" (click)="onEdit(); $event.stopPropagation()">Edit</button>
+            <button class="delete-button" (click)="onDelete(); $event.stopPropagation()">Delete</button>
+        </div>
+    </div>
+</div>

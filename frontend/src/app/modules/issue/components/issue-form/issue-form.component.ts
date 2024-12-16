@@ -4,13 +4,15 @@ import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } fr
 import { Router, ActivatedRoute } from '@angular/router';
 import { IssueService } from '../../services/issue.service';
 import { TaskService } from '../../../tasks/services/task.service';
-import { IssueCategory } from '../../models/issue';
+import { Issue, IssueCategory } from '../../models/issue';
 import { TaskFormComponent } from '../../../tasks/components/task-form/task-form.component';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { ProjectStateService } from '../../../project/services/project-state.service';
 import { take } from 'rxjs/operators';
 import { dueDateValidator } from '../../validators/due-date.validator';
 import { IssuePriority } from '../../models/issue-priority.enum';
+import { Task } from '../../../tasks/models/task.interface';
+import { AssignedUser } from '../../models/assigned-user.interface';
 
 @Component({
   selector: 'app-issue-form',
@@ -81,32 +83,33 @@ export class IssueFormComponent implements OnInit {
   }
 
   private loadIssue(id: number): void {
-    const issue = this.issueService.getIssueById(id);
-    if (issue) {
-      const formattedIssue = {
-        ...issue,
-        reportedDate: issue.reportedDate ? issue.reportedDate.toISOString().split('T')[0] : '',
-        dueDate: issue.dueDate ? issue.dueDate.toISOString().split('T')[0] : ''
-      };
+    this.issueService.getIssueById(id).subscribe(issue => {
+      if (issue) {
+        const formattedIssue = {
+          ...issue,
+          reportedDate: issue.reportedDate ? new Date(issue.reportedDate).toISOString().split('T')[0] : '',
+          dueDate: issue.dueDate ? new Date(issue.dueDate).toISOString().split('T')[0] : ''
+        };
 
-      this.issueForm.patchValue(formattedIssue);
+        this.issueForm.patchValue(formattedIssue);
 
-      const tasks = this.issueForm.get('tasks') as FormArray;
-      tasks.clear();
-      
-      if (issue.tasks) {
-        issue.tasks.forEach(task => {
-          const taskForm = this.taskService.createTaskForm();
-          taskForm.patchValue({
-            ...task,
-            projectId: issue.projectId,
-            assignedTo: task.assignedTo.map(user => user.id),
-            dueDate: task.dueDate ? task.dueDate.toISOString().split('T')[0] : ''
+        const tasks = this.issueForm.get('tasks') as FormArray;
+        tasks.clear();
+
+        if (issue.tasks) {
+          issue.tasks.forEach((task: Task) => {
+            const taskForm = this.taskService.createTaskForm();
+            taskForm.patchValue({
+              ...task,
+              projectId: issue.projectId,
+              assignedTo: task.assignedTo.map((user: AssignedUser) => user.id),
+              dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''
+            });
+            tasks.push(taskForm);
           });
-          tasks.push(taskForm);
-        });
+        }
       }
-    }
+    });
   }
 
   addTask(): void {
@@ -138,30 +141,39 @@ export class IssueFormComponent implements OnInit {
   onSubmit(): void {
     if (this.issueForm.valid) {
       const formValue = this.issueForm.value;
-      const issue = {
-        ...formValue,
-        id: this.isEditMode ? this.issueId! : Date.now(),
-        reportedDate: new Date(formValue.reportedDate),
-        dueDate: new Date(formValue.dueDate),
-        tasks: formValue.tasks.map((task: any) => ({
-          ...task,
-          dueDate: new Date(task.dueDate),
-          assignedTo: task.assignedTo.map((userId: number) =>
-            this.taskService.getAvailableUsers().pipe(take(1))
-              .subscribe(users => users.find(user => user.id === userId))
-          )
-        }))
-      };
+      const projectId = this.issueForm.get('projectId')?.value;
 
-      if (this.isEditMode) {
-        this.issueService.updateIssue(issue);
-        this.toastService.success('Issue updated successfully');
-      } else {
-        this.issueService.addIssue(issue);
-        this.toastService.success('Issue created successfully');
+      if (!projectId) {
+        this.toastService.error('No project ID found');
+        return;
       }
 
-      this.router.navigate(['/issues']);
+      // Map assignedTo IDs to User objects
+      formValue.tasks.forEach((task: any) => {
+        task.assignedTo = task.assignedTo.map((userId: number) => ({ id: userId }));
+      });
+
+      const issue: Issue = {
+        ...formValue,
+        id: this.isEditMode ? this.issueId! : undefined,
+        projectId: projectId,
+        reportedDate: new Date(formValue.reportedDate),
+        dueDate: new Date(formValue.dueDate)
+      };
+
+      const request = this.isEditMode && this.issueId
+        ? this.issueService.updateIssue(this.issueId, issue)
+        : this.issueService.addIssue(issue);
+
+      request.subscribe({
+        next: () => {
+          this.toastService.success(`Issue ${this.isEditMode ? 'updated' : 'created'} successfully`);
+          this.router.navigate(['/issues']);
+        },
+        error: (error) => {
+          this.toastService.error(`Failed to ${this.isEditMode ? 'update' : 'create'} issue: ${error.message}`);
+        }
+      });
     } else {
       this.errorMessage = 'Please fill in all required fields correctly.';
       this.toastService.error(this.errorMessage);

@@ -1,10 +1,9 @@
 package com.ubforge.ubforge.service;
 
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ubforge.ubforge.model.Release;
 import com.ubforge.ubforge.repository.ReleaseRepository;
 
@@ -21,7 +20,15 @@ public class ReleaseService {
         return releaseRepository.findById(id).orElse(null);
     }
 
+    public List<Release> getReleasesByProject(int projectId) {
+        return releaseRepository.findByProjectId(projectId);
+    }
+
     public Release createRelease(Release release) {
+        return releaseRepository.save(release);
+    }
+
+    public Release updateRelease(Release release) {
         return releaseRepository.save(release);
     }
 
@@ -29,21 +36,29 @@ public class ReleaseService {
         releaseRepository.deleteById(id);
     }
 
-    public String getReleaseStatus(int id) {
-        Release release = releaseRepository.findById(id).orElse(null);
-        if (release == null) {
-            return "Release not found";
+    public void addSprintToRelease(int releaseId, int sprintId) {
+        Optional<Release> optionalRelease = releaseRepository.findById(releaseId);
+        if (optionalRelease.isPresent()) {
+            Release release = optionalRelease.get();
+            List<Integer> sprintIds = release.getSprintIds();
+            if (!sprintIds.contains(sprintId)) {
+                sprintIds.add(sprintId);
+                release.setSprintIds(sprintIds);
+                releaseRepository.save(release);
+            }
         }
-        return release.getStatus();
     }
 
-    public String setReleaseStatus(int id, String status) {
-        Release release = releaseRepository.findById(id).orElse(null);
-        if (release == null) {
-            return "Release not found";
+    public void removeSprintFromRelease(int releaseId, int sprintId) {
+        Optional<Release> optionalRelease = releaseRepository.findById(releaseId);
+        if (optionalRelease.isPresent()) {
+            Release release = optionalRelease.get();
+            List<Integer> sprintIds = release.getSprintIds();
+            if (sprintIds.contains(sprintId)) {
+                sprintIds.remove(Integer.valueOf(sprintId));
+                release.setSprintIds(sprintIds);
+                releaseRepository.save(release);
+            }
         }
-        release.setStatus(status);
-        releaseRepository.save(release);
-        return "Status updated";
     }
 }

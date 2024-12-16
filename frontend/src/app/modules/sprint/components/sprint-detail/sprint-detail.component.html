@@ -25,20 +25,20 @@
             <p>{{sprint.description}}</p>
         </div>
 
-        <!-- <div class="tasks-section">
-            <h3>Tasks ({{sprint.tasks.length}})</h3>
-            <div class="tasks-list" *ngIf="sprint.tasks.length > 0">
-                <app-task-item *ngFor="let taskId of sprint.tasks" [taskId]="taskId"></app-task-item>
-            </div>
-            <p *ngIf="sprint.tasks.length === 0" class="empty-message">No tasks assigned to this sprint</p>
-        </div> -->
-
         <div class="issues-section">
-            <h3>Issues ({{sprint.issues.length}})</h3>
-            <div class="issues-list" *ngIf="sprint.issues.length > 0">
-                <!-- Add issue items here once implemented -->
+            <div class="section-header" (click)="toggleIssues()" (keydown)="toggleIssues()">
+                <h3>Issues ({{sprint.issues.length}})</h3>
+                <span class="toggle-icon" [class.expanded]="isIssuesExpanded">▼</span>
             </div>
-            <p *ngIf="sprint.issues.length === 0" class="empty-message">No issues assigned to this sprint</p>
+            <div class="issues-list-container" [@expandCollapse]="isIssuesExpanded ? 'expanded' : 'collapsed'">
+                <div class="issues-list" *ngIf="relatedIssues.length > 0">
+                    <app-issue-item *ngFor="let issue of relatedIssues" [issue]="issue">
+                    </app-issue-item>
+                </div>
+                <p *ngIf="relatedIssues.length === 0" class="empty-message">
+                    No issues assigned to this sprint
+                </p>
+            </div>
         </div>
     </div>
 </div>
