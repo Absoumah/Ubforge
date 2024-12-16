@@ -1,7 +1,6 @@
 package com.ubforge.ubforge.controller;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 class CommentControllerTest {
 
@@ -46,11 +44,12 @@ class CommentControllerTest {
         when(commentService.createComment(any(Comment.class))).thenReturn(comment);
 
         // Appeler la méthode du contrôleur
-        ResponseEntity<Void> response = commentController.createComment(comment);
+        ResponseEntity<Comment> response = commentController.createComment(comment);
 
         // Vérifications
-        assertEquals(HttpStatus.CREATED, response.getStatusCode()); // Vérifie que le statut est 201
-        assertTrue(response.getHeaders().getLocation().toString().contains("/comment/1")); // Vérifie l'URL retournée
+        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
+        assertNotNull(response.getBody()); // Vérifie que le corps de la réponse n'est pas nul
+        assertEquals(comment.getContent(), response.getBody().getContent()); // Vérifie que le commentaire retourné est correct
         verify(commentService, times(1)).createComment(any(Comment.class)); // Vérifie que la méthode du service a été appelée
     }
 
@@ -66,6 +65,7 @@ class CommentControllerTest {
         // Vérifications
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
         assertEquals(1, response.getBody().size()); // Vérifie qu'il y a un commentaire dans la liste
+        assertEquals(comment.getContent(), response.getBody().get(0).getContent()); // Vérifie le contenu du commentaire
         verify(commentService, times(1)).getCommentByTaskId(1); // Vérifie que la méthode du service a été appelée
     }
 
@@ -81,6 +81,7 @@ class CommentControllerTest {
         // Vérifications
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
         assertEquals(1, response.getBody().size()); // Vérifie qu'il y a un commentaire dans la liste
+        assertEquals(comment.getContent(), response.getBody().get(0).getContent()); // Vérifie le contenu du commentaire
         verify(commentService, times(1)).getCommentByIssueId(1); // Vérifie que la méthode du service a été appelée
     }
 
@@ -96,6 +97,8 @@ class CommentControllerTest {
         // Vérifications
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
         assertEquals(1, response.getBody().size()); // Vérifie qu'il y a un commentaire dans la liste
+        assertEquals(comment.getContent(), response.getBody().get(0).getContent()); // Vérifie le contenu du commentaire
         verify(commentService, times(1)).getAllComments(); // Vérifie que la méthode du service a été appelée
     }
 }
+

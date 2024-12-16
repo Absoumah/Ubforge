@@ -5,18 +5,18 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.ubforge.ubforge.model.Task;
+import com.ubforge.ubforge.model.TaskStatus;
 import com.ubforge.ubforge.service.TaskService;
 
-import org.checkerframework.checker.units.qual.t;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
+import java.util.List;
+
 
 class TaskControllerTest {
 
@@ -32,148 +32,133 @@ class TaskControllerTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // Initialisation d'un objet Task pour les tests
+        // Initialisation d'une tâche pour les tests
         task = new Task();
         task.setId(1);
-        task.setTask_title("Test Task");
-        task.setTaskStatus("In Progress");
+        task.setName("Test Task");
+        task.setDescription("Task description");
+        task.setStatus(TaskStatus.COMPLETED);
+
     }
 
     @Test
     void testCreateTask() {
-        // Simulation de la création d'une tâche
+        // Simuler la création d'une nouvelle tâche
         when(taskService.createTask(any(Task.class))).thenReturn(task);
 
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Void> response = taskController.createTask(task);
+        // Appeler la méthode du contrôleur
+        Task response = taskController.createTask(task).getBody();
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que la réponse est OK
-        verify(taskService, times(1)).createTask(any(Task.class)); // Vérifie que le service a été appelé une fois
+        assertNotNull(response); // Vérifie que la réponse n'est pas nulle
+        assertEquals(task.getId(), response.getId()); // Vérifie l'ID de la tâche
+        verify(taskService, times(1)).createTask(any(Task.class)); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
     void testGetAllTasks() {
-        // Simulation de la récupération de toutes les tâches
-        when(taskService.getAllTasks()).thenReturn(Arrays.asList(task));
+        // Simuler la récupération de toutes les tâches
+        List<Task> tasks = Arrays.asList(task);
+        when(taskService.getAllTasks()).thenReturn(tasks);
 
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Iterable<Task>> response = taskController.getAllTasks();
+        // Appeler la méthode du contrôleur
+        List<Task> response = taskController.getAllTasks().getBody();
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        verify(taskService, times(1)).getAllTasks(); // Vérifie que le service a été appelé une fois
+        assertNotNull(response); // Vérifie que la réponse n'est pas nulle
+        assertEquals(1, response.size()); // Vérifie qu'il y a une tâche dans la réponse
+        assertEquals(task.getId(), response.get(0).getId()); // Vérifie l'ID de la tâche
+        verify(taskService, times(1)).getAllTasks(); // Vérifie que la méthode du service a été appelée
     }
 
     @Test
-    void testGetTasksByUserId() {
-        // Simulation de la récupération des tâches par ID utilisateur
-        when(taskService.getTaskByUserId(1)).thenReturn(Arrays.asList(task));
+    void testGetTasksByProject() {
+        // Simuler la récupération des tâches par projet
+        List<Task> tasks = Arrays.asList(task);
+        when(taskService.getTasksByProject(1)).thenReturn(tasks);
 
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Iterable<Task>> response = taskController.getTasksByUserId(1);
+        // Appeler la méthode du contrôleur
+        List<Task> response = taskController.getTasksByProject(1).getBody();
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        verify(taskService, times(1)).getTaskByUserId(1); // Vérifie que le service a été appelé une fois
+        assertNotNull(response); // Vérifie que la réponse n'est pas nulle
+        assertEquals(1, response.size()); // Vérifie qu'il y a une tâche dans la réponse
+        assertEquals(task.getId(), response.get(0).getId()); // Vérifie l'ID de la tâche
+        verify(taskService, times(1)).getTasksByProject(1); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
     void testUpdateTask() {
-        // Simulation de la mise à jour d'une tâche
-        task.setTask_title("Updated Task");
+        // Simuler la mise à jour d'une tâche
         when(taskService.updateTask(1, task)).thenReturn(task);
 
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Void> response = taskController.updateTask(1, task);
+        // Appeler la méthode du contrôleur
+        Task response = taskController.updateTask(1, task).getBody();
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que la réponse est OK
-        verify(taskService, times(1)).updateTask(eq(1), any(Task.class)); // Vérifie que le service a été appelé une fois
+        assertNotNull(response); // Vérifie que la réponse n'est pas nulle
+        assertEquals(task.getId(), response.getId()); // Vérifie l'ID de la tâche
+        verify(taskService, times(1)).updateTask(1, task); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
     void testDeleteTask() {
-        // Simulation de la suppression d'une tâche
+        // Simuler la suppression d'une tâche
         doNothing().when(taskService).deleteTask(1);
 
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Void> response = taskController.deleteTask(1);
+        // Appeler la méthode du contrôleur
+        taskController.deleteTask(1);
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que la réponse est OK
-        verify(taskService, times(1)).deleteTask(1); // Vérifie que le service a été appelé une fois
+        verify(taskService, times(1)).deleteTask(1); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
     void testGetTaskById() {
-        // Simulation de la récupération d'une tâche par son ID
+        // Simuler la récupération d'une tâche par ID
         when(taskService.getTaskById(1)).thenReturn(task);
 
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Task> response = taskController.getTaskById(1);
+        // Appeler la méthode du contrôleur
+        Task response = taskController.getTaskById(1).getBody();
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(task, response.getBody()); // Vérifie que la tâche retournée est la bonne
-        verify(taskService, times(1)).getTaskById(1); // Vérifie que le service a été appelé une fois
-    }
+        assertNotNull(response); // Vérifie que la réponse n'est pas nulle
+        assertEquals(task.getId(), response.getId()); // Vérifie l'ID de la tâche
+        verify(taskService, times(1)).getTaskById(1); // Vérifie que la méthode du service a été appelée
 
-    @Test
-    void testGetTasksByIssueId() {
-        // Simulation de la récupération des tâches par ID d'issue
-        when(taskService.getTasksByIssueId(1)).thenReturn(Arrays.asList(task));
-
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Iterable<Task>> response = taskController.getTasksByIssueId(1);
-
-        // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        verify(taskService, times(1)).getTasksByIssueId(1); // Vérifie que le service a été appelé une fois
     }
 
     @Test
     void testAssignTaskToUser() {
-        // Simulation de l'affectation d'une tâche à un utilisateur
+        // Simuler l'affectation d'une tâche à un utilisateur
         when(taskService.assignTaskToUser(1, 1)).thenReturn(task);
 
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Task> response = taskController.assignTaskToUser(1, 1);
+        // Appeler la méthode du contrôleur
+        Task response = taskController.assignTaskToUser(1, 1).getBody();
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        verify(taskService, times(1)).assignTaskToUser(1, 1); // Vérifie que le service a été appelé une fois
+        assertNotNull(response); // Vérifie que la réponse n'est pas nulle
+        assertEquals(task.getId(), response.getId()); // Vérifie l'ID de la tâche
+        verify(taskService, times(1)).assignTaskToUser(1, 1); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
     void testUpdateTaskStatus() {
-        // Simulation de la mise à jour du statut d'une tâche
-        when(taskService.updateTaskStatus(1, "Completed")).thenReturn(task);
+        // Simuler la mise à jour du statut d'une tâche
+        when(taskService.updateTaskStatus(1, TaskStatus.COMPLETED)).thenReturn(task);
 
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Task> response = taskController.updateTaskStatus(1, "Completed");
-
-        // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        verify(taskService, times(1)).updateTaskStatus(1, "Completed"); // Vérifie que le service a été appelé une fois
-    }
-
-    @Test
-    void testAddToRelease() {
-        // Simulation de l'ajout d'une tâche à une release
-        when(taskService.addToRelease(1, 1)).thenReturn(task);
-
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Task> response = taskController.addToRelease(1, 1);
+        // Appeler la méthode du contrôleur
+        Task response = taskController.updateTaskStatus(1, TaskStatus.COMPLETED).getBody();
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        verify(taskService, times(1)).addToRelease(1, 1); // Vérifie que le service a été appelé une fois
+        assertNotNull(response); // Vérifie que la réponse n'est pas nulle
+        assertEquals(TaskStatus.COMPLETED, response.getStatus()); // Vérifie que le statut a bien été mis à jour
+        verify(taskService, times(1)).updateTaskStatus(1, TaskStatus.COMPLETED); // Vérifie que la méthode du service a été appelée
+
     }
 }

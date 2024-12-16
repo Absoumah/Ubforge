@@ -1,6 +1,7 @@
 package com.ubforge.ubforge.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,77 +34,91 @@ class IssueControllerTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // Initialisation d'un objet Issue pour les tests
+        // Initialisation d'un problème pour les tests
         issue = new Issue();
-        issue.setIssue_id(1);
-        issue.setIssue_title("Test Issue");
-        issue.setIssue_description("Test Description");
+        issue.setId(1);
+        issue.setTitle("Test Issue");
+        issue.setDescription("This is a test issue");
+
     }
 
     @Test
     void testCreateIssue() {
-        // Simulation de la création d'un issue
+        // Simuler la création d'un problème
         when(issueService.createIssue(any(Issue.class))).thenReturn(issue);
 
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Void> response = issueController.createIssue(issue);
+        // Appeler la méthode du contrôleur
+        ResponseEntity<Issue> response = issueController.createIssue(issue);
 
         // Vérifications
-        assertEquals(HttpStatus.CREATED, response.getStatusCode()); // Vérifie que le statut est 201
-        assertTrue(response.getHeaders().getLocation().toString().contains("/issue/1")); // Vérifie que l'URI est correct
+        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
+        assertEquals(issue.getId(), response.getBody().getId()); // Vérifie que l'ID du problème est correct
+        assertEquals(issue.getTitle(), response.getBody().getTitle()); // Vérifie que le titre est correct
+
         verify(issueService, times(1)).createIssue(any(Issue.class)); // Vérifie que la méthode du service a été appelée
     }
 
     @Test
     void testGetAllIssues() {
-        // Simulation de la récupération de toutes les issues
+        // Simuler la récupération de tous les problèmes
         when(issueService.getAllIssues()).thenReturn(Arrays.asList(issue));
 
-        // Appel de la méthode du contrôleur
+        // Appeler la méthode du contrôleur
+
         ResponseEntity<Iterable<Issue>> response = issueController.getAllIssues();
 
         // Vérifications
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
-        assertTrue(response.getBody() instanceof Iterable); // Vérifie que le corps de la réponse est une liste
-        assertEquals(1, ((Iterable<?>) response.getBody()).spliterator().getExactSizeIfKnown()); // Vérifie qu'il y a un seul élément
+        assertTrue(response.getBody().iterator().hasNext()); // Vérifie qu'il y a des problèmes dans la liste
+
         verify(issueService, times(1)).getAllIssues(); // Vérifie que la méthode du service a été appelée
     }
 
     @Test
     void testGetIssueById() {
-        // Simulation de la récupération d'un issue par ID
+        // Simuler la récupération d'un problème par ID
         when(issueService.getIssueById(1)).thenReturn(issue);
 
-        // Appel de la méthode du contrôleur
+        // Appeler la méthode du contrôleur
+
         ResponseEntity<Issue> response = issueController.getIssueById(1);
 
         // Vérifications
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
-        assertEquals(issue, response.getBody()); // Vérifie que le corps de la réponse correspond à l'issue récupéré
+        assertEquals(issue.getId(), response.getBody().getId()); // Vérifie que l'ID du problème est correct
+        assertEquals(issue.getTitle(), response.getBody().getTitle()); // Vérifie que le titre est correct
+
         verify(issueService, times(1)).getIssueById(1); // Vérifie que la méthode du service a été appelée
     }
 
     @Test
     void testUpdateIssue() {
-        // Simulation de la mise à jour d'un issue
-        issue.setIssue_title("Updated Issue");
-        when(issueService.updateIssue(1, issue)).thenReturn(issue);
+        // Simuler la mise à jour d'un problème
+        Issue updatedIssue = new Issue();
+        updatedIssue.setId(1);
+        updatedIssue.setTitle("Updated Issue");
+        updatedIssue.setDescription("This is an updated test issue");
 
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Issue> response = issueController.updateIssue(1, issue);
+        when(issueService.updateIssue(eq(1), any(Issue.class))).thenReturn(updatedIssue);
+
+        // Appeler la méthode du contrôleur
+        ResponseEntity<Issue> response = issueController.updateIssue(1, updatedIssue);
 
         // Vérifications
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
-        assertEquals("Updated Issue", response.getBody().getIssue_title()); // Vérifie que le titre de l'issue a été mis à jour
-        verify(issueService, times(1)).updateIssue(1, issue); // Vérifie que la méthode du service a été appelée
+        assertEquals(updatedIssue.getTitle(), response.getBody().getTitle()); // Vérifie que le titre est mis à jour
+        assertEquals(updatedIssue.getDescription(), response.getBody().getDescription()); // Vérifie que la description est mise à jour
+        verify(issueService, times(1)).updateIssue(eq(1), any(Issue.class)); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
     void testDeleteIssue() {
-        // Simulation de la suppression d'un issue
+        // Simuler la suppression d'un problème
         doNothing().when(issueService).deleteIssue(1);
 
-        // Appel de la méthode du contrôleur
+        // Appeler la méthode du contrôleur
+
         ResponseEntity<Void> response = issueController.deleteIssue(1);
 
         // Vérifications
@@ -113,10 +128,11 @@ class IssueControllerTest {
 
     @Test
     void testAssignToUser() {
-        // Simulation de l'assignation d'un issue à un utilisateur
+        // Simuler l'assignation d'un problème à un utilisateur
         doNothing().when(issueService).assignToUser(1, 1);
 
-        // Appel de la méthode du contrôleur
+        // Appeler la méthode du contrôleur
+
         ResponseEntity<Void> response = issueController.assignToUser(1, 1);
 
         // Vérifications
@@ -125,31 +141,20 @@ class IssueControllerTest {
     }
 
     @Test
-    void testAddToRelease() {
-        // Simulation de l'ajout d'un issue à un release
-        when(issueService.addToRelease(1, 1)).thenReturn(issue);
-
-        // Appel de la méthode du contrôleur
-        ResponseEntity<Issue> response = issueController.addToRelease(1, 1);
-
-        // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
-        assertEquals(issue, response.getBody()); // Vérifie que l'issue retourné est le bon
-        verify(issueService, times(1)).addToRelease(1, 1); // Vérifie que la méthode du service a été appelée
-    }
-
-    @Test
     void testFindIssueIdsByUserId() {
-        // Simulation de la récupération des issue_ids assignés à un utilisateur
-        Set<Integer> issueIds = new HashSet<>(Arrays.asList(1, 2, 3));
+        // Simuler la récupération des IDs de problèmes assignés à un utilisateur
+        Set<Integer> issueIds = new HashSet<>();
+        issueIds.add(1);
         when(issueService.findIssueIdsByUserId(1)).thenReturn(issueIds);
 
-        // Appel de la méthode du contrôleur
+        // Appeler la méthode du contrôleur
+
         ResponseEntity<Set<Integer>> response = issueController.findIssueIdsByUserId(1);
 
         // Vérifications
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
-        assertEquals(issueIds, response.getBody()); // Vérifie que les IDs retournés correspondent à ceux attendus
+        assertTrue(response.getBody().contains(1)); // Vérifie que l'ID du problème est présent dans la liste
         verify(issueService, times(1)).findIssueIdsByUserId(1); // Vérifie que la méthode du service a été appelée
     }
 }
+

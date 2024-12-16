@@ -8,7 +8,6 @@ class UbforgeApplicationTests {
 
 	@Test
 	void contextLoads() {
-		System.out.println("Test");
 	}
 
 }

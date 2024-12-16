@@ -32,94 +32,98 @@ class UserControllerTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // Initialisation d'un objet User pour les tests
+        // Initialisation d'un utilisateur pour les tests
         user = new User();
         user.setId(1);
-        user.setFirstName("testUser");
-        user.setEmail("testuser@example.com");
+        user.setFirstName("Test User");
+
     }
 
     @Test
     void testCreateUser() {
-        // Simulation de la création d'un utilisateur
+        // Simuler la création d'un utilisateur
         when(userService.createUser(any(User.class))).thenReturn(user);
 
-        // Appel de la méthode du contrôleur
+        // Appeler la méthode du contrôleur
         ResponseEntity<Void> response = userController.createUser(user);
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que la réponse est OK
-        verify(userService, times(1)).createUser(any(User.class)); // Vérifie que le service a été appelé une fois
+        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
+        verify(userService, times(1)).createUser(any(User.class)); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
     void testGetUserById() {
-        // Simulation de la récupération d'un utilisateur par ID
+        // Simuler la récupération d'un utilisateur par ID
         when(userService.getUserById(1)).thenReturn(user);
 
-        // Appel de la méthode du contrôleur
+        // Appeler la méthode du contrôleur
         ResponseEntity<User> response = userController.getUserById(1);
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(user, response.getBody()); // Vérifie que l'utilisateur retourné est celui attendu
-        verify(userService, times(1)).getUserById(1); // Vérifie que le service a été appelé une fois
+        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
+        assertEquals(user.getId(), response.getBody().getId()); // Vérifie que l'ID de l'utilisateur est correct
+        verify(userService, times(1)).getUserById(1); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
     void testUpdateUser() {
-        // Simulation de la mise à jour d'un utilisateur
+        // Simuler la mise à jour d'un utilisateur
         doNothing().when(userService).updateUser(eq(1), any(User.class));
 
-        // Appel de la méthode du contrôleur
+        // Appeler la méthode du contrôleur
         ResponseEntity<Void> response = userController.updateUser(1, user);
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(userService, times(1)).updateUser(eq(1), any(User.class)); // Vérifie que le service a été appelé une fois
+        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
+        verify(userService, times(1)).updateUser(eq(1), any(User.class)); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
     void testDeleteUser() {
-        // Simulation de la suppression d'un utilisateur
+        // Simuler la suppression d'un utilisateur
         doNothing().when(userService).deleteUser(1);
 
-        // Appel de la méthode du contrôleur
+        // Appeler la méthode du contrôleur
         ResponseEntity<Void> response = userController.deleteUser(1);
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(userService, times(1)).deleteUser(1); // Vérifie que le service a été appelé une fois
+        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
+        verify(userService, times(1)).deleteUser(1); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
     void testGetAllUsers() {
-        // Simulation de la récupération de tous les utilisateurs
+        // Simuler la récupération de tous les utilisateurs
         when(userService.getAllUsers()).thenReturn(Arrays.asList(user));
 
-        // Appel de la méthode du contrôleur
+        // Appeler la méthode du contrôleur
         ResponseEntity<Iterable<User>> response = userController.getAllUsers();
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        verify(userService, times(1)).getAllUsers(); // Vérifie que le service a été appelé une fois
+        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
+        assertTrue(response.getBody().iterator().hasNext()); // Vérifie qu'il y a des utilisateurs dans la liste
+        verify(userService, times(1)).getAllUsers(); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
     void testFindUserIdsByIssueId() {
-        // Simulation de la récupération des utilisateurs assignés à un issue
-        Set<Integer> userIds = new HashSet<>();
-        userIds.add(1);
-        userIds.add(2);
+        // Simuler la récupération des utilisateurs assignés à un problème (issueId)
+        Set<Integer> userIds = new HashSet<>(Arrays.asList(1, 2, 3));
         when(userService.findUserIdsByIssueId(1)).thenReturn(userIds);
 
-        // Appel de la méthode du contrôleur
+        // Appeler la méthode du contrôleur
         ResponseEntity<Set<Integer>> response = userController.findUserIdsByIssueId(1);
 
         // Vérifications
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(userIds, response.getBody()); // Vérifie que les IDs des utilisateurs retournés sont ceux attendus
-        verify(userService, times(1)).findUserIdsByIssueId(1); // Vérifie que le service a été appelé une fois
+        assertEquals(HttpStatus.OK, response.getStatusCode()); // Vérifie que le statut est 200
+        assertEquals(userIds, response.getBody()); // Vérifie que les IDs des utilisateurs sont corrects
+        verify(userService, times(1)).findUserIdsByIssueId(1); // Vérifie que la méthode du service a été appelée
     }
 }
+

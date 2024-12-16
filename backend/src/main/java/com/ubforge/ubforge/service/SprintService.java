@@ -24,8 +24,8 @@ public class SprintService {
     @Autowired
     private IssueService issueService;
 
-    @Autowired
-    private TaskService taskService;
+    // @Autowired
+    // private TaskService taskService;
 
     @EventListener
     public void handleTaskStatusChanged(TaskStatusChangedEvent event) {

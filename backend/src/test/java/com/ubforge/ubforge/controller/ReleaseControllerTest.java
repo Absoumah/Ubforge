@@ -12,8 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,91 +31,121 @@ class ReleaseControllerTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // Initialisation d'un objet Release pour les tests
+        // Initialisation d'une version pour les tests
         release = new Release();
         release.setId(1);
         release.setName("Test Release");
-        release.setStatus("In Progress");
-    }
-
-    @Test
-    void testCreateRelease() {
-        // Simulation de la création d'une release
-        when(releaseService.createRelease(any(Release.class))).thenReturn(release);
-
-        // Appel de la méthode du contrôleur
-        Release createdRelease = releaseController.createRelease(release);
-
-        // Vérifications
-        assertNotNull(createdRelease);
-        assertEquals("Test Release", createdRelease.getName()); // Vérifie que le titre est correct
-        verify(releaseService, times(1)).createRelease(any(Release.class)); // Vérifie que le service a été appelé une fois
+        release.setStatus("Active");
     }
 
     @Test
     void testGetAllReleases() {
-        // Simulation de la récupération de toutes les releases
-        when(releaseService.getAllReleases()).thenReturn(Arrays.asList(release));
+        // Simuler la récupération de toutes les versions
+        List<Release> releases = Arrays.asList(release);
+        when(releaseService.getAllReleases()).thenReturn(releases);
 
-        // Appel de la méthode du contrôleur
-        List<Release> releases = releaseController.getAllReleases();
+        // Appeler la méthode du contrôleur
+        List<Release> response = releaseController.getAllReleases();
 
         // Vérifications
-        assertNotNull(releases);
-        assertEquals(1, releases.size()); // Vérifie qu'une seule release est retournée
-        assertEquals("Test Release", releases.get(0).getName()); // Vérifie que la release retournée est correcte
-        verify(releaseService, times(1)).getAllReleases(); // Vérifie que le service a été appelé une fois
+        assertNotNull(response); // Vérifie que la réponse n'est pas nulle
+        assertEquals(1, response.size()); // Vérifie qu'il y a une version dans la réponse
+        assertEquals(release.getId(), response.get(0).getId()); // Vérifie l'ID de la version
+        verify(releaseService, times(1)).getAllReleases(); // Vérifie que la méthode du service a été appelée
     }
 
     @Test
     void testGetReleaseById() {
-        // Simulation de la récupération d'une release par ID
+        // Simuler la récupération d'une version par ID
         when(releaseService.getReleaseById(1)).thenReturn(release);
 
-        // Appel de la méthode du contrôleur
-        Release foundRelease = releaseController.getReleaseById(1);
+        // Appeler la méthode du contrôleur
+        Release response = releaseController.getReleaseById(1);
 
         // Vérifications
-        assertNotNull(foundRelease);
-        assertEquals("Test Release", foundRelease.getName()); // Vérifie que la release retournée est correcte
-        verify(releaseService, times(1)).getReleaseById(1); // Vérifie que le service a été appelé une fois
+        assertNotNull(response); // Vérifie que la réponse n'est pas nulle
+        assertEquals(release.getId(), response.getId()); // Vérifie l'ID de la version
+        verify(releaseService, times(1)).getReleaseById(1); // Vérifie que la méthode du service a été appelée
     }
 
     @Test
-    void testGetReleaseStatus() {
-        // Simulation de la récupération du status d'une release
-        when(releaseService.getReleaseStatus(1)).thenReturn("In Progress");
+    void testGetReleasesByProject() {
+        // Simuler la récupération des versions par ID de projet
+        List<Release> releases = Arrays.asList(release);
+        when(releaseService.getReleasesByProject(1)).thenReturn(releases);
 
-        // Appel de la méthode du contrôleur
-        String status = releaseController.getReleaseStatus(1);
+        // Appeler la méthode du contrôleur
+        List<Release> response = releaseController.getReleasesByProject(1).getBody();
 
         // Vérifications
-        assertEquals("In Progress", status); // Vérifie que le status retourné est correct
-        verify(releaseService, times(1)).getReleaseStatus(1); // Vérifie que le service a été appelé une fois
+        assertNotNull(response); // Vérifie que la réponse n'est pas nulle
+        assertEquals(1, response.size()); // Vérifie qu'il y a une version dans la réponse
+        assertEquals(release.getId(), response.get(0).getId()); // Vérifie l'ID de la version
+        verify(releaseService, times(1)).getReleasesByProject(1); // Vérifie que la méthode du service a été appelée
     }
 
     @Test
-    void testSetReleaseStatus() {
-        // Simulation de la mise à jour du status d'une release
-        when(releaseService.setReleaseStatus(1, "Completed")).thenReturn("Completed");
+    void testCreateRelease() {
+        // Simuler la création d'une nouvelle version
+        when(releaseService.createRelease(any(Release.class))).thenReturn(release);
 
-        // Appel de la méthode du contrôleur
-        String updatedStatus = releaseController.setReleaseStatus(1, "Completed");
+        // Appeler la méthode du contrôleur
+        Release response = releaseController.createRelease(release);
 
         // Vérifications
-        assertEquals("Completed", updatedStatus); // Vérifie que le status retourné est correct
-        verify(releaseService, times(1)).setReleaseStatus(1, "Completed"); // Vérifie que le service a été appelé une fois
+        assertNotNull(response); // Vérifie que la réponse n'est pas nulle
+        assertEquals(release.getId(), response.getId()); // Vérifie l'ID de la version
+        verify(releaseService, times(1)).createRelease(any(Release.class)); // Vérifie que la méthode du service a été appelée
+    }
+
+    @Test
+    void testUpdateRelease() {
+        // Simuler la mise à jour d'une version
+        when(releaseService.updateRelease(any(Release.class))).thenReturn(release);
+
+        // Appeler la méthode du contrôleur
+        Release response = releaseController.updateRelease(1, release);
+
+        // Vérifications
+        assertNotNull(response); // Vérifie que la réponse n'est pas nulle
+        assertEquals(release.getId(), response.getId()); // Vérifie l'ID de la version
+        verify(releaseService, times(1)).updateRelease(any(Release.class)); // Vérifie que la méthode du service a été appelée
+
     }
 
     @Test
     void testDeleteRelease() {
-        // Simulation de la suppression d'une release
+        // Simuler la suppression d'une version
         doNothing().when(releaseService).deleteRelease(1);
 
-        // Appel de la méthode du contrôleur
+        // Appeler la méthode du contrôleur
         releaseController.deleteRelease(1);
 
         // Vérifications
-        verify(releaseService, times(1)).deleteRelease(1); // Vérifie que le service a été appelé une fois
+        verify(releaseService, times(1)).deleteRelease(1); // Vérifie que la méthode du service a été appelée
+    }
+
+    @Test
+    void testAddSprintToRelease() {
+        // Simuler l'ajout d'un sprint à une version
+        doNothing().when(releaseService).addSprintToRelease(1, 1);
+
+        // Appeler la méthode du contrôleur
+        releaseController.addSprintToRelease(1, 1);
+
+        // Vérifications
+        verify(releaseService, times(1)).addSprintToRelease(1, 1); // Vérifie que la méthode du service a été appelée
+    }
+
+    @Test
+    void testRemoveSprintFromRelease() {
+        // Simuler la suppression d'un sprint d'une version
+        doNothing().when(releaseService).removeSprintFromRelease(1, 1);
+
+        // Appeler la méthode du contrôleur
+        releaseController.removeSprintFromRelease(1, 1);
+
+        // Vérifications
+        verify(releaseService, times(1)).removeSprintFromRelease(1, 1); // Vérifie que la méthode du service a été appelée
     }
 }
