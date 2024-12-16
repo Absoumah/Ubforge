@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ubforge.ubforge.service.CommentService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
@@ -21,7 +24,10 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    // create comment
+
+    @Operation(summary = "Create a new comment")
+    @ApiResponse(responseCode = "200", description = "Comment created")
+    @ApiResponse(responseCode = "400", description = "Bad request")
     @PostMapping("/add")
     public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
         return ResponseEntity.ok(commentService.createComment(comment));
